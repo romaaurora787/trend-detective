@@ -60,6 +60,20 @@ Same as `/api/beyond` (see README). Five small tiles:
 - **More erratic?** `variability.headline`.
 - **Turning point:** `turning_point.headline`; if `year` is not null, draw a vertical line at that year on chart b.
 
+## 2e. NEW (Sat ~19:30): three more backend pieces to show
+
+**Robustness badge** → `/api/analyse` now has `result.robustness`:
+- `robust` (true / false / null), `headline`, `windows[]` (`window`, `period`, `label`, `slope_per_decade`).
+- Show a small tag next to the verdict: **"Robust"** (green) or **"Fragile: depends on the years chosen"** (amber), with `headline` on hover or tap. Real examples: Lincolnshire warming is *Robust (+0.28 to +0.33 °C/decade across 4 windows)*; Lincolnshire evaporation is *Fragile ('some' for 1981–2025, 'mixed' if it ends in 2020)*.
+
+**Download the evidence** → `GET /api/evidence.csv?var=..&lat_min=..` (a file download):
+- A button on the case page: "Download the evidence (CSV)". Just an `<a href>` to the URL; the server sets the filename.
+- Contains every month (value, seasonal normal, anomaly, trend line) plus header lines with the verdict, slope, p-values and citation. For teachers, and for judges who want to check our numbers.
+
+**World report** → `GET /api/world` (precomputed, instant):
+- `variables[]`: `name`, `n_points` (111 land points worldwide), `n_proven`, `n_rising`, `n_falling`, `n_typical` (how many a typical analysis would call a trend), `n_fooled` (typical says trend, Detective says not proven), `n_fdr`; `cells[]` aligned with `points[]` (`lat`, `lon`) → `label`, `slope`.
+- Suggested view: a new tab, **"The world"**. A table with one row per variable: proven ↑ / proven ↓ / typical-would-claim / fooled, plus a small world dot map for the selected variable (dot colour = direction, solid = proven). Headline example: *"Air temperature: proven warming at 80 of 111 land points; a typical analysis would claim 96, so 16 of its 'trends' are false alarms."*
+
 ## 3. Small fixes (QUICK)
 1. **Map zoom control over the header:** when you scroll the map page, Leaflet's "+/−" control draws on top of the sticky header. Give `.shell` a `z-index` above 1000 (Leaflet controls use 1000) or lower `.leaflet-top`.
 2. **"p = 2e-18" in the Typical box:** fixed in the backend on `main` (now says "p < 0.0001"). Nothing to do once you merge.
@@ -74,7 +88,7 @@ Same as `/api/beyond` (see README). Five small tiles:
 | Task | Who | Notes |
 |---|---|---|
 | Merge `frontend` + `wording-fixes` into `main` | Kanishk (or say "go" to Akshita) | Both merge cleanly with the current `main` |
-| **Deploy backend** | Kanishk | Google Cloud Run (Global Offer) preferred over Render (Render sleeps 30–60 s). Dockerfile: `uv sync` → `uvicorn trend_detective.api:app --host 0.0.0.0 --port $PORT`; 1 GB RAM; repo data files go in the image |
+| **Deploy backend** | Kanishk | **`backend/Dockerfile` is ready** (not built locally: Docker isn't installed on Akshita's laptop, so please `docker build` once). Google Cloud Run (Global Offer) preferred over Render (Render sleeps 30–60 s). 1 GB RAM. `gcloud run deploy trend-detective-api --source backend --region europe-west2 --memory 1Gi --allow-unauthenticated` |
 | **Deploy frontend** | Kanishk | Vercel; set `VITE_API_URL` to the Cloud Run URL |
 | Cloud / GoDaddy / Microsoft sign-ups | Whoever signs up | Card verification must be entered by the person |
 | AI variable finder | Kanishk | Needs your Claude API key in the backend env (never in the frontend). Must pick only from `/api/variables` ids |
