@@ -1,0 +1,93 @@
+{
+    "variable": {
+        "id": "T2M_MAX",
+        "name": "Daytime highs",
+        "units": "\u00b0C",
+        "source": "MERRA-2 (via POWER)",
+        "plain": "Average of each day's highest air temperature.",
+        "tags": [
+            "city",
+            "desert",
+            "farm"
+        ],
+        "caveat": ""
+    },
+    "box": [
+        52.6,
+        53.7,
+        -1.0,
+        0.4
+    ],
+    "records": {
+        "period": "2011\u20132025",
+        "expected": 4.816,
+        "expected_lows": 4.812,
+        "textbook_expected": 4.799531815571172,
+        "record_highs": 15,
+        "record_lows": 3,
+        "ratio_highs": 3.1146179401993357,
+        "ratio_lows": 0.6234413965087281,
+        "p_highs": 0.0004997501249375312,
+        "p_lows": 0.862568715642179,
+        "headline": "Since 2011, 15 monthly highs were records. Without any change we'd expect about 5, so record highs are being broken 3.1\u00d7 as often as chance allows."
+    },
+    "emergence": {
+        "year": 2016,
+        "noise_sd_annual": 0.6679263665418752,
+        "slope_per_year": 0.038841290072132675,
+        "signal_to_noise_now": 2.558690371847586,
+        "headline": "The change rose clearly out of natural year-to-year noise in 2016 and has stayed out since."
+    },
+    "seasons": {
+        "seasons": [
+            {
+                "season": "Winter (Dec\u2013Feb)",
+                "slope_per_decade": 0.36273893897222137,
+                "p": 0.0057590525153021765,
+                "n_years": 44,
+                "p_adjusted": 0.01727715754590653,
+                "significant": true
+            },
+            {
+                "season": "Spring (Mar\u2013May)",
+                "slope_per_decade": 0.35843621002676784,
+                "p": 0.020427060859472768,
+                "n_years": 45,
+                "p_adjusted": 0.040854121718945535,
+                "significant": true
+            },
+            {
+                "season": "Summer (Jun\u2013Aug)",
+                "slope_per_decade": 0.5094015139963294,
+                "p": 0.0018050751879576943,
+                "n_years": 45,
+                "p_adjusted": 0.007220300751830777,
+                "significant": true
+            },
+            {
+                "season": "Autumn (Sep\u2013Nov)",
+                "slope_per_decade": 0.23391023223257743,
+                "p": 0.020825477247723212,
+                "n_years": 45,
+                "p_adjusted": 0.040854121718945535,
+                "significant": true
+            }
+        ],
+        "headline": "Summer is changing fastest (+0.509 per decade)."
+    },
+    "variability": {
+        "first_half": "1981\u20132003",
+        "second_half": "2003\u20132025",
+        "spread_ratio": 1.0973918957444575,
+        "p": 0.16208698440480063,
+        "headline": "No proven change in how erratic it is (spread changed +10%, could be chance)."
+    },
+    "turning_point": {
+        "year": null,
+        "candidate_year": 2015,
+        "bic_gain": -2.7666345184426824,
+        "slope_before_per_decade": 0.19776569796500254,
+        "slope_after_per_decade": 1.2547864540198184,
+        "headline": "A single straight trend explains it as well as any turning point."
+    }
+}

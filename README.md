@@ -59,6 +59,19 @@ Errors: 400 bad box, 404 unknown variable, 422 too little data, 502 NASA POWER f
 
 **C. Second witness.** `/api/analyse` and each report-card item have `second_witness`: `available`, `name` (e.g. Met Office HadCET, NASA GPCP, ESA CCI soil moisture), `agrees` (true → ✔ "Confirmed" badge, false → ⚠ "Caution" badge), `note`, `monthly_correlation`, `period`. If `available` is false, show nothing or "no second witness yet".
 
+### NEW: beyond the trend line
+`GET /api/beyond?var=T2M_MAX&lat_min=..&lat_max=..&lon_min=..&lon_max=..` returns five panels. Each has a `headline` with the numbers already filled in:
+- `records`: record highs and lows in the recent third of the record vs what chance gives (`record_highs`, `expected`, `ratio_highs`, `p_highs`, and the same for `_lows`). Show as **"Records broken 3.1× as often as chance"**.
+- `emergence`: `year` the change rose out of the noise (null if not yet). Show as **"Emerged from the noise in 2016"**.
+- `seasons`: per-season `slope_per_decade`, `significant` (Holm-corrected). Show as 4 small bars, with the significant ones solid.
+- `variability`: `spread_ratio`, `p`. Is it getting more erratic?
+- `turning_point`: `year` (null if a straight line is enough), `slope_before_per_decade`, `slope_after_per_decade`.
+
+Example: [`docs/examples/beyond_T2M_MAX_lincolnshire.json`](docs/examples/beyond_T2M_MAX_lincolnshire.json). Real findings: [`docs/beyond_scan.md`](docs/beyond_scan.md).
+
+### NEW: linked clues (Methods / "how variables connect" page)
+`GET /api/links` returns the pre-registered rules and out-of-sample hit rates (`summary[]`: `link`, `grid` = global/uk, `inside_holds`/`inside_n`, `outside_holds`/`outside_n`). Static; just render it. Write-up: [`docs/linked_clues.md`](docs/linked_clues.md).
+
 ### `GET /api/map?var=GWETROOT&lat_min=50&lat_max=55.5&lon_min=-6&lon_max=2`
 One trend per grid cell (0.5° × 0.625°). Each cell: `lat`, `lon` (cell centre), `slope_per_decade`, `p`, `significant_raw`, `significant_fdr`.
 - Colour: diverging by `slope_per_decade` (blue falling, red rising; reverse for rainfall and soil).

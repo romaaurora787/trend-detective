@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import power, stats, witnesses
+from . import beyond, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -222,6 +222,36 @@ def trend_map(
             "story": stats.map_story(n_valid, n_typ, int(sig.sum()), n_up, n_down, meta["name"]),
         },
     })
+
+
+@app.get("/api/beyond")
+def beyond_the_line(
+    var: str,
+    lat_min: float = Query(...), lat_max: float = Query(...),
+    lon_min: float = Query(...), lon_max: float = Query(...),
+):
+    """Records, emergence year, seasons, erratic-ness, turning point."""
+    meta = _var(var)
+    _bbox(lat_min, lat_max, lon_min, lon_max)
+    try:
+        series, n = power.fetch_area_series(var, lat_min, lat_max, lon_min, lon_max)
+    except power.PowerError as e:
+        raise HTTPException(502, str(e))
+    s = series.dropna()
+    if len(s) < 180:
+        raise HTTPException(422, "Need at least 15 years of data")
+    return _clean({"variable": meta, "box": [lat_min, lat_max, lon_min, lon_max], **beyond.beyond(s)})
+
+
+@app.get("/api/links")
+def linked_clues():
+    """Linked-clues results (precomputed by scripts/links_screen.py + links_regions.py)."""
+    out = {}
+    p = DATA / "links_regions.json"
+    if p.exists():
+        d = json.loads(p.read_text())
+        out = {"rules": d["rules"], "summary": d["summary"]}
+    return out
 
 
 @app.get("/api/validation")
