@@ -32,7 +32,7 @@ def test_analyse_has_all_panels():
 
 def test_report_card_groups():
     d = ok(f"/api/report-card?{LINCS}").json()
-    assert sum(len(g["items"]) for g in d["groups"]) + len(d["errors"]) == len(CATALOGUE)
+    assert sum(len(g["items"]) for g in d["groups"]) + len(d["errors"]) + len(d["not_yet_read"]) == len(CATALOGUE)
 
 
 def test_map_story():

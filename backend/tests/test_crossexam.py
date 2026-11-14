@@ -116,3 +116,10 @@ def test_climate_modes_finds_the_mode_and_keeps_the_real_trend():
 
 def test_climate_modes_none_linked_for_pure_noise():
     assert crossexam.climate_modes(_series(seed=11), "°C")["status"] == "none_linked"
+
+
+def test_all_windows_replay_finds_when_evidence_became_strong():
+    a = crossexam.all_windows(_series(trend_per_year=0.08, noise=0.3, seed=2))
+    assert a["became_proven"] is not None and 1998 <= a["became_proven"] <= 2010
+    assert a["timeline"][0]["end"] == 1998 and a["timeline"][-1]["end"] == 2025
+    assert crossexam.all_windows(_series(seed=9))["became_proven"] is None

@@ -117,3 +117,19 @@ def test_shuffled_control_flags_false_alarms_in_autocorrelated_noise():
     df = pd.DataFrame({c: common + 0.3 * rng.normal(size=n) for c in range(cells)}, index=MONTHS)
     c = stats.shuffled_control(df, n_perm=10)
     assert c["n_cells"] == cells and c["typical_hits_max"] >= 1
+
+
+def test_lst_quality_mask_and_scaling():
+    v = np.array([[15000, 0, 15000, 15000]])
+    q = np.array([[0, 0, 1, 2]])  # good, fill value, other-quality, cloud (not produced)
+    good = ndvi.PRODUCTS["LST_DAY"]["good"](v, q)
+    assert good.tolist() == [[True, False, True, False]]
+    P = ndvi.PRODUCTS["LST_DAY"]
+    assert abs(15000 * P["scale"] + P["offset"] - 26.85) < 1e-6  # 300 K
+
+
+def test_cache_paths_differ_per_product_and_satellite():
+    b = [28.0, 29.5, 76.5, 78.0]
+    names = {ndvi._cache_path(b, plat, prod).name for plat in ("terra", "aqua") for prod in ndvi.PRODUCTS}
+    assert len(names) == 6
+    assert ndvi._cache_path(b).name.startswith("ndvi3_")  # existing NDVI cache stays valid

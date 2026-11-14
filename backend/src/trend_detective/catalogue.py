@@ -123,6 +123,27 @@ CATALOGUE = [
         "citation": "Didan, K. (2021). MOD13Q1 MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061. "
                     "NASA EOSDIS LP DAAC. doi:10.5067/MODIS/MOD13Q1.061 (read via Microsoft Planetary Computer)",
     },
+    {
+        "id": "LST_DAY", "name": "Ground heat by day (satellite)", "units": "°C",
+        "source": "NASA MODIS Terra MOD11A2 v6.1 (1 km)",
+        "plain": "How hot the land surface itself gets in the late morning, measured from space. Cities and bare ground run hottest.",
+        "tags": ["city", "desert", "farm"],
+        "caveat": "Satellite record starts in 2000. Only clear-sky days are seen, so it describes sunny days. "
+                  "First look at a new place takes a few minutes.",
+        "satellite": True, "period": "2000–2025",
+        "citation": "Wan, Z., Hook, S., Hulley, G. (2021). MOD11A2 MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 "
+                    "Global 1km SIN Grid V061. NASA EOSDIS LP DAAC. doi:10.5067/MODIS/MOD11A2.061 (via Microsoft Planetary Computer)",
+    },
+    {
+        "id": "LST_NIGHT", "name": "Ground heat at night (satellite)", "units": "°C",
+        "source": "NASA MODIS Terra MOD11A2 v6.1 (1 km)",
+        "plain": "How warm the land surface stays at night (about 10:30 pm). Cities hold heat at night: the urban heat island.",
+        "tags": ["city", "arctic", "farm"],
+        "caveat": "Satellite record starts in 2000. Only clear nights are seen. First look at a new place takes a few minutes.",
+        "satellite": True, "period": "2000–2025",
+        "citation": "Wan, Z., Hook, S., Hulley, G. (2021). MOD11A2 MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 "
+                    "Global 1km SIN Grid V061. NASA EOSDIS LP DAAC. doi:10.5067/MODIS/MOD11A2.061 (via Microsoft Planetary Computer)",
+    },
 ]
 
 BY_ID = {v["id"]: v for v in CATALOGUE}

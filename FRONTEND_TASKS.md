@@ -146,3 +146,9 @@ Same as `/api/beyond` (see README). Five small tiles:
 - **VPD** is a normal variable (`id: "VPD"`); nothing special.
 - **Map**: under the summary, the `shuffled_control.headline` in a grey box ("pure noise would still light up ~60 cells on a typical map"). Great for the "why our map is honest" story. Optional toggle: real vs shuffled.
 - **"Check our work" box** on every case: list `result.reproduce[]` as links (name + note). Put the notebook link (GitHub) there too.
+
+## 11. NEW (Sun ~03:00): replay slider, coverage, land heat from space, climate models
+- **Replay slider** (rival xFr05en has one): `cross-examine.all_windows.timeline[]` (end year → p). Drag the end year; show "proven by {became_proven}" when reached. Simple line of p (log scale) with a 0.05 line also works.
+- **Coverage chip** under every verdict: `result.coverage.headline` (e.g. "306 of 310 months present; longest gap 4 months").
+- **LST_DAY / LST_NIGHT** are satellite variables like NDVI (same spinner, no map). Best demo: **Delhi, nights hotter / days cooler** next to Delhi greening.
+- **"Did the models see it coming?"** card (`/api/models`): observed slope as a dot over the model range bar (`model_range`, each `models[]` as a tick), `headline`, `next`, and `caveat` in small grey text. Only for T2M, T2M_MAX, T2M_MIN, rain, humidity, wind, sunshine.

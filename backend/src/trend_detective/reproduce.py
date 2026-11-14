@@ -50,6 +50,13 @@ def _giovanni(data_id: str, box, start: int, end: int) -> str:
 
 def links(var: str, box: list[float], start: int = 1981, end: int = 2025, power_param: str | None = None) -> list[dict]:
     out = []
+    if var in ("LST_DAY", "LST_NIGHT"):
+        return [{"name": "MODIS land surface temperature on Microsoft Planetary Computer (open data, no login)",
+                 "url": "https://planetarycomputer.microsoft.com/dataset/modis-11A2-061",
+                 "note": "The exact 8-day images we averaged (MOD11A2 v6.1, 1 km)."},
+                {"name": "MOD11A2 at NASA LP DAAC (get a time series with AppEEARS)",
+                 "url": "https://lpdaac.usgs.gov/products/mod11a2v061/",
+                 "note": "AppEEARS (free Earthdata login) extracts the same pixels for any box."}]
     if var == "NDVI":
         out.append({"name": "MODIS NDVI on Microsoft Planetary Computer (open data, no login)",
                     "url": "https://planetarycomputer.microsoft.com/dataset/modis-13Q1-061",
