@@ -33,6 +33,9 @@ def test_analyse_has_all_panels():
 def test_report_card_groups():
     d = ok(f"/api/report-card?{LINCS}").json()
     assert sum(len(g["items"]) for g in d["groups"]) + len(d["errors"]) + len(d["not_yet_read"]) == len(CATALOGUE)
+    for g in d["groups"]:
+        for i in g["items"]:  # issue 2.1: every item says whether a data-source change was checked
+            assert i["instrument_check"]["status"]
 
 
 def test_map_story():

@@ -130,12 +130,12 @@ docs/examples/  real API responses
 ```
 
 ## Data and credits
-- NASA POWER Project (NASA Langley Research Center), Prediction Of Worldwide Energy Resources, https://power.larc.nasa.gov. MERRA-2 (GMAO) meteorology; CERES / GEWEX SRB solar and cloud.
-- Methods: Mann (1945); Kendall (1975); Sen (1968); Hamed & Rao (1998); Yue & Wang (2004); Weatherhead et al. (1998); Benjamini & Hochberg (1995); Wilks (2016).
-- Places: GeoNames cities15000 (CC BY 4.0), geonames.org.
-- Greenness: Didan, K. (2021) MOD13Q1 MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061, NASA EOSDIS LP DAAC, doi:10.5067/MODIS/MOD13Q1.061 (and MYD13Q1 for Aqua); served by Microsoft Planetary Computer.
-- Second witnesses: ERA5 (Copernicus C3S, via Open-Meteo, CC BY 4.0); NOAA NCEI GHCN monthly station summaries; NOAA CPC Oceanic Niño Index; NASA GISTEMP v4; NASA EONET.
-- Libraries: pymannkendall, statsmodels, scipy, numpy, pandas, FastAPI.
+Full list with licence wording: [docs/methods.md → Data credits and licences](docs/methods.md#data-credits-and-licences).
+- **NASA:** POWER (MERRA-2 / GMAO; CERES / GEWEX SRB), GPM IMERG V07, GPCP v3.3, GISTEMP v4, EONET, MODIS MOD13Q1/MYD13Q1 and MOD11A2/MYD11A2 v6.1 (LP DAAC, via Microsoft Planetary Computer). NASA does not endorse this project.
+- **ERA5:** contains modified Copernicus Climate Change Service information [2026]; served by Open-Meteo (CC BY 4.0), which also serves CMIP6 HighResMIP model data.
+- **ESA CCI Soil Moisture** v09.2 (Dorigo et al. 2017; Gruber et al. 2019). **Met Office HadCET** (© Crown copyright, Open Government Licence v3.0). **NOAA** CPC, PSL, NCEI indices and GHCN stations. **GeoNames** (CC BY 4.0).
+- Methods: Mann (1945); Kendall (1975); Sen (1968); Hamed & Rao (1998); Yue & Wang (2004); Weatherhead et al. (1998); Benjamini & Hochberg (1995); Wilks (2016); full list in docs/methods.md.
+- Libraries: pymannkendall, statsmodels, scipy, numpy, pandas, FastAPI, rasterio.
 
 ## AI use
 Code was drafted with help from Claude (Anthropic) during the hackathon, and the team checked it with tests and synthetic experiments. Files with AI-assisted code say so in their header. Verdict numbers are always computed by code, never by the AI.
