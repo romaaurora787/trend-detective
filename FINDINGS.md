@@ -79,7 +79,7 @@ Rules were committed **before** testing, then tested on 111 global and 71 UK gri
 - **Amazon (Rondônia) browning** −0.0045/decade (Aqua −0.0067, p ≈ 4e-8): deforestation and drought.
 - **Lincolnshire:** not proven over the whole year (p = 0.09), but the **seasonal Kendall test is significant (p = 0.009), driven by autumn**: a longer growing season.
 
-**Delhi: nights hotter, days cooler at the ground** (MODIS land surface temperature): night +0.70 °C/decade, late morning −0.43 °C/decade, both proven. Same place: greener (NDVI up) and the air less "thirsty" (VPD −0.11 kPa/decade). Irrigation and greening cool the daytime surface; nights keep warming.
+**Delhi: nights hotter at the ground, days not** (MODIS land surface temperature): night +0.70 °C/decade (Aqua satellite agrees: +0.62, both proven). Late morning −0.43 °C/decade on Terra (proven), but Aqua's afternoon pass only leans the same way (−0.24, p = 0.18), so say "daytime ground heat is not rising", not "days are cooling". Same place: greener (NDVI up) and the air less "thirsty" (VPD −0.11 kPa/decade). Irrigation and greening are a likely reason the daytime surface isn't heating; nights keep warming.
 
 **Amazon drying is real and growing:** rain −0.53 mm/day/decade, confirmed by NASA GPCP v3.3; **drought months (SPI-3 ≤ −1) 0.9 a year in the 1980s → 9.4 a year in the last 10 years**; driest 12 months ended Jan 2016 (the 2015–16 El Niño). VPD +0.08 kPa/decade (strong).
 

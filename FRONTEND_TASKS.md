@@ -150,5 +150,5 @@ Same as `/api/beyond` (see README). Five small tiles:
 ## 11. NEW (Sat ~21:00): replay slider, coverage, land heat from space, climate models
 - **Replay slider** (rival xFr05en has one): `cross-examine.all_windows.timeline[]` (end year → p). Drag the end year; show "proven by {became_proven}" when reached. Simple line of p (log scale) with a 0.05 line also works.
 - **Coverage chip** under every verdict: `result.coverage.headline` (e.g. "306 of 310 months present; longest gap 4 months").
-- **LST_DAY / LST_NIGHT** are satellite variables like NDVI (same spinner, no map). Best demo: **Delhi, nights hotter / days cooler** next to Delhi greening.
+- **LST_DAY / LST_NIGHT** are satellite variables like NDVI (same spinner, no map). Best demo: **Delhi, nights hotter at the ground (both satellites agree), daytime ground heat not rising** next to Delhi greening. Don't say "days are cooling": only one satellite proves it.
 - **"Did the models see it coming?"** card (`/api/models`): observed slope as a dot over the model range bar (`model_range`, each `models[]` as a tick), `headline`, `next`, and `caveat` in small grey text. Only for T2M, T2M_MAX, T2M_MIN, rain, humidity, wind, sunshine.
