@@ -59,6 +59,14 @@ We generated 45-year monthly series with a seasonal cycle and autocorrelated noi
 
 **Starting point:** NASA GES DISC's own published approach (Acker et al., SeaWiFS chlorophyll time series) fits a least-squares line to monthly Giovanni data and tests it with an F-test. We build on it with seasonal removal, a robust slope, autocorrelation correction and multiple-testing control.
 
+## 6b. Cross-checks against other records (real data, same engine)
+| Check | Other record | NASA (via POWER) | Monthly anomaly correlation |
+|---|---|---|---|
+| **Temperature, Central England, 1981–2025** | Met Office HadCET (thermometers): **+0.31 °C/decade** (0.21 to 0.41), strong | MERRA-2 T2M, 25 cells: **+0.32 °C/decade** (0.21 to 0.43), strong | **0.99** |
+| **Rainfall, Lincoln box, 1983–2025** | NASA GPCP v3.3 (satellite + gauges): +0.031 mm/day/decade, not significant yet | MERRA-2 PRECTOTCORR, 15 cells: +0.029 mm/day/decade, not significant yet | **0.97** |
+
+MERRA-2 does not assimilate land station air temperatures, so the HadCET agreement is close to an independent confirmation. MERRA-2's corrected rainfall partly uses gauge and GPCP information, so the rainfall agreement shows consistency, not independence.
+
 ## 7. How long until we'd know?
 For trends that are not significant yet, we estimate the years of monthly data needed to detect a trend of the current size (5% level, 90% probability), following **Weatherhead et al. (1998)**:
 
