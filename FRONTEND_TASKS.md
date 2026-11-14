@@ -152,3 +152,9 @@ Same as `/api/beyond` (see README). Five small tiles:
 - **Coverage chip** under every verdict: `result.coverage.headline` (e.g. "306 of 310 months present; longest gap 4 months").
 - **LST_DAY / LST_NIGHT** are satellite variables like NDVI (same spinner, no map). Best demo: **Delhi, nights hotter at the ground (both satellites agree), daytime ground heat not rising** next to Delhi greening. Don't say "days are cooling": only one satellite proves it.
 - **"Did the models see it coming?"** card (`/api/models`): observed slope as a dot over the model range bar (`model_range`, each `models[]` as a tick), `headline`, `next`, and `caveat` in small grey text. Only for T2M, T2M_MAX, T2M_MIN, rain, humidity, wind, sunshine.
+
+## 12. NEW (Sat ~23:00): answers to issues.md (backend side done)
+- **2.1 Report card:** every item now has `instrument_check` {status, headline}. Show a small ⚠ with the headline when `status` is `could_be_instrument` or `doubt`. Items that the instrument explains are already moved to "Not proven yet" (`label: "mixed"`, `label_before_instrument_check` keeps the old one).
+- **3.4 Grey out slow variables:** call `/api/variables?lat_min=..&lat_max=..&lon_min=..&lon_max=..`; each variable has `ready` (true = instant) and `wait` text. Grey out or warn when `ready` is false.
+- **Score:** `cross-examine.score.checks[]` lists the five pass rules and `score.rule_note` says they were not pre-registered. Show the list, not just "5/5".
+- **Credits** for the footer: README "Data and credits" (full wording in docs/methods.md "Data credits and licences").

@@ -117,7 +117,7 @@ def monthly(box: list[float], workers: int = 8) -> pd.Series:
     path = _cache_path(box)
     cached = json.loads(path.read_text()) if path.exists() else {}
     todo = {}
-    if len(cached) < 12 * (2025 - 1998 + 1):
+    if not cached or max(cached) < "2025-09":  # IMERG Final runs ~3 months behind; Sep 2025 is the last month here
         todo = {m: u for m, u in granules().items() if m not in cached and m <= "2025-12"}
     if todo:
         if not creds.earthdata_token():

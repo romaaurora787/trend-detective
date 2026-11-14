@@ -88,8 +88,26 @@ def health():
 
 
 @app.get("/api/variables")
-def variables():
-    return {"variables": CATALOGUE, "place_types": PLACE_TYPES}
+def variables(lat_min: float | None = None, lat_max: float | None = None,
+              lon_min: float | None = None, lon_max: float | None = None):
+    """The catalogue. With a box, each variable also says whether it is instant here (`ready`)
+    or slow the first time (`ready: false`, `wait`): issue 3.4, so the site can grey out
+    satellite variables for places nobody has opened yet."""
+    if None in (lat_min, lat_max, lon_min, lon_max):
+        return {"variables": CATALOGUE, "place_types": PLACE_TYPES}
+    from . import ndvi
+    box = [lat_min, lat_max, lon_min, lon_max]
+    out = []
+    for m in CATALOGUE:
+        v = dict(m)
+        if m.get("satellite"):
+            path = ndvi._cache_path(box, product=m["id"])
+            v["ready"] = path.exists()
+            v["wait"] = None if v["ready"] else "about 1–4 minutes the first time (satellite images are read)"
+        else:
+            v["ready"], v["wait"] = True, None
+        out.append(v)
+    return {"variables": out, "place_types": PLACE_TYPES, "box": box}
 
 
 @app.get("/api/analyse")
@@ -454,6 +472,22 @@ def report_card(
             "typical_outcome": r["typical_vs_detective"]["outcome"],
             "typical_note": r["typical_vs_detective"]["note"],
         }
+        # Instrument check (Kanishk's issue 2.1): a documented data-source change could fake a trend.
+        lat_c = (box[0] + box[1]) / 2
+        if meta["id"] in crossexam.SOURCE_CHANGES or (meta["id"] == "PRECTOTCORR" and abs(lat_c) >= 42.5):
+            try:
+                al = crossexam.alibi(meta["id"], series, meta["units"], lat_c)
+                item["instrument_check"] = {"status": al["status"], "headline": al["headline"]}
+                if al["status"] == "could_be_instrument" and item["label"] in ("strong", "some"):
+                    # not allowed to stand as proven: a single jump at the data change explains it better
+                    item["label_before_instrument_check"] = item["label"]
+                    item["label"] = "mixed"
+                    item["headline"] = "Not proven: " + al["headline"]
+            except Exception as e:
+                item["instrument_check"] = {"status": "error", "headline": f"Instrument check unavailable ({type(e).__name__})."}
+        else:
+            item["instrument_check"] = {"status": "no_known_change",
+                                        "headline": "No documented change of instrument or model input in this record."}
         if witness:
             item["second_witness"] = _witness(meta["id"], box, series, meta["units"])
         return item

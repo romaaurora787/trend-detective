@@ -730,5 +730,11 @@ def cross_examine(var: str, series: pd.Series, units: str, box: list[float], n_c
                   res.get("walk_forward", {}).get("status") in ("confirmed", "continuing", "neither"),
                   not res.get("all_windows", {}).get("proven_opposite")])
     res["score"] = {"passed": int(passed), "of": 5, "proven": True,
-                    "headline": f"Passed {passed} of 5 cross-examination checks (instrument, El Niño, one year, two halves, dates)."}
+                    "headline": f"Passed {passed} of 5 cross-examination checks (instrument, El Niño, one year, two halves, dates).",
+                    "checks": ["instrument alibi: survives or no known change", "El Niño removed: still proven",
+                               "no single year flips it", "first half confirmed or continued in the second",
+                               "no start/end years give a proven opposite trend"],
+                    "rule_note": ("These five pass rules were written on Sat 14 Nov (~20:15) while building this check, after the "
+                                  "main Lincolnshire result was already known: they were not pre-registered. Each failure is "
+                                  "listed, so read the individual checks, not just the count.")}
     return res
