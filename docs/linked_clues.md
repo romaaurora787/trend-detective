@@ -35,3 +35,26 @@ This predicts the soil → heat result **before we look at it**. Dry soil should
 - Soil, evaporation, humidity and temperature here all come from **one model (MERRA-2)**. Links inside it partly show the model's own physics. To confirm with independent data, test soil → heat with **ESA satellite soil moisture** (we have Europe and East Africa) against MERRA-2 or station temperatures.
 - 10 places is a screen, not a global proof. The map version (every grid cell) would show where each link holds.
 - Correlation over months shows a consistent link, not proof of cause. The mechanism, the time order and the regime check together make the case.
+
+---
+
+# Stage 2: region rules tested on NEW places (out-of-sample)
+Script: `backend/scripts/links_regions.py`. The rules were committed to GitHub **before** the test ran (commit `6414be3`). Test places: a regular grid over all land (**111 points**, 45°S–65°N) and a 1° grid over the UK (**71 points**), none of them used to form the rules. Same strict test: predicted sign, p < 0.05 in both halves of 1981–2025.
+
+| Link | Region rule (fixed in advance) | Holds inside the region | Holds outside | Verdict |
+|---|---|---|---|---|
+| **Warmer months → more water vapour** | Cool climates (annual mean < 12 °C) | **48/51 global (94%)**, median r = +0.67 · **69/69 UK (100%)**, r = +0.93 | 16/60 (27%) | ✅ **Works and right.** Cool places only |
+| **Windier winter months → fewer frost days** | Mild-winter frost climates | **31/33 UK points (94%)**, median r = −0.61 | — | ✅ **Works across the UK.** ❌ The global "mild winter" rule failed (1/13), so this is a UK / maritime fact, not a world law |
+| **More haze → less sunshine (cloud held fixed)** | All land | **91/110 global (83%)** · 55/71 UK (77%) | — | ✅ **Works almost everywhere** |
+| **Rain → wetter root zone next month** | All land | **110/111 (99%)** · 71/71 UK | — | ✅ Universal (expected) |
+| **Dry soil → hotter days next month** | Water-limited climates | 44/85 (52%) | 1/25 (4%) | ⚠️ Happens **only** in water-limited places, but only in about half of them. Not reliable enough to promise |
+| **Your chain: dry soil → windier** | Water-limited climates | 28/85 (33%) · 0/30 UK | 1/25 | ❌ Rejected |
+| **Placebo (random noise)** | All land | **0/111 · 0/71** | — | ✅ The test doesn't invent links |
+
+## The links we can stand behind
+1. **In cool places, a warmer month is a more humid month.** This holds in 94% of new cool places worldwide and in every UK point tested. In hot places it usually doesn't (27%), because there the hottest months are the dry ones.
+2. **In the UK, windy winters mean fewer frosts.** It holds at 31 of 33 UK points, with a strong link (r = −0.61). Our guess that it would hold in every mild-winter climate was **wrong** when tested elsewhere (1/13). We report that honestly, and it's what makes it a genuinely local UK finding.
+3. **Haze dims the sunshine reaching the ground,** even after allowing for cloud, in 83% of places. The haze and sunshine figures come from different instruments.
+4. **Rain fills the soil for the following month,** in 99% of places. That's a sanity check rather than a discovery.
+
+**What we rejected:** dry soil → wind (your chain), cloud → day–night range, and "mild winter = wind stops frost" as a world rule. The rejections are part of the story: we show we test ideas instead of cherry-picking.
