@@ -18,6 +18,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import threading
 import time
 from pathlib import Path
 
@@ -33,6 +34,11 @@ MAX_SPAN = 10.0
 # Seconds to wait after each 429. The web app keeps this short; batch scripts
 # can set POWER_RETRY_WAITS="5,15,30,60,120".
 RETRY_WAITS = [float(x) for x in os.environ.get("POWER_RETRY_WAITS", "2,5,10").split(",")]
+# Live requests go out one at a time, at least MIN_GAP seconds apart (cached
+# responses are instant and skip this).
+MIN_GAP = float(os.environ.get("POWER_MIN_GAP", "0.4"))
+_PACE = threading.Lock()
+_last = [0.0]
 
 
 class PowerError(RuntimeError):
@@ -47,7 +53,12 @@ def _get(kind: str, params: dict) -> dict:
     q = {**params, "community": "AG", "format": "JSON"}
     # NASA POWER rate-limits bursts (HTTP 429): wait and retry with backoff.
     for wait in RETRY_WAITS:
-        r = httpx.get(f"{BASE}/{kind}", params=q, timeout=180)
+        with _PACE:  # one live request at a time, spaced out, so we never burst
+            gap = MIN_GAP - (time.monotonic() - _last[0])
+            if gap > 0:
+                time.sleep(gap)
+            r = httpx.get(f"{BASE}/{kind}", params=q, timeout=180)
+            _last[0] = time.monotonic()
         if r.status_code != 429:
             break
         time.sleep(wait)

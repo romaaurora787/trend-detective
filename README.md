@@ -59,6 +59,10 @@ Errors: 400 bad box, 404 unknown variable, 422 too little data, 502 NASA POWER f
 
 **C. Second witness.** `/api/analyse` and each report-card item have `second_witness`: `available`, `name` (e.g. Met Office HadCET, NASA GPCP, ESA CCI soil moisture), `agrees` (true → ✔ "Confirmed" badge, false → ⚠ "Caution" badge), `note`, `monthly_correlation`, `period`. If `available` is false, show nothing or "no second witness yet".
 
+### NEW: any place + the case file (see [FRONTEND_TASKS.md](FRONTEND_TASKS.md) for how to show them)
+- `GET /api/places?q=delhi`: search 34,215 world cities and towns (GeoNames, offline). Each result has a ready `box`.
+- `GET /api/context?var=..&lat_min=..&lat_max=..&lon_min=..&lon_max=..`: the case file around a verdict. `nearby` (local or regional? every surrounding cell tested with FDR), `impact` (change as % of normal; how often recent years beat old 1-in-10 extremes), `linked` (tested links re-checked at this place, with a story) and `beyond` (records, emergence, seasons, variability, turning point). Each section can independently be `{"error": ...}`.
+
 ### NEW: beyond the trend line
 `GET /api/beyond?var=T2M_MAX&lat_min=..&lat_max=..&lon_min=..&lon_max=..` returns five panels. Each has a `headline` with the numbers already filled in:
 - `records`: record highs and lows in the recent third of the record vs what chance gives (`record_highs`, `expected`, `ratio_highs`, `p_highs`, and the same for `_lows`). Show as **"Records broken 3.1× as often as chance"**.
@@ -99,6 +103,7 @@ docs/examples/  real API responses
 ## Data and credits
 - NASA POWER Project (NASA Langley Research Center), Prediction Of Worldwide Energy Resources, https://power.larc.nasa.gov. MERRA-2 (GMAO) meteorology; CERES / GEWEX SRB solar and cloud.
 - Methods: Mann (1945); Kendall (1975); Sen (1968); Hamed & Rao (1998); Yue & Wang (2004); Weatherhead et al. (1998); Benjamini & Hochberg (1995); Wilks (2016).
+- Places: GeoNames cities15000 (CC BY 4.0), geonames.org.
 - Libraries: pymannkendall, statsmodels, scipy, numpy, pandas, FastAPI.
 
 ## AI use

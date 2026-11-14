@@ -161,10 +161,11 @@ def typical_vs_detective(naive_p: float, naive_slope_dec: float, verdict_label: 
     typical_sig = naive_p < ALPHA
     detective_sig = verdict_label in {"strong", "some"}
     direction = "rising" if naive_slope_dec > 0 else "falling"
+    p_txt = "p < 0.0001" if naive_p < 0.0001 else f"p = {naive_p:.2g}"
     if typical_sig:
-        typical = f"Real trend: {direction} about {abs(naive_slope_dec):.3g} {units} per decade (p = {naive_p:.2g})."
+        typical = f"Real trend: {direction} about {abs(naive_slope_dec):.3g} {units} per decade ({p_txt})."
     else:
-        typical = f"No significant trend (p = {naive_p:.2g})."
+        typical = f"No significant trend ({p_txt})."
     if typical_sig and not detective_sig:
         outcome, note = "fooled", (
             "A typical analysis would have fooled you. Once we allow for natural ups and downs "

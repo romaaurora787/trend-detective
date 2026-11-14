@@ -1,0 +1,88 @@
+# Frontend tasks for Kanishk (written Sat 14 Nov, ~19:20)
+
+Your site (branch `frontend`) works end to end. Akshita and Claude clicked through every view: case, report card, map (England soil 89 → 0), methods; no console errors, a clean build, and the phone layout fits. This file lists **what to add or fix next**, in priority order. Every backend endpoint below is **already built, tested and on `main`**. Real example responses are in `docs/examples/`.
+
+## 0. First: get the latest backend
+```bash
+git checkout frontend
+git merge origin/main            # new endpoints: /api/places, /api/context, /api/beyond, /api/links
+git merge origin/wording-fixes   # your own wording branch; both merge cleanly (checked)
+cd backend && uv sync && uv run uvicorn trend_detective.api:app --reload
+```
+
+---
+
+## 1. Any place in the world: search box (HIGH)
+**Problem Akshita found:** the place menu only has 11 presets (one city per country), and "Pick on a map" is hidden.
+
+**Endpoint:** `GET /api/places?q=delhi&limit=8` searches 34,215 world cities and towns (GeoNames, offline, no API key, ~0.3 s first call, then instant).
+```json
+{"results": [{"name": "New Delhi", "country": "India", "region": "Delhi", "lat": 28.636, "lon": 77.224,
+  "population": 317797, "label": "New Delhi, Delhi, India", "box": [27.87, 29.37, 76.47, 77.97]}]}
+```
+- Put a **type-ahead search input** first in the controls row ("Search any city or town…"). Debounce ~200 ms; show `label` plus a muted population. On select → `go({ box: result.box })`.
+- Supports "paris, fr" (city, country prefix) and accents ("sao paulo" finds São Paulo).
+- Keep the presets as "Demo cases" (they have cached data and load instantly).
+- `placeName(box)` should show the searched name, not coordinates. Keep the chosen `label` in state or the URL hash (e.g. `&name=New%20Delhi`).
+- Attribution in the footer: "Places: GeoNames (CC BY 4.0)".
+
+## 2. The case file: what's around it, what it means, what else is happening (HIGH)
+**Problem Akshita found:** for New Delhi rainfall the page shows a verdict and stops. There's nothing about nearby places, whether that's significant, what it means, or what else is happening.
+
+**Endpoint:** `GET /api/context?var=PRECTOTCORR&lat_min=..&lat_max=..&lon_min=..&lon_max=..` takes ~4 s uncached (2–4 NASA calls), instant when cached. Examples: `docs/examples/context_PRECTOTCORR_new_delhi.json`, `docs/examples/context_T2M_lincolnshire.json`. **Each section can come back as `{"error": "..."}` on its own.** Hide that section, never the page.
+
+Add a new block **below the figure plate** on the case page: "**The case file**", with four parts.
+
+### 2a. Nearby: local or regional? → `nearby`
+- `headline`: the main sentence. Real examples:
+  - New Delhi rain: *"Not proven at this spot, but the area around it is changing: 99 cells rising and 0 falling after the correction."*
+  - Lincolnshire temperature: *"Regional, not just here: 120 of 120 surrounding cells show the same proven rising trend."*
+- `kind`: `regional` | `local` | `patchy` | `opposite` | `around` | `quiet` | `unknown`. Use it for a small tag.
+- `cells[]`: `lat`, `lon`, `slope_per_decade`, `p`, `significant_fdr`, `inside` (true = inside the user's box). Draw a **small static map** (an SVG grid is enough, no Leaflet needed): each cell coloured by slope (use your `dirTone`), significant cells solid or outlined, the user's box outlined. Cells with `p: null` are "no data / never changes" (grey).
+- `region_box` is the area shown (about 6° × 6° around the place). `fdr_q` = 0.1.
+
+### 2b. What it means → `impact`
+- `size_headline`: *"Change so far: +0.243 mm/day since 1981, +13% of the long-term average (1.91 mm/day)."* (`percent_of_mean` is null for temperatures; that's on purpose.)
+- `extremes_headline`: the big one. Example (Lincolnshire temperature): *"6 of the last 10 summers were warmer than what used to be a 1-in-10 summer (1981–2010). By chance we'd expect about 1."*
+- `extremes[]`: `period` (year / winter / spring / summer / autumn), `count`, `out_of`, `expected`, `p`. Show as a small table or 5 mini bars of count vs expected (1). Make the `p < 0.05` rows bold.
+
+### 2c. What else is changing here, and is it connected? → `linked[]`
+Only links that passed our out-of-sample test (`docs/linked_clues.md`), re-tested **at this place**.
+- Each item: `text` (the link), `evidence` (how often it held worldwide), `partner_name`, `holds_here` (bool), `r`, `partner_verdict`, `partner_slope_per_decade`, `partner_units`, `role` (cause/effect), `story` (the sentence to show).
+- Show: link text → ✔ "holds here (r = +0.71)" or ✖ "doesn't hold here" → the partner's verdict badge → `story`. Make the partner name a link that opens that variable's case (`go({ varId: partner })`).
+- An empty list is normal (no tested link for that variable). Show "No tested links for this variable yet" plus a button to the **report card** ("See everything else changing here").
+
+### 2d. Beyond the trend line → `beyond`
+Same as `/api/beyond` (see README). Five small tiles:
+- **Records:** `records.headline`; big number `ratio_highs` (or `ratio_lows`) "× chance" when `p_highs` (or `p_lows`) < 0.05.
+- **Emerged from the noise:** `emergence.year` (or "not yet": show `headline`).
+- **Seasons:** 4 small bars from `seasons.seasons[]` (`slope_per_decade`, solid if `significant`).
+- **More erratic?** `variability.headline`.
+- **Turning point:** `turning_point.headline`; if `year` is not null, draw a vertical line at that year on chart b.
+
+## 3. Small fixes (QUICK)
+1. **Map zoom control over the header:** when you scroll the map page, Leaflet's "+/−" control draws on top of the sticky header. Give `.shell` a `z-index` above 1000 (Leaflet controls use 1000) or lower `.leaflet-top`.
+2. **"p = 2e-18" in the Typical box:** fixed in the backend on `main` (now says "p < 0.0001"). Nothing to do once you merge.
+3. **Report card for a new place** fires 15 NASA calls. The backend now spaces them out (one at a time, 0.4 s apart) to avoid NASA's rate limit, so the **first** report card for a new place takes ~10–20 s. Show a progress message like "Checking 15 NASA records…". Don't fire extra calls in parallel from the browser.
+
+## 4. Methods page additions (MEDIUM)
+- **Cross-checks table** from `docs/methods.md` §6b: HadCET 0.99, GPCP 0.97, ESA soil.
+- **Linked clues:** `GET /api/links` (pre-registered rules + hit rates on 111 global and 71 UK new places) → a small table. Text: `docs/linked_clues.md` ("The links we can stand behind" + "What we rejected"). Mention the placebo held in 0 of 182 places.
+- **Beyond the line:** one paragraph per method (records vs 1/n chance with a permutation test; emergence = signal-to-noise > 2; seasons with Holm correction; variability with Brown-Forsythe; turning point by BIC). Source: the top docstring of `backend/src/trend_detective/beyond.py`.
+
+## 5. Things Claude can't do from Akshita's laptop (need you or Akshita)
+| Task | Who | Notes |
+|---|---|---|
+| Merge `frontend` + `wording-fixes` into `main` | Kanishk (or say "go" to Akshita) | Both merge cleanly with the current `main` |
+| **Deploy backend** | Kanishk | Google Cloud Run (Global Offer) preferred over Render (Render sleeps 30–60 s). Dockerfile: `uv sync` → `uvicorn trend_detective.api:app --host 0.0.0.0 --port $PORT`; 1 GB RAM; repo data files go in the image |
+| **Deploy frontend** | Kanishk | Vercel; set `VITE_API_URL` to the Cloud Run URL |
+| Cloud / GoDaddy / Microsoft sign-ups | Whoever signs up | Card verification must be entered by the person |
+| AI variable finder | Kanishk | Needs your Claude API key in the backend env (never in the frontend). Must pick only from `/api/variables` ids |
+| FortiGuard classification request | Kanishk | For the final URL, Sunday afternoon |
+| Make the GitHub repo **public** | Akshita (owner) | Just before submitting |
+| Video, screenshots, project page text | Akshita | |
+
+## 6. Data limits to show in the UI (honesty)
+- NASA POWER monthly data ends **Dec 2025**. Haze (AOD) starts **2001**; sunshine and cloud start **1984**.
+- Soil wetness and evaporation have no data over the sea (cells come back null).
+- A searched city gets a 1.5° × 1.5° box (~3–6 NASA cells, about 50 km each), so it's a **regional** picture, not a street-level one.
