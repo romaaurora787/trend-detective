@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import beyond, power, stats, witnesses
+from . import beyond, context, places, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -241,6 +241,58 @@ def beyond_the_line(
     if len(s) < 180:
         raise HTTPException(422, "Need at least 15 years of data")
     return _clean({"variable": meta, "box": [lat_min, lat_max, lon_min, lon_max], **beyond.beyond(s)})
+
+
+@app.get("/api/places")
+def place_search(q: str = Query(..., min_length=2, max_length=80), limit: int = Query(8, ge=1, le=20)):
+    """Search ~34,000 world cities and towns (GeoNames, CC BY 4.0). Each result has a ready `box`."""
+    return {"results": places.search(q, limit), "source": "GeoNames cities15000 (CC BY 4.0)"}
+
+
+@app.get("/api/context")
+def case_context(
+    var: str,
+    lat_min: float = Query(...), lat_max: float = Query(...),
+    lon_min: float = Query(...), lon_max: float = Query(...),
+):
+    """The case file around a verdict: nearby (local vs regional), impact,
+    linked clues re-tested here, and records/seasons/emergence/turning point."""
+    meta = _var(var)
+    _bbox(lat_min, lat_max, lon_min, lon_max)
+    box = [lat_min, lat_max, lon_min, lon_max]
+    try:
+        series, _ = power.fetch_area_series(var, *box)
+    except power.PowerError as e:
+        raise HTTPException(502, str(e))
+    s = series.dropna()
+    try:
+        own = stats.analyse(s, units=meta["units"])
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    out = {"variable": meta, "box": box, "verdict": own["verdict"]}
+    try:
+        out["nearby"] = context.nearby(var, box, own)
+    except Exception as e:  # each section fails on its own, never the whole page
+        out["nearby"] = {"error": f"{type(e).__name__}: {str(e)[:150]}"}
+    try:
+        out["impact"] = context.impact(var, s, own)
+    except Exception as e:
+        out["impact"] = {"error": f"{type(e).__name__}: {str(e)[:150]}"}
+    try:
+        t_mean = None
+        if var == "T2M":
+            t_mean = float(s.mean())
+        elif var in ("QV2M",):
+            ts, _ = power.fetch_area_series("T2M", *box)
+            t_mean = float(ts.dropna().mean())
+        out["linked"] = context.linked(var, box, s, own, t_mean)
+    except Exception as e:
+        out["linked"] = {"error": f"{type(e).__name__}: {str(e)[:150]}"}
+    try:
+        out["beyond"] = beyond.beyond(s) if len(s) >= 180 else {"error": "Need at least 15 years"}
+    except Exception as e:
+        out["beyond"] = {"error": f"{type(e).__name__}: {str(e)[:150]}"}
+    return _clean(out)
 
 
 @app.get("/api/links")

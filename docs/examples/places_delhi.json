@@ -1,0 +1,50 @@
+{
+    "results": [
+        {
+            "name": "Delhi",
+            "country": "India",
+            "region": "Delhi",
+            "lat": 28.652,
+            "lon": 77.231,
+            "population": 11034555,
+            "label": "Delhi, India",
+            "box": [
+                27.9,
+                29.4,
+                76.48,
+                77.98
+            ]
+        },
+        {
+            "name": "Delhi Cantonment",
+            "country": "India",
+            "region": "Delhi",
+            "lat": 28.6,
+            "lon": 77.133,
+            "population": 110351,
+            "label": "Delhi Cantonment, Delhi, India",
+            "box": [
+                27.85,
+                29.35,
+                76.38,
+                77.88
+            ]
+        },
+        {
+            "name": "New Delhi",
+            "country": "India",
+            "region": "Delhi",
+            "lat": 28.621,
+            "lon": 77.215,
+            "population": 317797,
+            "label": "New Delhi, Delhi, India",
+            "box": [
+                27.87,
+                29.37,
+                76.47,
+                77.97
+            ]
+        }
+    ],
+    "source": "GeoNames cities15000 (CC BY 4.0)"
+}
