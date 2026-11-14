@@ -22,7 +22,6 @@ import threading
 import time
 from pathlib import Path
 
-import httpx
 import numpy as np
 import pandas as pd
 import pymannkendall as mk
@@ -54,18 +53,13 @@ def _fetch(var: str, lat: float, lon: float) -> pd.DataFrame:
     if f.exists():
         d = json.loads(f.read_text())
     else:
+        from .era5 import open_meteo_get
         with _LOCK:
-            r = None
-            for wait in (0, 62, 62):
-                time.sleep(wait)
-                r = httpx.get(URL, params={"latitude": lat, "longitude": lon, "start_date": "1981-01-01",
-                                           "end_date": "2050-12-31", "models": ",".join(MODELS), "daily": field},
-                              timeout=120)
-                if r.status_code == 200:
-                    break
-            if r is None or r.status_code != 200:
-                raise ModelsError(f"Open-Meteo climate API {r.status_code if r is not None else '?'}: "
-                                  f"{(r.text[:200] if r is not None else '')}")
+            try:
+                r = open_meteo_get(URL, {"latitude": lat, "longitude": lon, "start_date": "1981-01-01",
+                                         "end_date": "2050-12-31", "models": ",".join(MODELS), "daily": field})
+            except RuntimeError as e:
+                raise ModelsError(str(e)) from e
             d = r.json()
             CACHE.mkdir(parents=True, exist_ok=True)
             f.write_text(json.dumps(d))
