@@ -1,0 +1,94 @@
+"""The fixed list of variables ("suspects") the app may use.
+
+The AI variable-finder may only pick ids from this list. Each entry was run
+through the stats engine on real NASA POWER data on 14 Nov 2026.
+Sources per the POWER parameter dictionary and response headers.
+"""
+
+CATALOGUE = [
+    {
+        "id": "T2M", "name": "Air temperature", "units": "°C", "source": "MERRA-2",
+        "plain": "Average air temperature 2 metres above the ground.",
+        "tags": ["city", "farm", "arctic", "desert", "rainforest", "coast", "any"],
+        "caveat": "",
+    },
+    {
+        "id": "T2M_MAX", "name": "Daytime highs", "units": "°C", "source": "MERRA-2 (via POWER)",
+        "plain": "Average of each day's highest air temperature.",
+        "tags": ["city", "desert", "farm"], "caveat": "",
+    },
+    {
+        "id": "T2M_MIN", "name": "Night-time lows", "units": "°C", "source": "MERRA-2 (via POWER)",
+        "plain": "Average of each day's lowest air temperature.",
+        "tags": ["city", "farm", "arctic"], "caveat": "",
+    },
+    {
+        "id": "TS", "name": "Ground (skin) temperature", "units": "°C", "source": "MERRA-2",
+        "plain": "Temperature of the land or sea surface itself.",
+        "tags": ["desert", "arctic", "coast"], "caveat": "",
+    },
+    {
+        "id": "PRECTOTCORR", "name": "Rainfall", "units": "mm/day", "source": "MERRA-2 (gauge-corrected)",
+        "plain": "Average rain and snow per day, corrected with rain-gauge observations.",
+        "tags": ["farm", "rainforest", "desert", "any"],
+        "caveat": "Rainfall varies a lot from year to year, so trends take decades to show.",
+    },
+    {
+        "id": "GWETTOP", "name": "Topsoil wetness", "units": "fraction (0 dry – 1 saturated)", "source": "MERRA-2",
+        "plain": "How wet the top 5 cm of soil is.",
+        "tags": ["farm", "desert", "rainforest"], "caveat": "Model estimate, not a direct measurement.",
+    },
+    {
+        "id": "GWETROOT", "name": "Root-zone soil wetness", "units": "fraction (0 dry – 1 saturated)", "source": "MERRA-2",
+        "plain": "How wet the soil is down to about 1 metre, where crop roots are.",
+        "tags": ["farm"], "caveat": "Model estimate, not a direct measurement.",
+    },
+    {
+        "id": "QV2M", "name": "Humidity (water in the air)", "units": "g/kg", "source": "MERRA-2",
+        "plain": "Grams of water vapour in each kilogram of air.",
+        "tags": ["rainforest", "coast", "city", "any"], "caveat": "",
+    },
+    {
+        "id": "RH2M", "name": "Relative humidity", "units": "%", "source": "MERRA-2 (via POWER)",
+        "plain": "How close the air is to being saturated with water.",
+        "tags": ["rainforest", "desert"], "caveat": "",
+    },
+    {
+        "id": "WS2M", "name": "Wind speed", "units": "m/s", "source": "MERRA-2 (via POWER)",
+        "plain": "Average wind speed 2 metres above the ground.",
+        "tags": ["coast", "arctic"], "caveat": "",
+    },
+    {
+        "id": "ALLSKY_SFC_SW_DWN", "name": "Sunshine reaching the ground", "units": "MJ/m²/day", "source": "CERES / GEWEX SRB",
+        "plain": "Solar energy reaching the ground, including the effect of clouds and haze.",
+        "tags": ["city", "farm", "desert"], "caveat": "Starts 1984.",
+    },
+    {
+        "id": "CLOUD_AMT", "name": "Cloud cover", "units": "%", "source": "CERES / GEWEX SRB",
+        "plain": "Share of the sky covered by cloud.",
+        "tags": ["coast", "rainforest", "any"], "caveat": "Starts 1984.",
+    },
+    {
+        "id": "AOD_55", "name": "Haze (aerosol optical depth)", "units": "unitless", "source": "MERRA-2 aerosols",
+        "plain": "How much dust, smoke and pollution particles dim the sunlight.",
+        "tags": ["city", "desert"], "caveat": "Starts 2001.",
+    },
+    {
+        "id": "EVLAND", "name": "Evaporation from land", "units": "mm/day", "source": "MERRA-2",
+        "plain": "Water evaporating from soil and plants each day.",
+        "tags": ["farm", "rainforest", "desert"], "caveat": "Model estimate.",
+    },
+    {
+        "id": "FROST_DAYS", "name": "Frost days", "units": "days/month", "source": "MERRA-2 (via POWER)",
+        "plain": "Days in the month when the temperature fell below freezing.",
+        "tags": ["arctic", "farm"],
+        "caveat": "Mostly zero in summer; trend uses regression instead of Sen's slope.",
+    },
+]
+
+BY_ID = {v["id"]: v for v in CATALOGUE}
+
+PLACE_TYPES = {
+    "city": "Big city", "farm": "Farmland", "coast": "Coast / estuary", "desert": "Desert",
+    "rainforest": "Rainforest", "arctic": "Arctic / cold", "any": "Anywhere",
+}
