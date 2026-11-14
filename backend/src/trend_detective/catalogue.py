@@ -41,7 +41,7 @@ CATALOGUE = [
     {
         "id": "GWETROOT", "name": "Root-zone soil wetness", "units": "fraction (0 dry – 1 saturated)", "source": "MERRA-2",
         "plain": "How wet the soil is down to about 1 metre, where crop roots are.",
-        "tags": ["farm"], "caveat": "Model estimate, not a direct measurement.",
+        "tags": ["farm"], "caveat": "Model estimate, not a direct measurement. MERRA-2 production streams join in 1991, 2001 and 2011, which can make deep-soil jumps: check the instrument alibi.",
     },
     {
         "id": "QV2M", "name": "Humidity (water in the air)", "units": "g/kg", "source": "MERRA-2",
@@ -61,17 +61,17 @@ CATALOGUE = [
     {
         "id": "ALLSKY_SFC_SW_DWN", "name": "Sunshine reaching the ground", "units": "MJ/m²/day", "source": "CERES / GEWEX SRB",
         "plain": "Solar energy reaching the ground, including the effect of clouds and haze.",
-        "tags": ["city", "farm", "desert"], "caveat": "Starts 1984.",
+        "tags": ["city", "farm", "desert"], "caveat": "Starts 1984. Data source changes in 2001 (GEWEX SRB to CERES): check the instrument alibi.",
     },
     {
         "id": "CLOUD_AMT", "name": "Cloud cover", "units": "%", "source": "CERES / GEWEX SRB",
         "plain": "Share of the sky covered by cloud.",
-        "tags": ["coast", "rainforest", "any"], "caveat": "Starts 1984.",
+        "tags": ["coast", "rainforest", "any"], "caveat": "Starts 1984. Data source changes in 2001 (GEWEX SRB to CERES): at many places the 'trend' is this switch. Check the instrument alibi.",
     },
     {
         "id": "AOD_55", "name": "Haze (aerosol optical depth)", "units": "unitless", "source": "MERRA-2 aerosols",
         "plain": "How much dust, smoke and pollution particles dim the sunlight.",
-        "tags": ["city", "desert"], "caveat": "Starts 2001.",
+        "tags": ["city", "desert"], "caveat": "Starts 2001. MERRA-2 stops using two aerosol satellites/networks in 2014: check the instrument alibi.",
     },
     {
         "id": "EVLAND", "name": "Evaporation from land", "units": "mm/day", "source": "MERRA-2",

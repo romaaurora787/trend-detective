@@ -454,6 +454,22 @@ def report_card(
             "typical_outcome": r["typical_vs_detective"]["outcome"],
             "typical_note": r["typical_vs_detective"]["note"],
         }
+        # Instrument check (Kanishk's issue 2.1): a documented data-source change could fake a trend.
+        lat_c = (box[0] + box[1]) / 2
+        if meta["id"] in crossexam.SOURCE_CHANGES or (meta["id"] == "PRECTOTCORR" and abs(lat_c) >= 42.5):
+            try:
+                al = crossexam.alibi(meta["id"], series, meta["units"], lat_c)
+                item["instrument_check"] = {"status": al["status"], "headline": al["headline"]}
+                if al["status"] == "could_be_instrument" and item["label"] in ("strong", "some"):
+                    # not allowed to stand as proven: a single jump at the data change explains it better
+                    item["label_before_instrument_check"] = item["label"]
+                    item["label"] = "mixed"
+                    item["headline"] = "Not proven: " + al["headline"]
+            except Exception as e:
+                item["instrument_check"] = {"status": "error", "headline": f"Instrument check unavailable ({type(e).__name__})."}
+        else:
+            item["instrument_check"] = {"status": "no_known_change",
+                                        "headline": "No documented change of instrument or model input in this record."}
         if witness:
             item["second_witness"] = _witness(meta["id"], box, series, meta["units"])
         return item
