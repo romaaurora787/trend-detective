@@ -73,3 +73,46 @@ def test_parse_csv_daily_to_monthly_with_header():
 def test_hunch_seasons_flip_in_the_south():
     assert guide._season_months("summer", -30) == [12, 1, 2]
     assert guide._season_months("summer", 50) == [6, 7, 8]
+
+
+def test_seasons_finds_a_winter_only_trend():
+    s = _series(noise=0.3, seed=3)
+    winter = s.index.month.isin([12, 1, 2])
+    s = s + np.where(winter, 0.1 * (s.index.year - 1984), 0.0)  # +1 per decade, winter only
+    a = crossexam.seasons(s, "°C", 52)
+    proven = {r["month"] for r in a["months"] if r["proven_fdr"]}
+    assert {"Dec", "Jan", "Feb"} <= proven
+    assert len(proven & {"Jun", "Jul", "Aug"}) <= 1  # FDR q=0.10 allows the odd false month
+    assert max(a["by_season"], key=lambda b: b["slope_per_decade"])["season"] == "winter"
+
+
+def test_seasons_flip_names_south_of_equator():
+    a = crossexam.seasons(_series(trend_per_year=0.05), "°C", -30)
+    assert next(b for b in a["by_season"] if b["months"] == "DJF")["season"] == "summer"
+
+
+def test_change_point_tells_step_from_steady_trend():
+    step = crossexam.change_point("T2M", _series(step=2.0, step_at="2005-01"), "°C")
+    assert step["status"] == "sudden_shift" and abs(step["year"] - 2005) <= 1
+    ramp = crossexam.change_point("T2M", _series(trend_per_year=0.06), "°C")
+    assert ramp["status"] in ("gradual", "none")
+    flat = crossexam.change_point("T2M", _series(seed=5), "°C")
+    assert flat["status"] == "none"
+
+
+def test_change_point_flags_documented_data_change():
+    cp = crossexam.change_point("CLOUD_AMT", _series(step=-3.0, step_at="2001-01"), "%")
+    assert cp["status"] == "sudden_shift" and cp["near_data_change"]
+
+
+def test_climate_modes_finds_the_mode_and_keeps_the_real_trend():
+    nao = crossexam.climate_indices()["NAO"].reindex(IDX).fillna(0).to_numpy()
+    s = _series(trend_per_year=0.03, noise=0.3, seed=7) + 1.0 * nao
+    c = crossexam.climate_modes(s, "°C")
+    assert c["links"][0]["mode"] == "NAO" and c["links"][0]["correlation"] > 0.5
+    assert "NAO" in c["removed"] and c["status"] == "survives"
+    assert abs(c["after"]["slope_per_decade"] - 0.3) < 0.1
+
+
+def test_climate_modes_none_linked_for_pure_noise():
+    assert crossexam.climate_modes(_series(seed=11), "°C")["status"] == "none_linked"

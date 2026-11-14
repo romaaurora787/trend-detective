@@ -19,7 +19,7 @@ from fastapi.responses import Response
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import beyond, compare as cmp, context, crossexam, era5, events, globalref, guide, heat, places, stations, power, stats, witnesses
+from . import beyond, compare as cmp, context, crossexam, drought, reproduce, era5, events, globalref, guide, heat, places, stations, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -115,6 +115,11 @@ def analyse(
         result["vs_world"] = globalref.vs_world(var, result["sen_slope_per_decade"], result["start"], result["end"])
     except Exception:
         result["vs_world"] = None
+    try:
+        result["reproduce"] = reproduce.links(var, [lat_min, lat_max, lon_min, lon_max],
+                                              int(result["start"][:4]), int(result["end"][:4]))
+    except Exception:
+        result["reproduce"] = []
     anomalies, _ = stats.deseasonalise(series)
     t = stats.to_decimal_year(anomalies.index)
     t_mid = (t[0] + t[-1]) / 2
@@ -327,6 +332,19 @@ def natural_events(lat_min: float = Query(...), lat_max: float = Query(...),
         raise HTTPException(502, f"NASA EONET unavailable ({type(e).__name__})")
 
 
+@app.get("/api/drought")
+@memo
+def drought_months(lat_min: float = Query(...), lat_max: float = Query(...),
+                   lon_min: float = Query(...), lon_max: float = Query(...)):
+    """Standardized Precipitation Index: drought months per year and the SPI-12 record."""
+    box = [lat_min, lat_max, lon_min, lon_max]
+    _bbox(*box)
+    try:
+        return _clean(drought.report(box))
+    except power.PowerError as e:
+        raise HTTPException(502, str(e))
+
+
 @app.get("/api/extreme-days")
 @memo
 def extreme_days(lat_min: float = Query(...), lat_max: float = Query(...),
@@ -447,6 +465,10 @@ def trend_map(
         c["significant_fdr"] = bool(s_)
         c["significant_raw"] = bool(np.isfinite(c["p"]) and c["p"] < stats.ALPHA)
         c["significant_typical"] = bool(np.isfinite(c["typical_p"]) and c["typical_p"] < stats.ALPHA)
+    try:
+        control = stats.shuffled_control(df[[c["id"] for c in cells]])
+    except Exception as e:  # never break the map
+        control = {"headline": f"Control unavailable ({type(e).__name__})."}
     n_valid = int(np.isfinite(pvals).sum())
     n_typ = sum(c["significant_typical"] for c in out)
     n_up = sum(c["significant_fdr"] and c["slope_per_decade"] > 0 for c in out)
@@ -464,6 +486,7 @@ def trend_map(
             "fdr_q": stats.FDR_Q,
             "story": stats.map_story(n_valid, n_typ, int(sig.sum()), n_up, n_down, meta["name"]),
         },
+        "shuffled_control": control,
     })
 
 

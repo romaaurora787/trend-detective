@@ -26,6 +26,7 @@ fails = []
 from trend_detective import guide
 for name, b in PLACES.items():
     q = f"lat_min={b[0]}&lat_max={b[1]}&lon_min={b[2]}&lon_max={b[3]}"
+    c.get(f"/api/drought?{q}")
     r = c.get(f"/api/report-card?{q}")
     print(name, "report-card", r.status_code, flush=True)
     for ep in ("profile", "events"):

@@ -290,6 +290,39 @@ def cell_tests(series: pd.Series, alpha: float = ALPHA) -> dict:
     return {"slope_per_decade": float(hr.slope * 120), "p": float(hr.p), "typical_p": float(naive.pvalue)}
 
 
+def shuffled_control(df: pd.DataFrame, n_perm: int = 20, seed: int = 0) -> dict:
+    """Pure-noise control for a map: shuffle whole YEARS (the same shuffle for every cell, so
+    neighbouring cells stay alike) and count how many cells the typical test still calls
+    'significant'. Any trend is destroyed by the shuffle, so every hit is a false alarm."""
+    ok = df.dropna(axis=1, thresh=int(0.9 * len(df)))
+    anom = ok.groupby(ok.index.month).transform(lambda x: x - x.mean())
+    anom = anom.dropna()
+    years = np.array(sorted(set(anom.index.year)))
+    full = [y for y in years if (anom.index.year == y).sum() == 12]
+    anom = anom[anom.index.year.isin(full)]
+    Y = anom.to_numpy()  # time x cells
+    n = Y.shape[0]
+    t = np.arange(n) / 12.0
+    tc = t - t.mean()
+    rng = np.random.default_rng(seed)
+    blocks = Y.reshape(len(full), 12, -1)
+    counts = []
+    for _ in range(n_perm):
+        Z = blocks[rng.permutation(len(full))].reshape(n, -1)
+        Zc = Z - Z.mean(axis=0)
+        b = tc @ Zc / (tc @ tc)
+        resid = Zc - np.outer(tc, b)
+        se = np.sqrt((resid ** 2).sum(axis=0) / (n - 2) / (tc @ tc))
+        p = 2 * sps.t.sf(np.abs(b / se), n - 2)
+        counts.append(int((p < ALPHA).sum()))
+    c = np.array(counts)
+    return {"n_cells": int(Y.shape[1]), "n_shuffles": n_perm, "typical_hits_median": float(np.median(c)),
+            "typical_hits_max": int(c.max()), "typical_hits_mean_pct": float(100 * c.mean() / max(Y.shape[1], 1)),
+            "headline": (f"Control: with the years shuffled (any real trend destroyed), a typical test still marks "
+                         f"about {np.median(c):.0f} of {Y.shape[1]} cells as changing (up to {c.max()} in {n_perm} tries). "
+                         "Those are pure false alarms: a typical map's pattern can be this.")}
+
+
 def map_story(n_cells: int, n_typical: int, n_fdr: int, n_up: int, n_down: int, var_name: str) -> str:
     """Feature A for maps: one plain sentence, numbers from code."""
     if n_typical == 0 and n_fdr == 0:

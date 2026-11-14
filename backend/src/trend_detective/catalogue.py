@@ -105,6 +105,14 @@ CATALOGUE = [
         "tags": ["any"], "caveat": "Data source changes in 2001 (GEWEX SRB to CERES): check the instrument alibi.",
     },
     {
+        "id": "VPD", "name": "Thirst of the air (vapour pressure deficit)", "units": "kPa",
+        "source": "Computed from MERRA-2 temperature and dew point (via POWER)",
+        "plain": "How strongly the air pulls water out of plants and soil. Rising VPD stresses crops and forests and feeds wildfires.",
+        "tags": ["farm", "rainforest", "desert"],
+        "caveat": "Computed from monthly averages, so it slightly understates the daytime peak.",
+        "derived": True,
+    },
+    {
         "id": "NDVI", "name": "Vegetation greenness (NDVI)", "units": "NDVI (0–1)",
         "source": "NASA MODIS Terra MOD13Q1 v6.1 (250 m)",
         "plain": "How green the plants are, seen from space: near 0 bare ground, 0.3 grass or crops, 0.8 dense forest.",

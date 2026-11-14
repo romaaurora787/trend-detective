@@ -139,3 +139,10 @@ Same as `/api/beyond` (see README). Five small tiles:
 - Hunches `greener` / `browner` are in `/api/hunches`.
 **Extreme days** (`/api/extreme-days?lat_min=..`): a small table / bar pairs "1980s → last 10 years" per index (`indices[].mean_1980s`, `.mean_last10`, `.headline`), and a mini-chart from `years[]`/`counts[]`. Rows with `rare: true` show "rare here". Lincolnshire: hot days 30 → 59 a year; frost nights 44 → 22.
 **World page**: `variables[].alibi` and `n_proven_after_alibi` → add a column "survive the instrument check" next to "proven" (cloud: 88 proven, 42 could be the 2001 switch).
+
+## 10. NEW (Sun ~02:00): more cross-examination, drought, VPD, control map, "check our work"
+- **Cross-examination block**: three more rows. `seasons`: 12 small bars (Jan–Dec, `months[].slope_per_decade`, solid if `proven_fdr`) + `headline`. `change_point`: "When did it change?" sentence (`headline`); draw a dotted line at `change_point.year` when `status` is `sudden_shift`. `climate_modes`: `strongest` sentence + `headline` (before/after slope pair like El Niño).
+- **Drought panel** (`/api/drought`): SPI-12 line chart (`spi12.dates/values`, shade below −1 in amber) + the two count rows like extreme days. Show for rain-related cases.
+- **VPD** is a normal variable (`id: "VPD"`); nothing special.
+- **Map**: under the summary, the `shuffled_control.headline` in a grey box ("pure noise would still light up ~60 cells on a typical map"). Great for the "why our map is honest" story. Optional toggle: real vs shuffled.
+- **"Check our work" box** on every case: list `result.reproduce[]` as links (name + note). Put the notebook link (GitHub) there too.
