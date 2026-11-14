@@ -68,3 +68,52 @@ def test_sinusoidal_projection_matches_modis_definition():
     x, y = ndvi._sinu(60.0, 10.0)
     assert abs(y - 6671703.118) < 1  # 60° N is the top of the v03 row
     assert abs(x - ndvi.R * np.radians(10) * 0.5) < 1e-6
+
+
+# ----- drought index, derived VPD, reproduce links, shuffled map control
+from trend_detective import drought, power, reproduce, stats  # noqa: E402
+
+MONTHS = pd.date_range("1981-01-01", "2025-12-01", freq="MS")
+
+
+def test_spi_is_standard_normal_over_the_baseline():
+    rng = np.random.default_rng(1)
+    rain = pd.Series(rng.gamma(2.0, 1.5, len(MONTHS)), index=MONTHS)
+    s = drought.spi(rain, 3)
+    base = s["1981":"2010"]
+    assert abs(base.mean()) < 0.15 and 0.85 < base.std() < 1.15
+
+
+def test_spi_sees_a_drying_climate():
+    rng = np.random.default_rng(2)
+    scale = np.linspace(2.0, 0.8, len(MONTHS))  # rain falls over time
+    rain = pd.Series(rng.gamma(2.0, scale), index=MONTHS)
+    s = drought.spi(rain, 3)
+    assert (s["2016":] <= -1).mean() > (s["1981":"1990"] <= -1).mean()
+
+
+def test_vpd_formula():
+    t, td = pd.Series([20.0]), pd.Series([10.0])
+    v = power.DERIVED["VPD"][1](t, td)
+    assert abs(float(v.iloc[0]) - (2.338 - 1.228)) < 0.01  # FAO-56 table values, kPa
+    assert float(power.DERIVED["VPD"][1](t, t).iloc[0]) == 0
+
+
+def test_reproduce_links_widen_small_boxes_and_add_imerg_for_rain():
+    ls = reproduce.links("PRECTOTCORR", [52.6, 53.7, -1.0, 0.4])
+    power_url = ls[0]["url"]
+    assert "latitude-min=52.15" in power_url and "latitude-max=54.15" in power_url
+    assert any("GPM_3IMERGM" in l["url"] for l in ls)
+    assert any("bbox=-1.0,52.6,0.4,53.7" in l["url"] for l in ls)
+    assert len(reproduce.links("VPD", [50, 55, -6, 2])) == 2  # one POWER request per ingredient
+
+
+def test_shuffled_control_flags_false_alarms_in_autocorrelated_noise():
+    rng = np.random.default_rng(3)
+    n, cells = len(MONTHS), 30
+    common = np.zeros(n)
+    for i in range(1, n):  # red noise shared by all cells (like a real region)
+        common[i] = 0.9 * common[i - 1] + rng.normal()
+    df = pd.DataFrame({c: common + 0.3 * rng.normal(size=n) for c in range(cells)}, index=MONTHS)
+    c = stats.shuffled_control(df, n_perm=10)
+    assert c["n_cells"] == cells and c["typical_hits_max"] >= 1

@@ -7,12 +7,16 @@ answers one question in plain words:
                  (documented source changes only, each with its reference)
   el_nino        Is it still there once El Niño / La Niña is removed?
                  (NOAA Oceanic Niño Index, lagged regression, Foster & Rahmstorf 2011)
+  climate_modes  ...and once every climate mode this place follows is removed?
+                 (El Niño, North Atlantic Oscillation, Indian Ocean Dipole, Pacific Decadal Oscillation)
   leave_one_out  Is one single year carrying the whole case?
   walk_forward   Found in the first half of the record: does it hold in the second?
   all_windows    Did we just pick good dates? Every start/end year, 15+ years long.
   decades        Is it speeding up? Rate per decade + an acceleration test.
   extremes       Early vs recent years, and the most extreme years.
   resolution     How many NASA grid cells really sit behind the number?
+  seasons        Which months are changing? (each month alone + seasonal Kendall)
+  change_point   When did it change? Sudden shift or gradual? (Pettitt + BIC)
 
 `overturn()` then lists what could still overturn the verdict.
 
@@ -239,6 +243,123 @@ def el_nino(series: pd.Series, units: str) -> dict:
             "method": "Foster & Rahmstorf (2011): regression on trend + ENSO index at the best-fitting lag"}
 
 
+# --------------------------------------------------------------------------- 2b. other climate modes
+def _table(path: Path, missing: float) -> pd.Series:
+    """Year + 12 monthly values per row (NOAA PSL / NCEI layout)."""
+    rows = {}
+    for line in path.read_text().splitlines():
+        p = line.split()
+        if len(p) != 13:
+            continue
+        try:
+            yr, vals = int(p[0]), [float(v) for v in p[1:]]
+        except ValueError:
+            continue
+        for m, v in enumerate(vals, 1):
+            if abs(v) < missing:
+                rows[pd.Timestamp(yr, m, 1)] = v
+    return pd.Series(rows).sort_index()
+
+
+@lru_cache(maxsize=1)
+def climate_indices() -> dict[str, pd.Series]:
+    ext = DATA / "external"
+    nao = {}
+    for line in (ext / "nao.ascii").read_text().splitlines():
+        p = line.split()
+        if len(p) == 3:
+            nao[pd.Timestamp(int(p[0]), int(p[1]), 1)] = float(p[2])
+    return {"ENSO": oni(), "NAO": pd.Series(nao).sort_index(),
+            "IOD": _table(ext / "dmi.had.long.data", 99), "PDO": _table(ext / "pdo.dat", 99)}
+
+
+MODES = {
+    "ENSO": ("El Niño / La Niña", "NOAA CPC Oceanic Niño Index"),
+    "NAO": ("North Atlantic Oscillation", "NOAA CPC monthly NAO index"),
+    "IOD": ("Indian Ocean Dipole", "NOAA PSL Dipole Mode Index (HadISST)"),
+    "PDO": ("Pacific Decadal Oscillation", "NOAA NCEI ERSST v5 PDO index"),
+}
+
+
+def climate_modes(series: pd.Series, units: str) -> dict:
+    """Which of the big ocean–atmosphere 'moods' does this place follow, and is the trend still
+    there once all of the linked ones are removed together? Trend + modes are fitted jointly
+    (Foster & Rahmstorf 2011), so a mode that itself drifts cannot steal a real trend."""
+    s = series.dropna().sort_index()
+    a, clim = stats.deseasonalise(s)
+    t_all = stats.to_decimal_year(a.index)
+    detr = a - np.polyval(np.polyfit(t_all, a.to_numpy(), 1), t_all)
+    idx = climate_indices()
+    links = []
+    for key, ser in idx.items():
+        best = None
+        for lag in range(0, 4):
+            x = ser.shift(lag, freq="MS").reindex(a.index)
+            ok = x.notna()
+            if ok.sum() < 120:
+                continue
+            r = float(np.corrcoef(detr[ok], x[ok])[0, 1])
+            if best is None or abs(r) > abs(best[0]):
+                best = (r, lag)
+        if best is None:
+            continue
+        r, lag = best
+        x = ser.shift(lag, freq="MS").reindex(a.index)
+        by_season = {}
+        for sname, months in (("Dec–Feb", [12, 1, 2]), ("Jun–Aug", [6, 7, 8])):
+            ok = x.notna() & a.index.month.isin(months)
+            if ok.sum() > 30:
+                by_season[sname] = float(np.corrcoef(detr[ok], x[ok])[0, 1])
+        top_season = max(by_season.items(), key=lambda kv: abs(kv[1])) if by_season else (None, None)
+        name, src = MODES[key]
+        links.append({"mode": key, "name": name, "index": src, "lag_months": lag, "correlation": r,
+                      "season_correlation": by_season, "strongest_season": top_season[0],
+                      "winter_correlation": by_season.get("Dec–Feb"),
+                      "linked": abs(r) >= 0.2 or (top_season[1] is not None and abs(top_season[1]) >= 0.35)})
+    use = [l for l in links if l["linked"]]
+    links.sort(key=lambda l: -abs(l["correlation"]))
+    if not use:
+        return {"status": "none_linked", "links": links,
+                "headline": "This place does not follow any of the big climate modes closely (El Niño, NAO, Indian Ocean Dipole, PDO), "
+                            "so they cannot explain its trend."}
+    cols, keep = [], pd.Series(True, index=a.index)
+    for l in use:
+        x = idx[l["mode"]].shift(l["lag_months"], freq="MS").reindex(a.index)
+        keep &= x.notna()
+        cols.append(x)
+    t = stats.to_decimal_year(a.index[keep])
+    X = np.c_[np.ones(keep.sum()), t - t.mean(), *[c[keep].to_numpy() for c in cols]]
+    beta, *_ = np.linalg.lstsq(X, a[keep].to_numpy(), rcond=None)
+    removed = sum(b * c[keep] for b, c in zip(beta[2:], cols))
+    adj = (a[keep] - removed) + clim.reindex(a[keep].index.month).to_numpy()
+    before, after = stats.analyse(s[keep], units), stats.analyse(adj, units)
+    pb, pa = _proven(before), _proven(after)
+    sb, sa = before["sen_slope_per_decade"], after["sen_slope_per_decade"]
+    names = ", ".join(l["name"] for l in use)
+    if pb and pa:
+        status, msg = "survives", f"Still there with {names} removed: {sa:+.3g} {units}/decade (was {sb:+.3g})."
+    elif pb:
+        status, msg = "weakens", (f"Weakens once {names} are removed: {sb:+.3g} → {sa:+.3g} {units}/decade, no longer proven. "
+                                  "Part of the 'trend' may be these natural swings.")
+    elif pa:
+        status, msg = "revealed", f"Natural swings were hiding it: with {names} removed, a proven trend appears ({sa:+.3g} {units}/decade)."
+    else:
+        status, msg = "none", f"No proven trend with or without {names}."
+    def _peak(l):
+        rs = l["season_correlation"].get(l["strongest_season"]) if l["strongest_season"] else None
+        return max(abs(l["correlation"]), abs(rs or 0))
+    top = max(use, key=_peak)
+    rs = top["season_correlation"].get(top["strongest_season"]) if top["strongest_season"] else None
+    follow = (f"Strongest link: {top['name']} (r = {top['correlation']:+.2f}"
+              + (f"; in {top['strongest_season']} r = {rs:+.2f}" if rs is not None and abs(rs) > abs(top["correlation"]) + 0.1 else "")
+              + ").")
+    return {"status": status, "headline": msg, "strongest": follow, "links": links, "removed": [l["mode"] for l in use],
+            "before": {"slope_per_decade": sb, "ci95": before["sen_ci95_per_decade"], "label": before["verdict"]["label"]},
+            "after": {"slope_per_decade": sa, "ci95": after["sen_ci95_per_decade"], "label": after["verdict"]["label"]},
+            "method": "Correlation of detrended anomalies with each index (best lag 0–3 months; Dec–Feb and Jun–Aug also separately); "
+                      "linked modes (|r| ≥ 0.2 overall, or ≥ 0.35 in Dec–Feb or Jun–Aug) fitted together with the trend and removed (Foster & Rahmstorf 2011)."}
+
+
 # --------------------------------------------------------------------------- 3. leave one year out
 def leave_one_out(series: pd.Series) -> dict:
     s = series.dropna().sort_index()
@@ -418,6 +539,116 @@ def resolution(n_cells: int, box: list[float], var: str = "") -> dict:
     return {"label": lab, "n_cells": n_cells, "box_km": round(km), "headline": msg}
 
 
+
+# --------------------------------------------------------------------------- 9. which months / seasons
+MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+
+def seasons(series: pd.Series, units: str, lat_centre: float = 50.0) -> dict:
+    """Trend of each calendar month separately (is it a winter story or a summer story?),
+    corrected across the 12 months with Benjamini–Hochberg, plus the seasonal Kendall test
+    (Hirsch et al. 1982) and its version that allows months to be correlated (Hirsch & Slack 1984)."""
+    s = series.dropna()
+    rows, pvals = [], []
+    for m in range(1, 13):
+        y = s[s.index.month == m]
+        if len(y) < 10:
+            rows.append({"month": MONTHS[m - 1], "slope_per_decade": None, "p": None})
+            pvals.append(np.nan)
+            continue
+        r = mk.yue_wang_modification_test(y.to_numpy(), lag=1)
+        rows.append({"month": MONTHS[m - 1], "slope_per_decade": float(r.slope * 10), "p": float(r.p)})
+        pvals.append(float(r.p))
+    sig = stats.fdr(pvals)
+    for row, ok in zip(rows, sig):
+        row["proven_fdr"] = bool(ok)
+    full = s.asfreq("MS")
+    sk = mk.seasonal_test(full.to_numpy(), period=12)
+    csk = mk.correlated_seasonal_test(full.to_numpy(), period=12)
+    south = lat_centre < 0
+    names = {"DJF": "summer" if south else "winter", "MAM": "autumn" if south else "spring",
+             "JJA": "winter" if south else "summer", "SON": "spring" if south else "autumn"}
+    groups = {"DJF": [12, 1, 2], "MAM": [3, 4, 5], "JJA": [6, 7, 8], "SON": [9, 10, 11]}
+    by_season = []
+    for code, ms in groups.items():
+        sl = [rows[m - 1]["slope_per_decade"] for m in ms if rows[m - 1]["slope_per_decade"] is not None]
+        by_season.append({"season": names[code], "months": code,
+                          "slope_per_decade": float(np.mean(sl)) if sl else None,
+                          "n_proven": sum(rows[m - 1]["proven_fdr"] for m in ms)})
+    ok_rows = [r for r in rows if r["slope_per_decade"] is not None]
+    fastest = max(ok_rows, key=lambda r: abs(r["slope_per_decade"]))
+    n_proven = sum(r["proven_fdr"] for r in rows)
+    up = sum(r["slope_per_decade"] > 0 for r in ok_rows)
+    u = units
+    if n_proven == 0:
+        msg = (f"No single month has a proven trend on its own (after correcting for testing 12 months), "
+               f"but {up} of {len(ok_rows)} months point upward.")
+    else:
+        prov = [r["month"] for r in rows if r["proven_fdr"]]
+        msg = (f"{n_proven} of 12 months show a proven change ({', '.join(prov)}). "
+               f"Biggest change: {fastest['month']} ({fastest['slope_per_decade']:+.3g} {u}/decade).")
+    ss = [b for b in by_season if b["slope_per_decade"] is not None]
+    if len(ss) == 4:
+        hi = max(ss, key=lambda b: b["slope_per_decade"])
+        lo = min(ss, key=lambda b: b["slope_per_decade"])
+        if np.sign(hi["slope_per_decade"]) != np.sign(lo["slope_per_decade"]):
+            msg += f" The seasons disagree: {hi['season']} {hi['slope_per_decade']:+.3g}, {lo['season']} {lo['slope_per_decade']:+.3g}."
+    return {"months": rows, "by_season": by_season, "n_proven_months": int(n_proven),
+            "seasonal_kendall": {"p": float(sk.p), "slope_per_decade": float(sk.slope * 10), "trend": sk.trend},
+            "seasonal_kendall_correlated": {"p": float(csk.p), "trend": csk.trend},
+            "headline": msg,
+            "method": "Each calendar month tested alone (Yue–Wang Mann–Kendall + Sen), Benjamini–Hochberg across the 12; "
+                      "seasonal Kendall (Hirsch et al. 1982) and the correlated-seasons version (Hirsch & Slack 1984)."}
+
+
+# --------------------------------------------------------------------------- 10. when did it change?
+def _pettitt(y: np.ndarray) -> tuple[int, float, float]:
+    """Pettitt (1979) change-point test: index of the last value before the change, K, approximate p."""
+    n = len(y)
+    sgn = np.sign(y[None, :] - y[:, None])  # sgn[i, j] = sign(y_j - y_i)
+    U = np.array([sgn[: t + 1, t + 1:].sum() for t in range(n - 1)])
+    t = int(np.argmax(np.abs(U)))
+    K = float(np.abs(U[t]))
+    p = float(min(1.0, 2 * np.exp(-6 * K ** 2 / (n ** 3 + n ** 2))))
+    return t, K, p
+
+
+def change_point(var: str, series: pd.Series, units: str) -> dict:
+    """When did it change? Pettitt test on yearly anomalies, then: is a sudden shift at that year a
+    better description than a steady trend (BIC), and does the year match a documented data change?"""
+    ann = _annual(series)
+    y, years = ann.to_numpy(), ann.index.to_numpy()
+    if len(y) < 12:
+        return {"status": "too_short", "headline": "Too few years to look for a change point."}
+    t, K, p = _pettitt(y)
+    yr = int(years[t + 1])  # first year after the shift
+    before, after = float(y[: t + 1].mean()), float(y[t + 1:].mean())
+    tt = years - years.mean()
+    one = np.ones_like(tt, dtype=float)
+    step = (years >= yr).astype(float)
+    b_trend, b_step = _bic(y, np.c_[one, tt]), _bic(y, np.c_[one, step])
+    b_both = _bic(y, np.c_[one, tt, step])
+    known = [c for c in SOURCE_CHANGES.get(var, []) if abs(int(c[0][:4]) - yr) <= 2]
+    u = units
+    if p >= ALPHA:
+        status, msg = "none", f"No clear change point: the record has no single year where it shifted (Pettitt p = {p:.2g})."
+    elif b_step < b_trend - 2 and b_step <= b_both:
+        status = "sudden_shift"
+        msg = (f"A sudden shift fits better than a steady trend: around {yr} the average moved from "
+               f"{before:+.3g} to {after:+.3g} {u} (anomaly), and stayed there.")
+    else:
+        status = "gradual"
+        msg = (f"Most change happened after about {yr}, but a steady trend describes it as well or better than a "
+               f"sudden jump: read this as gradual change, not one event (Pettitt p = {p:.2g}).")
+    if known and status != "none":
+        msg += f" Note: {yr} is close to a documented data change ({known[0][0][:7]}: {known[0][1].split(':')[0]})."
+    return {"status": status, "year": yr, "p": p, "mean_before": before, "mean_after": after,
+            "bic_trend": b_trend, "bic_step": b_step, "bic_trend_plus_step": b_both,
+            "near_data_change": [{"date": c[0], "what": c[1]} for c in known],
+            "headline": msg,
+            "method": "Pettitt (1979) test on yearly anomalies; step vs steady trend compared with BIC (difference > 2)."}
+
+
 # --------------------------------------------------------------------------- what could overturn it
 def overturn(res: dict) -> list[str]:
     out = []
@@ -427,6 +658,9 @@ def overturn(res: dict) -> list[str]:
     en = res.get("el_nino", {})
     if en.get("status") in ("weakens", "revealed"):
         out.append(en["headline"])
+    cm = res.get("climate_modes", {})
+    if cm.get("status") in ("weakens", "revealed"):
+        out.append(cm["headline"])
     lo = res.get("leave_one_out", {})
     if lo.get("flips"):
         out.append(lo["headline"])
@@ -436,6 +670,9 @@ def overturn(res: dict) -> list[str]:
     wf = res.get("walk_forward", {})
     if wf.get("status") in ("faded", "reversed"):
         out.append(wf["headline"])
+    cp = res.get("change_point", {})
+    if cp.get("status") == "sudden_shift":
+        out.append(cp["headline"])
     rs = res.get("resolution", {})
     if rs.get("label") == "sub_cell":
         out.append(rs["headline"])
@@ -449,12 +686,15 @@ def cross_examine(var: str, series: pd.Series, units: str, box: list[float], n_c
     lat_c = (box[0] + box[1]) / 2
     for name, fn in [("alibi", lambda: alibi(var, series, units, lat_c)),
                      ("el_nino", lambda: el_nino(series, units)),
+                     ("climate_modes", lambda: climate_modes(series, units)),
                      ("leave_one_out", lambda: leave_one_out(series)),
                      ("walk_forward", lambda: walk_forward(series, units)),
                      ("all_windows", lambda: all_windows(series)),
                      ("decades", lambda: decades(series, units)),
                      ("extremes", lambda: extremes(series, units)),
-                     ("resolution", lambda: resolution(n_cells, box, var))]:
+                     ("resolution", lambda: resolution(n_cells, box, var)),
+                     ("seasons", lambda: seasons(series, units, lat_c)),
+                     ("change_point", lambda: change_point(var, series, units))]:
         try:
             res[name] = fn()
         except Exception as e:  # one failed check never sinks the others

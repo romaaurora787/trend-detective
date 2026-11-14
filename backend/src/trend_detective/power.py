@@ -82,7 +82,23 @@ def _to_series(values: dict) -> pd.Series:
     return s.where(s != FILL).sort_index()
 
 
+def _es(t):
+    """Saturation vapour pressure (kPa), Tetens / FAO-56 form."""
+    return 0.6108 * np.exp(17.27 * t / (t + 237.3))
+
+
+# Variables computed from POWER parameters (same grid, same months)
+DERIVED = {
+    # vapour pressure deficit: how hard the air pulls water out of plants and soil
+    "VPD": (("T2M", "T2MDEW"), lambda t, td: _es(t) - _es(td)),
+}
+
+
 def fetch_point(param: str, lat: float, lon: float, start=START_YEAR, end=END_YEAR) -> pd.Series:
+    if param in DERIVED:
+        parts, fn = DERIVED[param]
+        a, b = (fetch_point(x, lat, lon, start, end) for x in parts)
+        return fn(a, b).rename(param)
     d = _get(
         "point",
         {"parameters": param, "latitude": round(lat, 3), "longitude": round(lon, 3), "start": start, "end": end},
@@ -94,6 +110,10 @@ def fetch_region(param: str, lat_min, lat_max, lon_min, lon_max, start=START_YEA
     """Gridded monthly data for a box. Returns (DataFrame time x cell, cells list)."""
     if lat_max - lat_min > MAX_SPAN or lon_max - lon_min > MAX_SPAN:
         raise PowerError("Region too large: NASA POWER allows at most 10 x 10 degrees")
+    if param in DERIVED:
+        parts, fn = DERIVED[param]
+        (da, cells), (db, _) = (fetch_region(x, lat_min, lat_max, lon_min, lon_max, start, end) for x in parts)
+        return fn(da, db), cells
     d = _get(
         "regional",
         {
