@@ -99,12 +99,16 @@ def compare(var: str, lat: float, lon: float, observed_slope: float, y0: int, y1
     if lo <= observed_slope <= hi:
         verdict, msg = "inside", (f"The models saw it coming: the observed {observed_slope:+.3g} {u}/decade sits inside the "
                                   f"range of {len(rows)} climate models for the same years ({lo:+.3g} to {hi:+.3g}).")
-    elif observed_slope > hi:
-        verdict, msg = "above", (f"Faster than every model: observed {observed_slope:+.3g} {u}/decade, models "
-                                 f"{lo:+.3g} to {hi:+.3g} for the same years.")
     else:
-        verdict, msg = "below", (f"Slower than every model: observed {observed_slope:+.3g} {u}/decade, models "
-                                 f"{lo:+.3g} to {hi:+.3g} for the same years.")
+        verdict = "above" if observed_slope > hi else "below"
+        # "stronger" = further from zero in the observed direction than every model
+        stronger = (observed_slope > hi and observed_slope > 0) or (observed_slope < lo and observed_slope < 0)
+        if stronger:
+            word = "rising faster" if observed_slope > 0 else "falling faster"
+            head = f"Stronger than every model: {word} than all {len(rows)} climate models"
+        else:
+            head = f"Weaker than every model: the {len(rows)} climate models expected more change"
+        msg = f"{head} (observed {observed_slope:+.3g} {u}/decade, models {lo:+.3g} to {hi:+.3g} for the same years)."
     nxt = None
     if len(fut):
         same = int((np.sign(fut) == np.sign(np.median(fut))).sum())
