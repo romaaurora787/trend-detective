@@ -80,7 +80,7 @@ def _hadcet_witness(box):
 
 
 def _gpcp_witness(box):
-    ds = _open_nc("gpcp_v33_monthly_global.nc")
+    ds = _open_nc("gpcp_v33_monthly_global_1deg.nc")
     if ds is not None:
         da = ds["sat_gauge_precip"]
         if float(da["lon"].max()) > 180:  # 0..360 grid -> -180..180
