@@ -100,3 +100,11 @@ Same as `/api/beyond` (see README). Five small tiles:
 - NASA POWER monthly data ends **Dec 2025**. Haze (AOD) starts **2001**; sunshine and cloud start **1984**.
 - Soil wetness and evaporation have no data over the sea (cells come back null).
 - A searched city gets a 1.5° × 1.5° box (~3–6 NASA cells, about 50 km each), so it's a **regional** picture, not a street-level one.
+
+## 7. NEW (Sat ~21:00): research on the other 1,216 teams → read `docs/research_competition.md`
+- Many rivals already have Hamed-Rao, FDR, a check-up, a second witness, and compare-two-places. Our pitch should lead with what only we have: the **instrument alibi**, linked clues tested on new places, records and emergence, and the world report.
+- Frontend ideas from it, for you:
+  - **"Guess first" question cards** ("Is it really getting hotter here?" → the user guesses → we reveal the verdict).
+  - **Watchable demo tours** (the brief asks for "demonstration examples the user could watch").
+  - A **compare-two-places** view once `/api/compare` lands.
+- **Correction:** don't show the world report's cloud row as "88 proven" (see FINDINGS §2c).
