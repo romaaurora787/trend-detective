@@ -1,5 +1,8 @@
 # Earth System Trend Detective
 
+> **New here (or a Claude helping Kanishk)? Start with [docs/FULL_REPORT.md](docs/FULL_REPORT.md)**: full status, every endpoint, demo numbers, what to check and what to build next.
+
+
 NASA Space Apps Challenge 2026, team Akshita + Kanishk.
 
 Pick a place and a question. The app pulls NASA monthly data and answers in plain English: is it really changing, how fast, how sure are we, where, and how many more years until we would know.
