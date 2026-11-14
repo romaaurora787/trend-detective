@@ -17,6 +17,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import time
 from pathlib import Path
 
 import httpx
@@ -28,6 +30,9 @@ CACHE = Path(__file__).resolve().parents[2] / "data" / "cache"
 FILL = -999.0
 START_YEAR, END_YEAR = 1981, 2025
 MAX_SPAN = 10.0
+# Seconds to wait after each 429. The web app keeps this short; batch scripts
+# can set POWER_RETRY_WAITS="5,15,30,60,120".
+RETRY_WAITS = [float(x) for x in os.environ.get("POWER_RETRY_WAITS", "2,5,10").split(",")]
 
 
 class PowerError(RuntimeError):
@@ -40,7 +45,12 @@ def _get(kind: str, params: dict) -> dict:
     if path.exists():
         return json.loads(path.read_text())
     q = {**params, "community": "AG", "format": "JSON"}
-    r = httpx.get(f"{BASE}/{kind}", params=q, timeout=180)
+    # NASA POWER rate-limits bursts (HTTP 429): wait and retry with backoff.
+    for wait in RETRY_WAITS:
+        r = httpx.get(f"{BASE}/{kind}", params=q, timeout=180)
+        if r.status_code != 429:
+            break
+        time.sleep(wait)
     if r.status_code != 200:
         try:
             msg = "; ".join(r.json().get("messages", [])) or r.text[:300]
