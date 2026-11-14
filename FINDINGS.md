@@ -85,6 +85,8 @@ Rules were committed **before** testing, then tested on 111 global and 71 UK gri
 
 **Climate modes:** Spain's winter rain follows the North Atlantic Oscillation (r = −0.65); Lincolnshire's winter temperature too (r = +0.53), and its warming survives removing the NAO (+0.36 °C/decade). East Africa rain follows the Indian Ocean Dipole and El Niño.
 
+**Did climate models see it coming?** (7 CMIP6 HighResMIP models, same years, point at the box centre): Lincolnshire warming +0.33 °C/decade is **stronger than every model** (+0.14 to +0.30); Svalbard +0.60 is **weaker than every model** (+0.82 to +1.2; reanalyses also disagree on Arctic trends); Delhi night-time lows +0.13 sit **inside** the model range; Amazon drying −0.53 mm/day/decade is **far stronger than any model** (−0.11 to +0.03), so treat it with care even though GPCP agrees. Caveat: these runs had the real ocean temperatures until 2014.
+
 **When did the evidence become strong?** Replaying each record from 1981: Lincolnshire warming proven by 1999 and every year since; Svalbard by 2005; Amazon drying by 2005; Delhi greening by 2015.
 
 **Change points:** Lincolnshire warming is gradual (a steady trend fits as well as a jump). East Africa cloud shows a sudden shift around 1998 (near the data-source change: see 2c).

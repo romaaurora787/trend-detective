@@ -133,3 +133,14 @@ def test_cache_paths_differ_per_product_and_satellite():
     names = {ndvi._cache_path(b, plat, prod).name for plat in ("terra", "aqua") for prod in ndvi.PRODUCTS}
     assert len(names) == 6
     assert ndvi._cache_path(b).name.startswith("ndvi3_")  # existing NDVI cache stays valid
+
+
+def test_models_wording_uses_direction(monkeypatch):
+    from trend_detective import models
+    idx = pd.date_range("1981-01-01", "2050-12-31", freq="D")
+    t = (idx.year - 1981).to_numpy() / 10
+    df = pd.DataFrame({m: -0.1 * k * t for k, m in enumerate(models.MODELS[:3], 1)}, index=idx)  # falls 0.1–0.3/decade
+    monkeypatch.setattr(models, "_fetch", lambda *a: df)
+    assert models.compare("PRECTOTCORR", 0, 0, -0.5, 1981, 2025, "mm/day")["headline"].startswith("Stronger than every model: falling faster")
+    assert models.compare("PRECTOTCORR", 0, 0, -0.05, 1981, 2025, "mm/day")["headline"].startswith("Weaker")
+    assert models.compare("PRECTOTCORR", 0, 0, -0.2, 1981, 2025, "mm/day")["verdict"] == "inside"
