@@ -4,7 +4,8 @@
                Without change, the chance a year sets a record is 1/n for the
                n-th year (Benestad 2003; Rahmstorf & Coumou 2011). We compare
                observed vs expected counts in the recent third of the record,
-               with a permutation p-value (shuffle years within each month).
+               with a permutation p-value (whole years shuffled in 5-year
+               blocks, which keeps natural persistence).
 2. emergence   When did the change rise out of the noise? First year after
                which the trend-implied change stays above 2x the year-to-year
                noise (signal-to-noise > 2; Hawkins & Sutton 2012 style).
@@ -12,9 +13,10 @@
                per season on yearly seasonal means, Holm-corrected across
                the four seasons.
 4. variability Is it getting more erratic? Spread of detrended anomalies in
-               the second half vs the first half (Brown-Forsythe test).
+               the second half vs the first half; permutation test that
+               shuffles whole years in 5-year blocks.
 5. turning     Did the trend change at some year? Compare a straight line with
-               a "hinge" (two connected lines) by BIC; report the best year.
+               a "hinge" (two connected lines) by BIC (gain > 10 required).
 
 All numbers come from code. AI-use note: drafted with Claude (Anthropic)
 during the hackathon; checked with synthetic tests (tests/test_beyond.py).
@@ -37,6 +39,16 @@ def _annual(anom: pd.Series) -> pd.Series:
     """Yearly mean anomaly, complete years only."""
     g = anom.groupby(anom.index.year)
     return g.mean()[g.count() == 12]
+
+
+BIC_THRESHOLD = 10.0
+BLOCK_YEARS = 5  # shuffle whole 5-year blocks: keeps within-year and year-to-year persistence
+
+
+def _block_order(n: int, rng, block: int = BLOCK_YEARS) -> np.ndarray:
+    """Row order from shuffling consecutive blocks of years (last block may be short)."""
+    blocks = [np.arange(i, min(i + block, n)) for i in range(0, n, block)]
+    return np.concatenate([blocks[k] for k in rng.permutation(len(blocks))])
 
 
 # ---------------------------------------------------------------- 1. records
@@ -63,7 +75,10 @@ def records(series: pd.Series, recent_fraction: float = 1 / 3, n_perm: int = 200
     rng = np.random.default_rng(seed)
     perm_hi, perm_lo = np.empty(n_perm), np.empty(n_perm)
     for i in range(n_perm):
-        p = np.column_stack([rng.permutation(m[:, j]) for j in range(m.shape[1])])
+        # Whole years move together, in 5-year blocks: shuffling months one by one
+        # gave 13-22% false alarms (ideal 10%, two-sided) on persistent synthetic
+        # weather; see scripts/validate_beyond.py.
+        p = m[_block_order(n, rng)]
         perm_hi[i], perm_lo[i] = _count_records(p, start, True), _count_records(p, start, False)
     p_hi = (1 + (perm_hi >= obs_hi).sum()) / (n_perm + 1)
     p_lo = (1 + (perm_lo >= obs_lo).sum()) / (n_perm + 1)
@@ -151,22 +166,36 @@ def seasons(series: pd.Series) -> dict:
 
 
 # ---------------------------------------------------------------- 4. variability
-def variability(series: pd.Series) -> dict:
+def variability(series: pd.Series, n_perm: int = 2000, seed: int = 0) -> dict:
     anom, _ = deseasonalise(series)
     t = to_decimal_year(anom.index)
     fit = sps.linregress(t, anom.to_numpy())
     resid = pd.Series(anom.to_numpy() - (fit.intercept + fit.slope * t), index=anom.index)
-    mid = len(resid) // 2
-    a, b = resid.iloc[:mid], resid.iloc[mid:]
-    stat, p = sps.levene(a, b, center="median")
-    ratio = float(b.std() / a.std())
+    df = resid.to_frame("r")
+    df["y"], df["m"] = df.index.year, df.index.month
+    mat = df.pivot(index="y", columns="m", values="r").dropna().to_numpy()
+    n = len(mat)
+    half = n // 2
+    years = sorted(set(resid.index.year))
+
+    def stat(x):
+        return float(np.log(x[half:].std() / x[:half].std()))
+
+    obs = stat(mat)
+    # Whole years shuffled in 5-year blocks (a Levene test on months gave 15-19%
+    # false alarms at a 5% level on persistent synthetic weather).
+    rng = np.random.default_rng(seed)
+    perm = np.array([stat(mat[_block_order(n, rng)]) for _ in range(n_perm)])
+    p = float((1 + (np.abs(perm) >= abs(obs)).sum()) / (n_perm + 1))
+    ratio = float(np.exp(obs))
+    split = years[half] if half < len(years) else years[-1]
     if p < 0.05:
-        msg = (f"More erratic: month-to-month swings are {100*(ratio-1):+.0f}% bigger since {resid.index[mid].year}."
-               if ratio > 1 else f"Calmer: month-to-month swings are {100*(1-ratio):.0f}% smaller since {resid.index[mid].year}.")
+        msg = (f"More erratic: month-to-month swings are {100*(ratio-1):+.0f}% bigger since {split}."
+               if ratio > 1 else f"Calmer: month-to-month swings are {100*(1-ratio):.0f}% smaller since {split}.")
     else:
         msg = f"No proven change in how erratic it is (spread changed {100*(ratio-1):+.0f}%, could be chance)."
-    return {"first_half": f"{resid.index[0].year}–{resid.index[mid-1].year}", "second_half": f"{resid.index[mid].year}–{resid.index[-1].year}",
-            "spread_ratio": ratio, "p": float(p), "headline": msg}
+    return {"first_half": f"{years[0]}–{years[half-1]}", "second_half": f"{split}–{years[-1]}",
+            "spread_ratio": ratio, "p": p, "headline": msg}
 
 
 # ---------------------------------------------------------------- 5. turning point
@@ -197,11 +226,14 @@ def turning_point(series: pd.Series, min_seg: int = 6) -> dict:
     bic2 = n * np.log(sse2 / n) + 4 * np.log(n)  # +1 slope, +1 break year
     delta = bic1 - bic2
     before, after = b2[1] * 10, (b2[1] + b2[2]) * 10
-    if delta > 6:  # "strong" evidence on the usual BIC scale
+    # BIC gain > 10 = "very strong" evidence. With > 6, false alarms on very
+    # persistent no-trend weather reached 11%; with > 10, 7.7%, and a real
+    # break was still found 93% of the time (scripts/validate_beyond.py).
+    if delta > BIC_THRESHOLD:
         msg = f"Turning point around {year}: {before:+.3g} per decade before, {after:+.3g} per decade after."
     else:
         msg = "A single straight trend explains it as well as any turning point."
-    return {"year": year if delta > 6 else None, "candidate_year": year, "bic_gain": float(delta),
+    return {"year": year if delta > BIC_THRESHOLD else None, "candidate_year": year, "bic_gain": float(delta),
             "slope_before_per_decade": float(before), "slope_after_per_decade": float(after),
             "headline": msg}
 
