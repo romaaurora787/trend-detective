@@ -1,0 +1,1026 @@
+{
+ "hypotheses": [
+  {
+   "id": "soil_heat",
+   "title": "Dry soil last month \u2192 hotter days this month (warm season)",
+   "mechanism": "Wet soil spends the sun's energy on evaporation (cooling); dry soil can't, so the ground and air heat up.",
+   "sign": -1
+  },
+  {
+   "id": "cloud_dtr",
+   "title": "More cloud \u2192 smaller day\u2013night temperature gap",
+   "mechanism": "Clouds block sunshine by day and trap heat by night, squeezing the daily range.",
+   "sign": -1
+  },
+  {
+   "id": "wind_frost",
+   "title": "Windier cold months \u2192 fewer frost days",
+   "mechanism": "Frost forms on calm, clear nights when cold air pools at the ground; wind mixes warmer air down.",
+   "sign": -1
+  },
+  {
+   "id": "haze_sun",
+   "title": "More haze \u2192 less sunshine reaching the ground (cloud held fixed)",
+   "mechanism": "Aerosol particles reflect and absorb sunlight before it reaches the surface.",
+   "sign": -1
+  },
+  {
+   "id": "warm_moist",
+   "title": "Warmer months \u2192 more water vapour in the air",
+   "mechanism": "Warm air can hold about 7% more water vapour per \u00b0C (Clausius\u2013Clapeyron).",
+   "sign": 1
+  },
+  {
+   "id": "rain_soil",
+   "title": "Rain this month \u2192 wetter root zone next month",
+   "mechanism": "Rain soaks in and the deep soil remembers it for weeks.",
+   "sign": 1
+  },
+  {
+   "id": "soil_wind_via_heat",
+   "title": "YOUR CHAIN: dry soil \u2192 hotter days \u2192 windier (warm season)",
+   "mechanism": "Hot ground stirs a deeper turbulent layer, mixing faster winds from aloft down to 2 m.",
+   "sign": -1
+  },
+  {
+   "id": "placebo",
+   "title": "PLACEBO: computer-generated random 'sticky' noise vs each place's rainfall (no mechanism)",
+   "mechanism": "None by construction. It must fail in either direction; if it 'holds', the test is broken.",
+   "sign": 0
+  }
+ ],
+ "results": [
+  {
+   "place": "Lincolnshire, UK",
+   "hyp": "soil_heat",
+   "r": -0.1468958441887805,
+   "p": 0.12309495371114877,
+   "n": 135,
+   "r_first_half": -0.17096890132125922,
+   "r_second_half": -0.13798668215136362,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Lincolnshire, UK",
+   "hyp": "cloud_dtr",
+   "r": -0.16592133037294102,
+   "p": 0.0002112471563491623,
+   "n": 504,
+   "r_first_half": -0.12147003220299828,
+   "r_second_half": -0.20708393718516171,
+   "split": "1984-2005 | 2005-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Lincolnshire, UK",
+   "hyp": "wind_frost",
+   "r": -0.6476611083472488,
+   "p": 9.886694544876291e-17,
+   "n": 135,
+   "r_first_half": -0.6538270785892246,
+   "r_second_half": -0.6707299970685531,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Lincolnshire, UK",
+   "hyp": "haze_sun",
+   "r": -0.25851861502306545,
+   "p": 5.72421158968591e-06,
+   "n": 300,
+   "r_first_half": -0.22867796967179885,
+   "r_second_half": -0.28059695204760127,
+   "split": "2001-2013 | 2013-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Lincolnshire, UK",
+   "hyp": "warm_moist",
+   "r": 0.9139837868402034,
+   "p": 8.526897772359629e-198,
+   "n": 540,
+   "r_first_half": 0.9042428650722331,
+   "r_second_half": 0.9237891760741161,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Lincolnshire, UK",
+   "hyp": "rain_soil",
+   "r": 0.2932086800873727,
+   "p": 3.8250063722226826e-11,
+   "n": 539,
+   "r_first_half": 0.2965688629278808,
+   "r_second_half": 0.3268627510751565,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Lincolnshire, UK",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.012504683522090066,
+   "p": 0.897329588086448,
+   "n": 135,
+   "r_first_half": -0.033052461156727504,
+   "r_second_half": 0.01124755713432386,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Lincolnshire, UK",
+   "hyp": "placebo",
+   "r": 0.014263473885734306,
+   "p": 0.7485407864500339,
+   "n": 540,
+   "r_first_half": 0.004070191921789492,
+   "r_second_half": 0.02324040007064348,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Lincolnshire, UK",
+   "hyp": "cc_rate",
+   "pct_per_degC": 5.767889523785091
+  },
+  {
+   "place": "Madrid, Spain",
+   "hyp": "soil_heat",
+   "r": -0.13976380180030099,
+   "p": 0.1231565528762389,
+   "n": 135,
+   "r_first_half": 0.004823118580021499,
+   "r_second_half": -0.26728414042135695,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Madrid, Spain",
+   "hyp": "cloud_dtr",
+   "r": -0.21478695008236243,
+   "p": 2.105844977482679e-06,
+   "n": 504,
+   "r_first_half": -0.21066931270119135,
+   "r_second_half": -0.2244287845937472,
+   "split": "1984-2005 | 2005-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Madrid, Spain",
+   "hyp": "wind_frost",
+   "r": 0.014711303146234419,
+   "p": 0.8655216735595812,
+   "n": 135,
+   "r_first_half": -0.20278122957705136,
+   "r_second_half": 0.248367619334597,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Madrid, Spain",
+   "hyp": "haze_sun",
+   "r": -0.4620073009959051,
+   "p": 2.93765967087357e-16,
+   "n": 300,
+   "r_first_half": -0.4504911356585576,
+   "r_second_half": -0.48103116457057477,
+   "split": "2001-2013 | 2013-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Madrid, Spain",
+   "hyp": "warm_moist",
+   "r": 0.24692041902334527,
+   "p": 6.049591850116647e-08,
+   "n": 540,
+   "r_first_half": 0.2673572167213858,
+   "r_second_half": 0.2214691786746736,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Madrid, Spain",
+   "hyp": "rain_soil",
+   "r": 0.6352984453071279,
+   "p": 1.0090597691622365e-49,
+   "n": 539,
+   "r_first_half": 0.6306973439269326,
+   "r_second_half": 0.6407583096681698,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Madrid, Spain",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.3390176868713531,
+   "p": 0.00012697083213253894,
+   "n": 135,
+   "r_first_half": -0.36307931377404573,
+   "r_second_half": -0.29791861385491225,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Madrid, Spain",
+   "hyp": "placebo",
+   "r": 0.08564372484811753,
+   "p": 0.06751289576990882,
+   "n": 540,
+   "r_first_half": 0.03401500409738234,
+   "r_second_half": 0.1422115901082063,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Madrid, Spain",
+   "hyp": "cc_rate",
+   "pct_per_degC": 1.9001994495373247
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "hyp": "soil_heat",
+   "r": -0.5940950915858567,
+   "p": 5.447921812797263e-10,
+   "n": 135,
+   "r_first_half": -0.49330492908407947,
+   "r_second_half": -0.6805948470877307,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "hyp": "cloud_dtr",
+   "r": 0.008760906723428928,
+   "p": 0.8460967086675808,
+   "n": 504,
+   "r_first_half": 0.0964638001746311,
+   "r_second_half": -0.07895515603207459,
+   "split": "1984-2005 | 2005-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "hyp": "wind_frost",
+   "r": -0.011172292362182288,
+   "p": 0.8982692922205789,
+   "n": 135,
+   "r_first_half": -0.0995233870755025,
+   "r_second_half": 0.039032781262841966,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "hyp": "haze_sun",
+   "r": -0.4777105703114924,
+   "p": 9.415834352094635e-17,
+   "n": 300,
+   "r_first_half": -0.4297687352556701,
+   "r_second_half": -0.4742494388129469,
+   "split": "2001-2013 | 2013-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "hyp": "warm_moist",
+   "r": 0.23044287158915985,
+   "p": 5.462279668964592e-07,
+   "n": 540,
+   "r_first_half": 0.22716952255048,
+   "r_second_half": 0.22092202419807175,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "hyp": "rain_soil",
+   "r": 0.48928034528300873,
+   "p": 9.256963528042097e-32,
+   "n": 539,
+   "r_first_half": 0.4918652515143414,
+   "r_second_half": 0.4890700364391546,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.31953896241617474,
+   "p": 0.00015827299286359886,
+   "n": 135,
+   "r_first_half": -0.38828206898419065,
+   "r_second_half": -0.2669169208235975,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "hyp": "placebo",
+   "r": -0.004794983153618718,
+   "p": 0.9134195152762689,
+   "n": 540,
+   "r_first_half": 0.045199781290880675,
+   "r_second_half": -0.05791084019944092,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "hyp": "cc_rate",
+   "pct_per_degC": 1.5446765433952938
+  },
+  {
+   "place": "Niamey, Sahel",
+   "hyp": "soil_heat",
+   "r": -0.36804816098654486,
+   "p": 5.009662740039592e-05,
+   "n": 135,
+   "r_first_half": -0.3488422308425821,
+   "r_second_half": -0.30794101526884726,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Niamey, Sahel",
+   "hyp": "cloud_dtr",
+   "r": -0.19180817072119058,
+   "p": 4.1245239880232495e-05,
+   "n": 504,
+   "r_first_half": -0.14520812838084005,
+   "r_second_half": -0.24421899171452807,
+   "split": "1984-2005 | 2005-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Niamey, Sahel",
+   "hyp": "wind_frost",
+   "status": "n/a (no frost)"
+  },
+  {
+   "place": "Niamey, Sahel",
+   "hyp": "haze_sun",
+   "r": -0.6757015058644308,
+   "p": 1.2508682576524443e-37,
+   "n": 300,
+   "r_first_half": -0.7297283021309907,
+   "r_second_half": -0.6329423327642452,
+   "split": "2001-2013 | 2013-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Niamey, Sahel",
+   "hyp": "warm_moist",
+   "r": 0.04401704770854624,
+   "p": 0.36762209651890054,
+   "n": 540,
+   "r_first_half": -0.01761041717412447,
+   "r_second_half": 0.10796825433438526,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Niamey, Sahel",
+   "hyp": "rain_soil",
+   "r": 0.678321162031982,
+   "p": 1.8882152836098624e-63,
+   "n": 539,
+   "r_first_half": 0.6247760556019062,
+   "r_second_half": 0.7371810868857823,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Niamey, Sahel",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.09619857824047115,
+   "p": 0.27637711553970346,
+   "n": 135,
+   "r_first_half": 0.08986131600304431,
+   "r_second_half": -0.17219386569788087,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Niamey, Sahel",
+   "hyp": "placebo",
+   "r": 0.04649292596180216,
+   "p": 0.30812423972006087,
+   "n": 540,
+   "r_first_half": -0.011708505213617071,
+   "r_second_half": 0.11299909912455543,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Niamey, Sahel",
+   "hyp": "cc_rate",
+   "pct_per_degC": 0.43777899760576655
+  },
+  {
+   "place": "Manaus, Amazon",
+   "hyp": "soil_heat",
+   "r": -0.8446869793039743,
+   "p": 1.9078709367997755e-13,
+   "n": 135,
+   "r_first_half": -0.8245018452922537,
+   "r_second_half": -0.8409855989049855,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Manaus, Amazon",
+   "hyp": "cloud_dtr",
+   "r": -0.08739879526979517,
+   "p": 0.15140529489291862,
+   "n": 504,
+   "r_first_half": 0.0009382268084880109,
+   "r_second_half": -0.1562132362362243,
+   "split": "1984-2005 | 2005-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Manaus, Amazon",
+   "hyp": "wind_frost",
+   "status": "n/a (no frost)"
+  },
+  {
+   "place": "Manaus, Amazon",
+   "hyp": "haze_sun",
+   "r": -0.32132266188591796,
+   "p": 5.674964436398234e-08,
+   "n": 300,
+   "r_first_half": -0.3728342838695954,
+   "r_second_half": -0.30527913289952846,
+   "split": "2001-2013 | 2013-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Manaus, Amazon",
+   "hyp": "warm_moist",
+   "r": -0.46685980910221375,
+   "p": 3.2774190099238045e-10,
+   "n": 540,
+   "r_first_half": -0.06596560343074587,
+   "r_second_half": -0.6558435854807937,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Manaus, Amazon",
+   "hyp": "rain_soil",
+   "r": 0.6701235097519794,
+   "p": 8.655120861422367e-41,
+   "n": 539,
+   "r_first_half": 0.6846877500760684,
+   "r_second_half": 0.6560266718165281,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Manaus, Amazon",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.2041840854200356,
+   "p": 0.0362602541326561,
+   "n": 135,
+   "r_first_half": 0.3591325641532031,
+   "r_second_half": -0.47697401476675416,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Manaus, Amazon",
+   "hyp": "placebo",
+   "r": -0.046514969146751975,
+   "p": 0.3677775580495469,
+   "n": 540,
+   "r_first_half": 0.014746989572912364,
+   "r_second_half": -0.1170490070109336,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Manaus, Amazon",
+   "hyp": "cc_rate",
+   "pct_per_degC": -1.6980717090052448
+  },
+  {
+   "place": "Delhi, India",
+   "hyp": "soil_heat",
+   "r": -0.2994356664735123,
+   "p": 0.0007504654488307303,
+   "n": 135,
+   "r_first_half": -0.25473493396765484,
+   "r_second_half": -0.36390888077400085,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Delhi, India",
+   "hyp": "cloud_dtr",
+   "r": -0.2975445389369124,
+   "p": 2.185570887056658e-11,
+   "n": 504,
+   "r_first_half": -0.28351333207265283,
+   "r_second_half": -0.3167615177622678,
+   "split": "1984-2005 | 2005-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Delhi, India",
+   "hyp": "wind_frost",
+   "status": "n/a (no frost)"
+  },
+  {
+   "place": "Delhi, India",
+   "hyp": "haze_sun",
+   "r": -0.5252809268969844,
+   "p": 9.340305858998182e-20,
+   "n": 300,
+   "r_first_half": -0.3755577159359827,
+   "r_second_half": -0.6151443065909808,
+   "split": "2001-2013 | 2013-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Delhi, India",
+   "hyp": "warm_moist",
+   "r": -0.6088384086463816,
+   "p": 7.666523055479297e-36,
+   "n": 540,
+   "r_first_half": -0.6722659970939162,
+   "r_second_half": -0.5374012644985856,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Delhi, India",
+   "hyp": "rain_soil",
+   "r": 0.713218667886928,
+   "p": 5.5532648462242836e-73,
+   "n": 539,
+   "r_first_half": 0.7795790940800502,
+   "r_second_half": 0.6425375949074874,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Delhi, India",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.5164713617534703,
+   "p": 7.359433524648474e-10,
+   "n": 135,
+   "r_first_half": -0.5710722262276429,
+   "r_second_half": -0.46105999844460405,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Delhi, India",
+   "hyp": "placebo",
+   "r": 0.09385040124832969,
+   "p": 0.0407093701667734,
+   "n": 540,
+   "r_first_half": 0.06522069012966206,
+   "r_second_half": 0.11226207807669451,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Delhi, India",
+   "hyp": "cc_rate",
+   "pct_per_degC": -7.217452041181893
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "hyp": "soil_heat",
+   "r": -0.34811392405383623,
+   "p": 0.00025305119919600747,
+   "n": 134,
+   "r_first_half": -0.33202283296473406,
+   "r_second_half": -0.3730925182001288,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "hyp": "cloud_dtr",
+   "r": -0.2287760965027129,
+   "p": 4.2682498446887957e-07,
+   "n": 504,
+   "r_first_half": -0.10793871419609531,
+   "r_second_half": -0.3428438738334851,
+   "split": "1984-2005 | 2005-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "hyp": "wind_frost",
+   "status": "n/a (no frost)"
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "hyp": "haze_sun",
+   "r": -0.3306770743330678,
+   "p": 4.61907609273967e-07,
+   "n": 300,
+   "r_first_half": -0.27610636342731254,
+   "r_second_half": -0.3388652881652076,
+   "split": "2001-2013 | 2013-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "hyp": "warm_moist",
+   "r": -0.11143321502640076,
+   "p": 0.023096578563902938,
+   "n": 540,
+   "r_first_half": 0.016907715257088403,
+   "r_second_half": -0.22678964964035872,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "hyp": "rain_soil",
+   "r": 0.6362752442188572,
+   "p": 1.7322114605413412e-43,
+   "n": 539,
+   "r_first_half": 0.5458892989766266,
+   "r_second_half": 0.7090037626737603,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.3495731117258616,
+   "p": 5.4468200859338033e-05,
+   "n": 135,
+   "r_first_half": -0.1906696226899246,
+   "r_second_half": -0.4432057281023392,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "hyp": "placebo",
+   "r": 0.01967891669773203,
+   "p": 0.6874203152223266,
+   "n": 540,
+   "r_first_half": -0.06055959698816103,
+   "r_second_half": 0.101395292451979,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "hyp": "cc_rate",
+   "pct_per_degC": -1.2332547230450313
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "hyp": "soil_heat",
+   "r": -0.3814819036340259,
+   "p": 4.801241777698518e-05,
+   "n": 135,
+   "r_first_half": -0.4589103400359203,
+   "r_second_half": -0.2980433098812264,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "hyp": "cloud_dtr",
+   "r": 0.08764587898270587,
+   "p": 0.05037370715835819,
+   "n": 504,
+   "r_first_half": 0.1200002228716482,
+   "r_second_half": 0.05118233912817538,
+   "split": "1984-2005 | 2005-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "hyp": "wind_frost",
+   "r": -0.059520895084446655,
+   "p": 0.5195441692232929,
+   "n": 135,
+   "r_first_half": 0.1496387769469542,
+   "r_second_half": -0.056183782405468376,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "hyp": "haze_sun",
+   "r": -0.28778523328389216,
+   "p": 7.014788800206629e-07,
+   "n": 300,
+   "r_first_half": -0.16597611415925234,
+   "r_second_half": -0.36867679338196796,
+   "split": "2001-2013 | 2013-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "hyp": "warm_moist",
+   "r": 0.40675237271112064,
+   "p": 3.251093972763946e-22,
+   "n": 540,
+   "r_first_half": 0.4138394753457274,
+   "r_second_half": 0.40541363354145565,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "hyp": "rain_soil",
+   "r": 0.4497000024086763,
+   "p": 6.497249590939934e-24,
+   "n": 539,
+   "r_first_half": 0.47752258106808443,
+   "r_second_half": 0.4097095220117886,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.05341312179463834,
+   "p": 0.5386816932883545,
+   "n": 135,
+   "r_first_half": -0.046740880644875506,
+   "r_second_half": -0.04283014812351831,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "hyp": "placebo",
+   "r": -0.030313090044147114,
+   "p": 0.5066990989488144,
+   "n": 540,
+   "r_first_half": -0.021598399101149607,
+   "r_second_half": -0.042343947022332615,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "hyp": "cc_rate",
+   "pct_per_degC": 2.375013398213521
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "hyp": "soil_heat",
+   "r": -0.45363302872601946,
+   "p": 4.911222722479379e-07,
+   "n": 135,
+   "r_first_half": -0.6299483868505651,
+   "r_second_half": -0.22072762160254528,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "hyp": "cloud_dtr",
+   "r": -0.4147828934514522,
+   "p": 5.600852936749808e-20,
+   "n": 504,
+   "r_first_half": -0.40637027363691774,
+   "r_second_half": -0.432992181658327,
+   "split": "1984-2005 | 2005-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "hyp": "wind_frost",
+   "status": "n/a (no frost)"
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "hyp": "haze_sun",
+   "r": -0.24515089676117227,
+   "p": 4.6991843499403135e-05,
+   "n": 300,
+   "r_first_half": -0.34925983444273107,
+   "r_second_half": -0.16148238053537345,
+   "split": "2001-2013 | 2013-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "hyp": "warm_moist",
+   "r": -0.5596246469133834,
+   "p": 4.582270870610761e-25,
+   "n": 540,
+   "r_first_half": -0.5656845189834168,
+   "r_second_half": -0.554935513771992,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "hyp": "rain_soil",
+   "r": 0.7139779223560253,
+   "p": 3.5383160272676763e-66,
+   "n": 539,
+   "r_first_half": 0.7190969587433516,
+   "r_second_half": 0.7057454478889947,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.5683873437131646,
+   "p": 7.337450902447216e-13,
+   "n": 135,
+   "r_first_half": -0.5157837073873032,
+   "r_second_half": -0.6385606533954437,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "hyp": "placebo",
+   "r": 0.0009134199419825037,
+   "p": 0.9849319396109214,
+   "n": 540,
+   "r_first_half": 0.04985238294476676,
+   "r_second_half": -0.05832391460466238,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "hyp": "cc_rate",
+   "pct_per_degC": -6.160635208649925
+  },
+  {
+   "place": "Beijing, China",
+   "hyp": "soil_heat",
+   "r": -0.3954897622083769,
+   "p": 4.469625825506143e-06,
+   "n": 135,
+   "r_first_half": -0.5494049357128223,
+   "r_second_half": -0.2550878227885044,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Beijing, China",
+   "hyp": "cloud_dtr",
+   "r": -0.04025119570831468,
+   "p": 0.3681803700876035,
+   "n": 504,
+   "r_first_half": -0.035904646242425065,
+   "r_second_half": -0.045783040326135796,
+   "split": "1984-2005 | 2005-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Beijing, China",
+   "hyp": "wind_frost",
+   "r": 0.2580779462339028,
+   "p": 0.0031739063693490117,
+   "n": 135,
+   "r_first_half": 0.3345034223499271,
+   "r_second_half": 0.02697452331275231,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Beijing, China",
+   "hyp": "haze_sun",
+   "r": -0.5667521639424378,
+   "p": 4.9490875492935325e-20,
+   "n": 300,
+   "r_first_half": -0.6437169716412412,
+   "r_second_half": -0.5457546107939939,
+   "split": "2001-2013 | 2013-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Beijing, China",
+   "hyp": "warm_moist",
+   "r": 0.007402797238432715,
+   "p": 0.8796653796305235,
+   "n": 540,
+   "r_first_half": -0.0384621350463909,
+   "r_second_half": 0.05124550894276881,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Beijing, China",
+   "hyp": "rain_soil",
+   "r": 0.5977917865425153,
+   "p": 9.937464913030799e-49,
+   "n": 539,
+   "r_first_half": 0.6015152161851167,
+   "r_second_half": 0.5936777847865778,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Beijing, China",
+   "hyp": "soil_wind_via_heat",
+   "r": -0.2431318726826748,
+   "p": 0.007526735129211226,
+   "n": 135,
+   "r_first_half": -0.2909779223455291,
+   "r_second_half": -0.3851473323607459,
+   "split": "1981-2003 | 2003-2025",
+   "status": "HOLDS"
+  },
+  {
+   "place": "Beijing, China",
+   "hyp": "placebo",
+   "r": 0.06112546800205758,
+   "p": 0.1718417772550689,
+   "n": 540,
+   "r_first_half": 0.10861370835074872,
+   "r_second_half": 0.018765137844522172,
+   "split": "1981-2003 | 2003-2025",
+   "status": "fails"
+  },
+  {
+   "place": "Beijing, China",
+   "hyp": "cc_rate",
+   "pct_per_degC": 0.07981014387597044
+  }
+ ],
+ "evaporation_regime": [
+  {
+   "place": "Lincolnshire, UK",
+   "mean_root_wetness": 0.7282777777777777,
+   "r_evap_sunshine": 0.545935824244011,
+   "r_evap_soil": 0.3956518986276346,
+   "controlled_by": "sunshine (energy-limited)"
+  },
+  {
+   "place": "Madrid, Spain",
+   "mean_root_wetness": 0.5211296296296296,
+   "r_evap_sunshine": -0.32136494478921906,
+   "r_evap_soil": 0.9240332136098883,
+   "controlled_by": "soil water (water-limited)"
+  },
+  {
+   "place": "Kansas, US Great Plains",
+   "mean_root_wetness": 0.42733333333333334,
+   "r_evap_sunshine": -0.24501239405898811,
+   "r_evap_soil": 0.8309892132233819,
+   "controlled_by": "soil water (water-limited)"
+  },
+  {
+   "place": "Niamey, Sahel",
+   "mean_root_wetness": 0.25733333333333336,
+   "r_evap_sunshine": -0.12294001846872481,
+   "r_evap_soil": 0.7440068939465656,
+   "controlled_by": "soil water (water-limited)"
+  },
+  {
+   "place": "Manaus, Amazon",
+   "mean_root_wetness": 0.7581851851851852,
+   "r_evap_sunshine": -0.2834611269141247,
+   "r_evap_soil": 0.7848108548034936,
+   "controlled_by": "soil water (water-limited)"
+  },
+  {
+   "place": "Delhi, India",
+   "mean_root_wetness": 0.4186851851851852,
+   "r_evap_sunshine": -0.43134889395790427,
+   "r_evap_soil": 0.8207888707705062,
+   "controlled_by": "soil water (water-limited)"
+  },
+  {
+   "place": "Murray-Darling, Australia",
+   "mean_root_wetness": 0.5181481481481481,
+   "r_evap_sunshine": -0.5201581037090136,
+   "r_evap_soil": 0.8794053795957973,
+   "controlled_by": "soil water (water-limited)"
+  },
+  {
+   "place": "Yakutsk, Siberia",
+   "mean_root_wetness": 0.556962962962963,
+   "r_evap_sunshine": -0.04300533020739624,
+   "r_evap_soil": 0.8863388894500509,
+   "controlled_by": "soil water (water-limited)"
+  },
+  {
+   "place": "Nairobi, East Africa",
+   "mean_root_wetness": 0.6259259259259259,
+   "r_evap_sunshine": -0.6012132108486311,
+   "r_evap_soil": 0.9035253940944225,
+   "controlled_by": "soil water (water-limited)"
+  },
+  {
+   "place": "Beijing, China",
+   "mean_root_wetness": 0.47820370370370374,
+   "r_evap_sunshine": -0.043178900136137996,
+   "r_evap_soil": 0.8656765362660267,
+   "controlled_by": "soil water (water-limited)"
+  }
+ ]
+}
