@@ -39,6 +39,24 @@ MAP = {
     "FROST_DAYS": ("temperature_2m_min", "frost", "ERA5 days with a minimum below 0 °C."),
 }
 _LOCK = threading.Lock()
+# Open-Meteo counts requests per hour per IP across its APIs. After an hourly-limit error,
+# stop asking for a while instead of retrying (retries keep the limit exhausted).
+BLOCKED_UNTIL = [0.0]
+
+
+def open_meteo_get(url: str, params: dict, timeout: float = 120) -> httpx.Response:
+    if time.time() < BLOCKED_UNTIL[0]:
+        raise RuntimeError(f"Open-Meteo hourly limit reached; retry after {time.strftime('%H:%M', time.localtime(BLOCKED_UNTIL[0]))}")
+    r = None
+    for wait in (0, 62, 62):  # the per-minute limit clears in a minute
+        time.sleep(wait)
+        r = httpx.get(url, params=params, timeout=timeout)
+        if r.status_code == 200:
+            return r
+        if "Hourly" in r.text or "Daily" in r.text:
+            BLOCKED_UNTIL[0] = time.time() + 20 * 60
+            break
+    raise RuntimeError(f"Open-Meteo {r.status_code}: {r.text[:150]}")
 
 
 def _fetch(lat: float, lon: float) -> pd.DataFrame:
@@ -48,14 +66,8 @@ def _fetch(lat: float, lon: float) -> pd.DataFrame:
         d = json.loads(f.read_text())
     else:
         with _LOCK:  # one at a time: Open-Meteo weighs long requests heavily
-            for wait in (0, 62, 62):
-                time.sleep(wait)
-                r = httpx.get(URL, params={"latitude": lat, "longitude": lon, "start_date": "1981-01-01",
-                                           "end_date": "2025-12-31", "daily": ",".join(DAILY), "timezone": "UTC"},
-                              timeout=90)
-                if r.status_code == 200:
-                    break
-            r.raise_for_status()
+            r = open_meteo_get(URL, {"latitude": lat, "longitude": lon, "start_date": "1981-01-01",
+                                     "end_date": "2025-12-31", "daily": ",".join(DAILY), "timezone": "UTC"}, timeout=90)
             d = r.json()
             f.write_text(json.dumps(d))
     df = pd.DataFrame(d["daily"])
