@@ -114,7 +114,7 @@ def _witness(var, box, series, units):
 GROUPS = [
     ("proven", "Proven change", {"strong", "some"}),
     ("not_yet", "Not proven yet", {"not_yet", "mixed"}),
-    ("none", "No meaningful trend", {"none"}),
+    ("none", "No trend detected", {"none"}),
 ]
 
 
@@ -169,7 +169,7 @@ def report_card(
         "fooled_count": len(fooled),
         "fooled_variables": fooled,
         "summary": (f"{len(groups[0]['items'])} proven changes, {len(groups[1]['items'])} not proven yet, "
-                    f"{len(groups[2]['items'])} with no meaningful trend."
+                    f"{len(groups[2]['items'])} with no trend detected."
                     + (f" A typical analysis would also have claimed trends in: {', '.join(fooled)}." if fooled else "")),
     })
 
