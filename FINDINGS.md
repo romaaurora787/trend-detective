@@ -16,17 +16,19 @@ All numbers come from code in `backend/` on NASA POWER monthly data, 1981–2025
 - **C. Second witness.** Met Office, NASA GPCP (global rainfall) and ESA soil moisture each confirm or caution against a verdict.
 
 ## 3. Beyond the trend line ([beyond_scan.md](docs/beyond_scan.md))
-| Place | Finding |
+The methods were re-checked for false alarms on synthetic weather where nothing is changing (`backend/scripts/validate_beyond.py`). Shuffling month by month gave too many false alarms (records 13–22%, "more erratic" 15–19%). We now shuffle **whole years in 5-year blocks**: records 5–7% (two-sided limit 10%), "erratic" 4.5–7.5%, and turning points need a BIC gain > 10 (7.7% even in very persistent weather; real breaks still found 93% of the time). **Claims that didn't survive were removed**: Amazon "22% more erratic", Lincolnshire mean-temperature records, and haze record counts in London, Beijing and Delhi (record too short).
+
+| Place | Finding (passes the corrected tests) |
 |---|---|
-| **Lincolnshire, daytime highs** | Record highs broken **3.1× as often as chance** since 2011; **summer** warming fastest (+0.51 °C/decade); emerged from the noise in **2016** |
-| **Lincolnshire, air temperature** | Records 2.1× chance; **winter** fastest (+0.42 °C/decade); emerged **2008** |
-| **Lincolnshire, frost days** | Record-low frost months **4.9× as often as chance** |
-| **Lincolnshire, sunshine** | Records 2.3× chance; **spring** brightening fastest; emerged 2014 |
-| **Svalbard (Arctic)** | Record highs **3.8×**; **winter** warming **+1.3 °C/decade** |
-| **Amazon (Rondônia)** | Daytime-high records **4.6×**, **22% more erratic** since 2003; record-dry months **3.7×**; drying emerged in **1999** |
-| **Beijing haze** | **Turning point ~2010**: rising before, falling after; record-clean months 2.6× chance since 2018; **19% calmer** since 2013 |
-| **Delhi haze** | Record-haze months **2.5×** chance since 2018; **20% more erratic** since 2013 |
-| **London haze** | Record-clean months **4.5×** chance since 2018 |
+| **Lincolnshire, daytime highs** | Record highs **3.2× as often as chance** since 2011; **summer** warming fastest (+0.51 °C/decade); emerged from the noise in **2016** |
+| **Lincolnshire, air temperature** | **Winter** fastest (+0.42 °C/decade); emerged **2008** |
+| **Lincolnshire, frost days** | Record-low frost months **4.8× as often as chance** |
+| **Lincolnshire, sunshine** | Record highs **2.1×** chance; **spring** brightening fastest; emerged 2014 |
+| **Svalbard (Arctic)** | Record highs **3.2×** chance; **winter** warming **+1.3 °C/decade** |
+| **Amazon (Rondônia)** | Record daytime highs **4.2×** and record-dry months **3.8×** chance; drying emerged in **1999** |
+| **Sahel** | Record-wet months **1.8×** chance; rain recovery emerged 2017 |
+| **Beijing haze** | **Turning point ~2010**: rising before, falling after (BIC gain 16) |
+| **Delhi haze** | **18% more erratic** since 2013 (p = 0.04) |
 
 ## 4. Linked clues that hold on NEW places ([linked_clues.md](docs/linked_clues.md))
 Rules were committed **before** testing, then tested on 111 global and 71 UK grid points:
