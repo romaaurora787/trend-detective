@@ -17,8 +17,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.0036256310679611504,
             "p": 0.31629364071725874,
+            "typical_p": 0.0014083240064335166,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 1,
@@ -26,8 +28,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.0027817745803357446,
             "p": 0.5040556284800444,
+            "typical_p": 0.015345594690467876,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 2,
@@ -35,8 +39,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.008333333333333305,
             "p": 0.09240093728079168,
+            "typical_p": 4.3154610748649e-06,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 3,
@@ -44,8 +50,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.005200895820219362,
             "p": 0.26720794831383965,
+            "typical_p": 0.0016645475591075853,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 4,
@@ -53,8 +61,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.004999999999999988,
             "p": 0.2839538797895975,
+            "typical_p": 0.002214394366108223,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 5,
@@ -62,8 +72,10 @@
             "lon": -2.5,
             "slope_per_decade": -0.004155844155844167,
             "p": 0.3474169242959031,
+            "typical_p": 0.07197223283418083,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 6,
@@ -71,8 +83,10 @@
             "lon": -1.875,
             "slope_per_decade": -0.0032830820770519105,
             "p": 0.5285244742741777,
+            "typical_p": 0.25466002416607214,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 7,
@@ -80,8 +94,10 @@
             "lon": -1.25,
             "slope_per_decade": -0.0021954329056725085,
             "p": 0.7351574739645386,
+            "typical_p": 0.5317364379229212,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 8,
@@ -89,8 +105,10 @@
             "lon": -0.625,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 9,
@@ -98,8 +116,10 @@
             "lon": -0.0,
             "slope_per_decade": -0.009046408203840334,
             "p": 0.2806614816304993,
+            "typical_p": 0.01845467697171487,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 10,
@@ -107,8 +127,10 @@
             "lon": 0.625,
             "slope_per_decade": -0.00945236978992253,
             "p": 0.27967779347177624,
+            "typical_p": 0.005701730865097773,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 11,
@@ -116,8 +138,10 @@
             "lon": 1.25,
             "slope_per_decade": -0.010642614793799946,
             "p": 0.283118616028758,
+            "typical_p": 0.0004155635793667018,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 12,
@@ -125,8 +149,10 @@
             "lon": 1.875,
             "slope_per_decade": -0.013793103448275874,
             "p": 0.1814170241604287,
+            "typical_p": 2.287822367508105e-08,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 13,
@@ -134,8 +160,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.003958625116713308,
             "p": 0.2647326990888268,
+            "typical_p": 0.0006766497953701458,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 14,
@@ -143,8 +171,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.003673094582185515,
             "p": 0.30548407443168735,
+            "typical_p": 0.0010595776034883968,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 15,
@@ -152,8 +182,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.004542035733472917,
             "p": 0.285130852739669,
+            "typical_p": 0.0013059436116782677,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 16,
@@ -161,8 +193,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.01026499302649924,
             "p": 0.04069439694759325,
+            "typical_p": 2.068775327116132e-08,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 17,
@@ -170,8 +204,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.012024539877300618,
             "p": 0.013069845887561549,
+            "typical_p": 1.027912870312709e-11,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 18,
@@ -179,8 +215,10 @@
             "lon": -2.5,
             "slope_per_decade": 0.011538461538461515,
             "p": 0.01706950518211281,
+            "typical_p": 1.9879955161458594e-12,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 19,
@@ -188,8 +226,10 @@
             "lon": -1.875,
             "slope_per_decade": 0.006692015209125498,
             "p": 0.13980864517600522,
+            "typical_p": 3.4921320224466747e-06,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 20,
@@ -197,8 +237,10 @@
             "lon": -1.25,
             "slope_per_decade": 0.0009382199364368245,
             "p": 0.7475127421125918,
+            "typical_p": 0.17288962512535663,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 21,
@@ -206,8 +248,10 @@
             "lon": -0.625,
             "slope_per_decade": -9.373198253851118e-05,
             "p": 0.95130761489624,
+            "typical_p": 0.86348574850323,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 22,
@@ -215,8 +259,10 @@
             "lon": -0.0,
             "slope_per_decade": 0.00041482300884956614,
             "p": 0.908825687720642,
+            "typical_p": 0.6502404143479025,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 23,
@@ -224,8 +270,10 @@
             "lon": 0.625,
             "slope_per_decade": 0.0,
             "p": 0.9827083470643725,
+            "typical_p": 0.9497911420675629,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 24,
@@ -233,8 +281,10 @@
             "lon": 1.25,
             "slope_per_decade": -0.0007547169811320657,
             "p": 0.876369447853591,
+            "typical_p": 0.8083798152154228,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 25,
@@ -242,8 +292,10 @@
             "lon": 1.875,
             "slope_per_decade": -0.005192361434559867,
             "p": 0.5343876585645271,
+            "typical_p": 0.019274751395068717,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 26,
@@ -251,8 +303,10 @@
             "lon": -5.625,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 27,
@@ -260,8 +314,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.009891196834817017,
             "p": 0.056076108757244114,
+            "typical_p": 1.2749674911862187e-08,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 28,
@@ -269,8 +325,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.011521486643437885,
             "p": 0.046504283530224955,
+            "typical_p": 1.0163657242208344e-10,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 29,
@@ -278,8 +336,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.008084932979590401,
             "p": 0.15577425566295156,
+            "typical_p": 1.9026789478477418e-07,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 30,
@@ -287,8 +347,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.0036812570145903314,
             "p": 0.4601944263516342,
+            "typical_p": 0.003080855292823313,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 31,
@@ -296,8 +358,10 @@
             "lon": -2.5,
             "slope_per_decade": 0.0007356321839080875,
             "p": 0.830444187987261,
+            "typical_p": 0.2551855470483278,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 32,
@@ -305,8 +369,10 @@
             "lon": -1.875,
             "slope_per_decade": 0.0,
             "p": 0.9793746553223628,
+            "typical_p": 0.5771644791526017,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 33,
@@ -314,8 +380,10 @@
             "lon": -1.25,
             "slope_per_decade": 0.0,
             "p": 0.9613251023259122,
+            "typical_p": 0.5524346773869779,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 34,
@@ -323,8 +391,10 @@
             "lon": -0.625,
             "slope_per_decade": -0.0004061018346732378,
             "p": 0.9020776577956229,
+            "typical_p": 0.9856635750819605,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 35,
@@ -332,8 +402,10 @@
             "lon": -0.0,
             "slope_per_decade": -0.0015325670498084645,
             "p": 0.81408282866438,
+            "typical_p": 0.3919396866146271,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 36,
@@ -341,8 +413,10 @@
             "lon": 0.625,
             "slope_per_decade": -0.00017486338797815192,
             "p": 0.92631928659234,
+            "typical_p": 0.7737997828781626,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 37,
@@ -350,8 +424,10 @@
             "lon": 1.25,
             "slope_per_decade": -0.0002877440963752389,
             "p": 0.9202446554039374,
+            "typical_p": 0.6994855688770251,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 38,
@@ -359,8 +435,10 @@
             "lon": 1.875,
             "slope_per_decade": -0.002424242424242497,
             "p": 0.7005631474395839,
+            "typical_p": 0.08293642435777791,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 39,
@@ -368,8 +446,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.00377527242359348,
             "p": 0.21379426448590122,
+            "typical_p": 0.001862887995384826,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 40,
@@ -377,8 +457,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.010081300813008075,
             "p": 0.023896524299580335,
+            "typical_p": 7.635969066565697e-10,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 41,
@@ -386,8 +468,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.015644426675446636,
             "p": 0.017321615658131728,
+            "typical_p": 1.759016944441729e-17,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 42,
@@ -395,8 +479,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.009475465313028775,
             "p": 0.10702699946378424,
+            "typical_p": 2.0843362096633127e-11,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 43,
@@ -404,8 +490,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.0030989325785220033,
             "p": 0.5184665364670129,
+            "typical_p": 0.003004377969379079,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 44,
@@ -413,8 +501,10 @@
             "lon": -2.5,
             "slope_per_decade": 0.006388361796331444,
             "p": 0.2858403020733449,
+            "typical_p": 0.00020872133193568804,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 45,
@@ -422,8 +512,10 @@
             "lon": -1.875,
             "slope_per_decade": 0.0,
             "p": 0.9658400475134239,
+            "typical_p": 0.5845897707016141,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 46,
@@ -431,8 +523,10 @@
             "lon": -1.25,
             "slope_per_decade": 0.0012266948812901606,
             "p": 0.8267594444252753,
+            "typical_p": 0.23739408573756804,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 47,
@@ -440,8 +534,10 @@
             "lon": -0.625,
             "slope_per_decade": -0.0009039548022597122,
             "p": 0.8728252266324399,
+            "typical_p": 0.9039335411335544,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 48,
@@ -449,8 +545,10 @@
             "lon": -0.0,
             "slope_per_decade": -0.006060606060606031,
             "p": 0.37071354195184814,
+            "typical_p": 0.001680725760852526,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 49,
@@ -458,8 +556,10 @@
             "lon": 0.625,
             "slope_per_decade": -0.004775022956841114,
             "p": 0.4590530856865058,
+            "typical_p": 0.009272584157396757,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 50,
@@ -467,8 +567,10 @@
             "lon": 1.25,
             "slope_per_decade": -0.0022401445347787,
             "p": 0.6641118598620268,
+            "typical_p": 0.13532188970727782,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 51,
@@ -476,8 +578,10 @@
             "lon": 1.875,
             "slope_per_decade": -0.0017849436585950908,
             "p": 0.6867004841356101,
+            "typical_p": 0.19771125126279648,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 52,
@@ -485,8 +589,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.00792792792792791,
             "p": 0.0521283463125406,
+            "typical_p": 4.073292353883142e-07,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 53,
@@ -494,8 +600,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.008242424242424221,
             "p": 0.021607617216064634,
+            "typical_p": 1.399040684206195e-08,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 54,
@@ -503,8 +611,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.005882352941176476,
             "p": 0.09401254058142361,
+            "typical_p": 4.5800677206859495e-06,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 55,
@@ -512,8 +622,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.0033580246913580167,
             "p": 0.3139713867689462,
+            "typical_p": 0.0008179923038279288,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 56,
@@ -521,8 +633,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.007342995169082201,
             "p": 0.12947125618778554,
+            "typical_p": 1.3233770991461562e-07,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 57,
@@ -530,8 +644,10 @@
             "lon": -2.5,
             "slope_per_decade": 0.007544204322200387,
             "p": 0.2853520398800389,
+            "typical_p": 5.277472824887271e-06,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 58,
@@ -539,8 +655,10 @@
             "lon": -1.875,
             "slope_per_decade": -0.003640265949780335,
             "p": 0.5531710966933996,
+            "typical_p": 0.15579768778691455,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 59,
@@ -548,8 +666,10 @@
             "lon": -1.25,
             "slope_per_decade": -0.0030208021482550093,
             "p": 0.6379532538403201,
+            "typical_p": 0.3756201376593338,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 60,
@@ -557,8 +677,10 @@
             "lon": -0.625,
             "slope_per_decade": -0.004678362573099446,
             "p": 0.4822176053000349,
+            "typical_p": 0.08150449949896905,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 61,
@@ -566,8 +688,10 @@
             "lon": -0.0,
             "slope_per_decade": -0.00901794759186062,
             "p": 0.18680541966217024,
+            "typical_p": 2.3528507751465204e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 62,
@@ -575,8 +699,10 @@
             "lon": 0.625,
             "slope_per_decade": -0.007698744769874493,
             "p": 0.24487985832713322,
+            "typical_p": 0.0003014997394424567,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 63,
@@ -584,8 +710,10 @@
             "lon": 1.25,
             "slope_per_decade": 0.002588996763754062,
             "p": 0.6021001318060824,
+            "typical_p": 0.006637466923506141,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 64,
@@ -593,8 +721,10 @@
             "lon": 1.875,
             "slope_per_decade": 0.0043664717348928,
             "p": 0.2659022277652636,
+            "typical_p": 1.1051112084032691e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 65,
@@ -602,8 +732,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.019183893991526174,
             "p": 0.004688468342859187,
+            "typical_p": 1.3937892497959119e-16,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 66,
@@ -611,8 +743,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.010633946830265875,
             "p": 0.003337180479504598,
+            "typical_p": 1.1427959711769694e-12,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 67,
@@ -620,8 +754,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.009442171417756304,
             "p": 0.010048374731320475,
+            "typical_p": 3.913720197567852e-10,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 68,
@@ -629,8 +765,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.007927927927927887,
             "p": 0.05962405152348027,
+            "typical_p": 1.0810107450078349e-06,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 69,
@@ -638,8 +776,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.018169520402078542,
             "p": 0.014085026622436603,
+            "typical_p": 1.9267240988082624e-20,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 70,
@@ -647,8 +787,10 @@
             "lon": -2.5,
             "slope_per_decade": 0.0,
             "p": 0.9900211056587582,
+            "typical_p": 0.4823996177707331,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 71,
@@ -656,8 +798,10 @@
             "lon": -1.875,
             "slope_per_decade": -0.004834528878065485,
             "p": 0.46159456830399725,
+            "typical_p": 0.041136141939279745,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 72,
@@ -665,8 +809,10 @@
             "lon": -1.25,
             "slope_per_decade": -0.005791855905311838,
             "p": 0.394367554335854,
+            "typical_p": 0.018072576701049416,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 73,
@@ -674,8 +820,10 @@
             "lon": -0.625,
             "slope_per_decade": -0.00702147525676936,
             "p": 0.2840974787234325,
+            "typical_p": 0.004027270620723686,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 74,
@@ -683,8 +831,10 @@
             "lon": -0.0,
             "slope_per_decade": -0.008383500557413628,
             "p": 0.2057232542161378,
+            "typical_p": 0.00023071195498112302,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 75,
@@ -692,8 +842,10 @@
             "lon": 0.625,
             "slope_per_decade": -0.00950955943474649,
             "p": 0.15877931463488837,
+            "typical_p": 4.2072927261586456e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 76,
@@ -701,8 +853,10 @@
             "lon": 1.25,
             "slope_per_decade": 0.00394593607305934,
             "p": 0.5124470366144167,
+            "typical_p": 3.8489022556344085e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 77,
@@ -710,8 +864,10 @@
             "lon": 1.875,
             "slope_per_decade": -0.00029064702621364914,
             "p": 0.9139156491307003,
+            "typical_p": 0.27865832672649626,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 78,
@@ -719,8 +875,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.0010884353741494495,
             "p": 0.8156959796605157,
+            "typical_p": 0.04413614000135397,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 79,
@@ -728,8 +886,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.007113507038035378,
             "p": 0.00829400146500836,
+            "typical_p": 1.7022305278196788e-08,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 80,
@@ -737,8 +897,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.006666666666666672,
             "p": 0.015771198753655513,
+            "typical_p": 7.407432768449373e-08,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 81,
@@ -746,8 +908,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.005610990600144612,
             "p": 0.17630547468363278,
+            "typical_p": 3.372721151481593e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 82,
@@ -755,8 +919,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.005517241379310344,
             "p": 0.414880352483209,
+            "typical_p": 6.392037612339358e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 83,
@@ -764,8 +930,10 @@
             "lon": -2.5,
             "slope_per_decade": 0.0,
             "p": 0.9965032242682432,
+            "typical_p": 0.23612228376643513,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 84,
@@ -773,8 +941,10 @@
             "lon": -1.875,
             "slope_per_decade": -0.0027586206896551557,
             "p": 0.6062482762922454,
+            "typical_p": 0.3973361082464942,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 85,
@@ -782,8 +952,10 @@
             "lon": -1.25,
             "slope_per_decade": -0.003709752316452045,
             "p": 0.5472770726214355,
+            "typical_p": 0.22939839313551663,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 86,
@@ -791,8 +963,10 @@
             "lon": -0.625,
             "slope_per_decade": -0.0056686626746506995,
             "p": 0.36310850113577464,
+            "typical_p": 0.03511033965901518,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 87,
@@ -800,8 +974,10 @@
             "lon": -0.0,
             "slope_per_decade": -0.0031952183501835632,
             "p": 0.5999160066186375,
+            "typical_p": 0.6015507770201676,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 88,
@@ -809,8 +985,10 @@
             "lon": 0.625,
             "slope_per_decade": 0.008270042194092702,
             "p": 0.1182739750299937,
+            "typical_p": 1.2378081036433792e-15,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 89,
@@ -818,8 +996,10 @@
             "lon": 1.25,
             "slope_per_decade": 0.004464555052790298,
             "p": 0.3326564719656844,
+            "typical_p": 5.40713859939268e-07,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 90,
@@ -827,8 +1007,10 @@
             "lon": 1.875,
             "slope_per_decade": 0.0,
             "p": 0.9908651432547741,
+            "typical_p": 0.09667727309458202,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 91,
@@ -836,8 +1018,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.004516470553909131,
             "p": 0.358940516940784,
+            "typical_p": 8.303930705095292e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 92,
@@ -845,8 +1029,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.0046376811594201935,
             "p": 0.055152614603302785,
+            "typical_p": 4.0302577672178594e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 93,
@@ -854,8 +1040,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.0022739018087855546,
             "p": 0.1812466817438314,
+            "typical_p": 0.0009219523452726185,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 94,
@@ -863,8 +1051,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.005597187728707081,
             "p": 0.29450635068013487,
+            "typical_p": 1.5677184819997498e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 95,
@@ -872,8 +1062,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.0025214899713466945,
             "p": 0.621292728636659,
+            "typical_p": 0.007128090366296346,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 96,
@@ -881,8 +1073,10 @@
             "lon": -2.5,
             "slope_per_decade": -0.0004848484848484315,
             "p": 0.874350677093005,
+            "typical_p": 0.6132641525911622,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 97,
@@ -890,8 +1084,10 @@
             "lon": -1.875,
             "slope_per_decade": -0.0011536456730078435,
             "p": 0.7696622319231778,
+            "typical_p": 0.9632887548879359,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 98,
@@ -899,8 +1095,10 @@
             "lon": -1.25,
             "slope_per_decade": 0.002539682539682539,
             "p": 0.6523880807671634,
+            "typical_p": 0.014776071949289699,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 99,
@@ -908,8 +1106,10 @@
             "lon": -0.625,
             "slope_per_decade": -0.0013719185423365834,
             "p": 0.7889321242098553,
+            "typical_p": 0.8000482641871108,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 100,
@@ -917,8 +1117,10 @@
             "lon": -0.0,
             "slope_per_decade": -0.003137254901960785,
             "p": 0.5749483620035545,
+            "typical_p": 0.5882411048433349,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 101,
@@ -926,8 +1128,10 @@
             "lon": 0.625,
             "slope_per_decade": -0.0033333333333326887,
             "p": 0.558012469718451,
+            "typical_p": 0.49649172466135016,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 102,
@@ -935,8 +1139,10 @@
             "lon": 1.25,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 103,
@@ -944,8 +1150,10 @@
             "lon": 1.875,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 104,
@@ -953,8 +1161,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.010000000000000009,
             "p": 0.0051812120091192515,
+            "typical_p": 2.510370508650779e-15,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 105,
@@ -962,8 +1172,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.004833333333333439,
             "p": 0.07523458392688842,
+            "typical_p": 0.00013605922869503506,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 106,
@@ -971,8 +1183,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.004716000221226726,
             "p": 0.06885839395690496,
+            "typical_p": 0.00015623740801676958,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 107,
@@ -980,8 +1194,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.006105919003115235,
             "p": 0.0511300293622412,
+            "typical_p": 2.5416650545355417e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 108,
@@ -989,8 +1205,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.0021073961499493187,
             "p": 0.4807168237245669,
+            "typical_p": 0.019810404863222764,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 109,
@@ -998,8 +1216,10 @@
             "lon": -2.5,
             "slope_per_decade": -0.0002607986960065021,
             "p": 0.86806568656511,
+            "typical_p": 0.6799501571467583,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 110,
@@ -1007,8 +1227,10 @@
             "lon": -1.875,
             "slope_per_decade": -0.0004650394918626642,
             "p": 0.846615901213291,
+            "typical_p": 0.6969887100803724,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 111,
@@ -1016,8 +1238,10 @@
             "lon": -1.25,
             "slope_per_decade": 0.0067555555555555815,
             "p": 0.25192717634187556,
+            "typical_p": 8.28641823333817e-08,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 112,
@@ -1025,8 +1249,10 @@
             "lon": -0.625,
             "slope_per_decade": 0.006153846153846159,
             "p": 0.3270557165585428,
+            "typical_p": 2.8898002827557772e-06,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 113,
@@ -1034,8 +1260,10 @@
             "lon": -0.0,
             "slope_per_decade": 0.006907630522088382,
             "p": 0.27120153324470264,
+            "typical_p": 1.7221471713002677e-07,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 114,
@@ -1043,8 +1271,10 @@
             "lon": 0.625,
             "slope_per_decade": 0.007628691983122355,
             "p": 0.22959202742588403,
+            "typical_p": 8.916421956057187e-09,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 115,
@@ -1052,8 +1282,10 @@
             "lon": 1.25,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 116,
@@ -1061,8 +1293,10 @@
             "lon": 1.875,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 117,
@@ -1070,8 +1304,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.002539682539682528,
             "p": 0.3688319894528067,
+            "typical_p": 0.012318141432099937,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 118,
@@ -1079,8 +1315,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.0026001169524456145,
             "p": 0.23197940635730552,
+            "typical_p": 0.03219812509472132,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 119,
@@ -1088,8 +1326,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.0032643546929261216,
             "p": 0.15057007997464256,
+            "typical_p": 0.006255945165385496,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 120,
@@ -1097,8 +1337,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.02236347603014267,
             "p": 0.0030309928353908777,
+            "typical_p": 8.175961410543867e-28,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 121,
@@ -1106,8 +1348,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.026315789473684174,
             "p": 0.007308128553711546,
+            "typical_p": 2.750572849673847e-34,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 122,
@@ -1115,8 +1359,10 @@
             "lon": -2.5,
             "slope_per_decade": 0.0005442176870748606,
             "p": 0.74613869667156,
+            "typical_p": 0.26689712281884687,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 123,
@@ -1124,8 +1370,10 @@
             "lon": -1.875,
             "slope_per_decade": 0.0,
             "p": 0.9606187839137841,
+            "typical_p": 0.6633743072675262,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 124,
@@ -1133,8 +1381,10 @@
             "lon": -1.25,
             "slope_per_decade": 0.0018223234624146207,
             "p": 0.6749391319099716,
+            "typical_p": 0.02209746559381637,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 125,
@@ -1142,8 +1392,10 @@
             "lon": -0.625,
             "slope_per_decade": 0.0030500874059435886,
             "p": 0.39237560423827,
+            "typical_p": 0.003514118047307967,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 126,
@@ -1151,8 +1403,10 @@
             "lon": -0.0,
             "slope_per_decade": 0.0018953248330297477,
             "p": 0.2713679584738,
+            "typical_p": 0.01572188907260004,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 127,
@@ -1160,8 +1414,10 @@
             "lon": 0.625,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 128,
@@ -1169,8 +1425,10 @@
             "lon": 1.25,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 129,
@@ -1178,8 +1436,10 @@
             "lon": 1.875,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 130,
@@ -1187,8 +1447,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.0,
             "p": 0.9493627192607941,
+            "typical_p": 0.9569551508273779,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 131,
@@ -1196,8 +1458,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.0,
             "p": 0.9481770920442272,
+            "typical_p": 0.7359153876502581,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 132,
@@ -1205,8 +1469,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.0003684524519747714,
             "p": 0.6989781130006776,
+            "typical_p": 0.2852701791816448,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 133,
@@ -1214,8 +1480,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.013287197231833876,
             "p": 0.00712543628274398,
+            "typical_p": 8.496784755228269e-16,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 134,
@@ -1223,8 +1491,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.022666666666666613,
             "p": 0.005972450982109523,
+            "typical_p": 6.673200781231492e-26,
             "significant_fdr": false,
-            "significant_raw": true
+            "significant_raw": true,
+            "significant_typical": true
         },
         {
             "id": 135,
@@ -1232,8 +1502,10 @@
             "lon": -2.5,
             "slope_per_decade": 0.0028464419475655537,
             "p": 0.5414874037816584,
+            "typical_p": 0.02411345865260439,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 136,
@@ -1241,8 +1513,10 @@
             "lon": -1.875,
             "slope_per_decade": 0.004839506172839532,
             "p": 0.40599694613511916,
+            "typical_p": 0.0004959893704829664,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 137,
@@ -1250,8 +1524,10 @@
             "lon": -1.25,
             "slope_per_decade": 0.005968074104051436,
             "p": 0.31256687838779085,
+            "typical_p": 1.4486755286209872e-05,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 138,
@@ -1259,8 +1535,10 @@
             "lon": -0.625,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 139,
@@ -1268,8 +1546,10 @@
             "lon": -0.0,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 140,
@@ -1277,8 +1557,10 @@
             "lon": 0.625,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 141,
@@ -1286,8 +1568,10 @@
             "lon": 1.25,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 142,
@@ -1295,8 +1579,10 @@
             "lon": 1.875,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 143,
@@ -1304,8 +1590,10 @@
             "lon": -5.625,
             "slope_per_decade": 0.0,
             "p": 0.9119213107494555,
+            "typical_p": 0.48318573008524385,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 144,
@@ -1313,8 +1601,10 @@
             "lon": -5.0,
             "slope_per_decade": 0.0,
             "p": 0.8854994318455747,
+            "typical_p": 0.9793793478289078,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 145,
@@ -1322,8 +1612,10 @@
             "lon": -4.375,
             "slope_per_decade": 0.0,
             "p": 0.8891202108578915,
+            "typical_p": 0.7626646514605258,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 146,
@@ -1331,8 +1623,10 @@
             "lon": -3.75,
             "slope_per_decade": 0.000952380952381006,
             "p": 0.49652832638006394,
+            "typical_p": 0.1233679122131232,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 147,
@@ -1340,8 +1634,10 @@
             "lon": -3.125,
             "slope_per_decade": 0.002884990253411313,
             "p": 0.36382005535304085,
+            "typical_p": 0.010114342606315259,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 148,
@@ -1349,8 +1645,10 @@
             "lon": -2.5,
             "slope_per_decade": 0.004306987399770896,
             "p": 0.3384866589868194,
+            "typical_p": 0.0006748487381843404,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 149,
@@ -1358,8 +1656,10 @@
             "lon": -1.875,
             "slope_per_decade": 0.0033333333333333487,
             "p": 0.40785705096161795,
+            "typical_p": 0.0067637516749117785,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": true
         },
         {
             "id": 150,
@@ -1367,8 +1667,10 @@
             "lon": -1.25,
             "slope_per_decade": 0.0010444989929506412,
             "p": 0.6653014900082566,
+            "typical_p": 0.208555565774216,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 151,
@@ -1376,8 +1678,10 @@
             "lon": -0.625,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 152,
@@ -1385,8 +1689,10 @@
             "lon": -0.0,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 153,
@@ -1394,8 +1700,10 @@
             "lon": 0.625,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 154,
@@ -1403,8 +1711,10 @@
             "lon": 1.25,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         },
         {
             "id": 155,
@@ -1412,16 +1722,20 @@
             "lon": 1.875,
             "slope_per_decade": null,
             "p": null,
+            "typical_p": null,
             "significant_fdr": false,
-            "significant_raw": false
+            "significant_raw": false,
+            "significant_typical": false
         }
     ],
     "summary": {
         "n_cells": 137,
+        "n_significant_typical": 89,
         "n_significant_raw": 18,
         "n_significant_fdr": 0,
         "n_rising_fdr": 0,
         "n_falling_fdr": 0,
-        "fdr_q": 0.1
+        "fdr_q": 0.1,
+        "story": "A typical map would show 89 of 137 places changing. None of them survive our checks: that pattern is what chance alone produces."
     }
 }

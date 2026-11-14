@@ -75,3 +75,12 @@ def test_fdr():
 def test_too_short():
     with pytest.raises(ValueError):
         stats.analyse(synth(n_years=2))
+
+
+def test_typical_vs_detective_outcomes():
+    tv = stats.typical_vs_detective
+    assert tv(0.01, 0.2, "not_yet", "C")["outcome"] == "fooled"
+    assert tv(0.001, 0.2, "strong", "C")["outcome"] == "agree_trend"
+    assert tv(0.3, 0.2, "none", "C")["outcome"] == "agree_none"
+    r = stats.analyse(synth(trend_per_decade=0.5, noise=0.5, seed=1), units="C")
+    assert r["typical_vs_detective"]["outcome"] == "agree_trend"

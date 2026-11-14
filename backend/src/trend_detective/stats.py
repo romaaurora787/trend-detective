@@ -151,6 +151,35 @@ def fdr(pvalues, q: float = FDR_Q) -> np.ndarray:
 
 
 # ---------------------------------------------------------------- main entry
+def typical_vs_detective(naive_p: float, naive_slope_dec: float, verdict_label: str, units: str) -> dict:
+    """Feature A: what a typical analysis would conclude vs the Detective.
+
+    "Typical" = straight-line fit to the de-seasonalised months, treating every
+    month as independent (the method that gave up to 55% false alarms in our
+    synthetic test).
+    """
+    typical_sig = naive_p < ALPHA
+    detective_sig = verdict_label in {"strong", "some"}
+    direction = "rising" if naive_slope_dec > 0 else "falling"
+    if typical_sig:
+        typical = f"Real trend: {direction} about {abs(naive_slope_dec):.3g} {units} per decade (p = {naive_p:.2g})."
+    else:
+        typical = f"No significant trend (p = {naive_p:.2g})."
+    if typical_sig and not detective_sig:
+        outcome, note = "fooled", (
+            "A typical analysis would have fooled you. Once we allow for natural ups and downs "
+            "that carry over from month to month, the evidence is too weak to call it a trend."
+        )
+    elif typical_sig and detective_sig:
+        outcome, note = "agree_trend", "Both agree, and this trend survives the stricter checks."
+    elif detective_sig:
+        outcome, note = "missed", "A typical analysis would have missed this trend."
+    else:
+        outcome, note = "agree_none", "Both agree: no proven trend."
+    return {"typical_p": float(naive_p), "typical_slope_per_decade": float(naive_slope_dec),
+            "typical_says": typical, "outcome": outcome, "note": note}
+
+
 @dataclass
 class Verdict:
     label: str  # strong | some | mixed | not_yet | none
@@ -206,6 +235,7 @@ def analyse(series: pd.Series, units: str = "", alpha: float = ALPHA) -> dict:
         slope_method = "ols_neff (many repeated values)"
         half = sps.t.ppf(1 - alpha / 2, ols["n_eff"] - 2) * ols["se"]
         sen, lo, hi = ols["slope"], ols["slope"] - half, ols["slope"] + half
+    naive = sps.linregress(t, y)  # every month treated as independent
     record_years = (len(y)) / 12.0
     # Weatherhead et al. derive n* for a least-squares trend, so use the OLS
     # slope here (Sen's median can be far smaller for skewed data like rain).
@@ -232,6 +262,7 @@ def analyse(series: pd.Series, units: str = "", alpha: float = ALPHA) -> dict:
             "n_eff": ols["n_eff"],
         },
         "baseline_raw_ols": baseline_ols_raw(s),
+        "typical_vs_detective": typical_vs_detective(naive.pvalue, naive.slope * 10, v.label, units),
         "years_to_detect": n_star,
         "record_years": record_years,
         "verdict": asdict(v),
@@ -245,3 +276,33 @@ def quick_cell_test(series: pd.Series, alpha: float = ALPHA) -> tuple[float, flo
     y = anomalies.to_numpy()
     hr = mk.hamed_rao_modification_test(y, alpha=alpha, lag=HR_LAG)
     return float(hr.slope * 120), float(hr.p)  # slope per month -> per decade
+
+
+def cell_tests(series: pd.Series, alpha: float = ALPHA) -> dict:
+    """Map cell: Detective test (Hamed-Rao MK, Sen slope) plus the typical
+    test (straight line, months treated as independent)."""
+    anomalies, _ = deseasonalise(series)
+    y = anomalies.to_numpy()
+    t = to_decimal_year(anomalies.index)
+    hr = mk.hamed_rao_modification_test(y, alpha=alpha, lag=HR_LAG)
+    naive = sps.linregress(t, y)
+    return {"slope_per_decade": float(hr.slope * 120), "p": float(hr.p), "typical_p": float(naive.pvalue)}
+
+
+def map_story(n_cells: int, n_typical: int, n_fdr: int, n_up: int, n_down: int, var_name: str) -> str:
+    """Feature A for maps: one plain sentence, numbers from code."""
+    if n_typical == 0 and n_fdr == 0:
+        return f"No grid cell shows a real change in {var_name.lower()}, and a typical map would agree."
+    if n_fdr == 0:
+        return (f"A typical map would show {n_typical} of {n_cells} places changing. "
+                f"None of them survive our checks: that pattern is what chance alone produces.")
+    parts = []
+    if n_up:
+        parts.append(f"{n_up} rising")
+    if n_down:
+        parts.append(f"{n_down} falling")
+    real = " and ".join(parts)
+    if n_typical > n_fdr:
+        return (f"A typical map would show {n_typical} of {n_cells} places changing. "
+                f"{n_fdr} are real ({real}); the other {n_typical - n_fdr} could be chance.")
+    return f"{n_fdr} of {n_cells} places show a real change ({real})."

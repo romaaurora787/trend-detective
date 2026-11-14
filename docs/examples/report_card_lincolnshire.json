@@ -1,0 +1,436 @@
+{
+    "box": [
+        52.6,
+        53.7,
+        -1.0,
+        0.4
+    ],
+    "groups": [
+        {
+            "key": "proven",
+            "title": "Proven change",
+            "items": [
+                {
+                    "id": "AOD_55",
+                    "name": "Haze (aerosol optical depth)",
+                    "units": "unitless",
+                    "source": "MERRA-2 aerosols",
+                    "label": "strong",
+                    "headline": "Strong evidence it is falling: about 0.0199 unitless per decade.",
+                    "direction": "falling",
+                    "slope_per_decade": -0.0199111111111111,
+                    "ci95": [
+                        -0.024911392405062713,
+                        -0.015000000000001013
+                    ],
+                    "total_change": -0.049611851851851525,
+                    "period": "2001-01 to 2025-12",
+                    "years_to_detect": 16.32374067930014,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                },
+                {
+                    "id": "TS",
+                    "name": "Ground (skin) temperature",
+                    "units": "\u00b0C",
+                    "source": "MERRA-2",
+                    "label": "strong",
+                    "headline": "Strong evidence it is rising: about 0.336 \u00b0C per decade.",
+                    "direction": "rising",
+                    "slope_per_decade": 0.33563591606326326,
+                    "ci95": [
+                        0.2372762510734463,
+                        0.4345297428300671
+                    ],
+                    "total_change": 1.5075646563174858,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 26.97522825355718,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                },
+                {
+                    "id": "QV2M",
+                    "name": "Humidity (water in the air)",
+                    "units": "g/kg",
+                    "source": "MERRA-2",
+                    "label": "strong",
+                    "headline": "Strong evidence it is rising: about 0.139 g/kg per decade.",
+                    "direction": "rising",
+                    "slope_per_decade": 0.13851595246206497,
+                    "ci95": [
+                        0.09751716974581841,
+                        0.18042590548788812
+                    ],
+                    "total_change": 0.6221674864754397,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 26.42355815961163,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                },
+                {
+                    "id": "T2M",
+                    "name": "Air temperature",
+                    "units": "\u00b0C",
+                    "source": "MERRA-2",
+                    "label": "strong",
+                    "headline": "Strong evidence it is rising: about 0.333 \u00b0C per decade.",
+                    "direction": "rising",
+                    "slope_per_decade": 0.33301096237132893,
+                    "ci95": [
+                        0.23367218562098724,
+                        0.43500397797513013
+                    ],
+                    "total_change": 1.4957742393178808,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 27.09742995246757,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": true,
+                        "name": "Met Office Central England Temperature (HadCET)",
+                        "kind": "thermometers",
+                        "independence": "independent",
+                        "period": "1981-01 to 2025-12",
+                        "nasa_verdict": "strong",
+                        "nasa_slope_per_decade": 0.33301096237132893,
+                        "witness_verdict": "strong",
+                        "witness_slope_per_decade": 0.30742728933144176,
+                        "witness_units_note": "",
+                        "monthly_correlation": 0.9710986147214465,
+                        "agrees": true,
+                        "note": "Confirmed: Met Office Central England Temperature (HadCET) also shows a real rising trend."
+                    }
+                },
+                {
+                    "id": "T2M_MIN",
+                    "name": "Night-time lows",
+                    "units": "\u00b0C",
+                    "source": "MERRA-2 (via POWER)",
+                    "label": "strong",
+                    "headline": "Strong evidence it is rising: about 0.272 \u00b0C per decade.",
+                    "direction": "rising",
+                    "slope_per_decade": 0.2716771691268009,
+                    "ci95": [
+                        0.1722991566135324,
+                        0.3751875343399303
+                    ],
+                    "total_change": 1.22028328466121,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 30.797695199371475,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                },
+                {
+                    "id": "T2M_MAX",
+                    "name": "Daytime highs",
+                    "units": "\u00b0C",
+                    "source": "MERRA-2 (via POWER)",
+                    "label": "strong",
+                    "headline": "Strong evidence it is rising: about 0.325 \u00b0C per decade.",
+                    "direction": "rising",
+                    "slope_per_decade": 0.32524416884252516,
+                    "ci95": [
+                        0.19357809942561788,
+                        0.4562382307654672
+                    ],
+                    "total_change": 1.4608883917176707,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 35.15760846537158,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                },
+                {
+                    "id": "ALLSKY_SFC_SW_DWN",
+                    "name": "Sunshine reaching the ground",
+                    "units": "MJ/m\u00b2/day",
+                    "source": "CERES / GEWEX SRB",
+                    "label": "strong",
+                    "headline": "Strong evidence it is rising: about 0.147 MJ/m\u00b2/day per decade.",
+                    "direction": "rising",
+                    "slope_per_decade": 0.1473738302591014,
+                    "ci95": [
+                        0.08193388344543667,
+                        0.21918234466754186
+                    ],
+                    "total_change": 0.6177419718360644,
+                    "period": "1984-01 to 2025-12",
+                    "years_to_detect": 32.500761379936776,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                },
+                {
+                    "id": "FROST_DAYS",
+                    "name": "Frost days",
+                    "units": "days/month",
+                    "source": "MERRA-2 (via POWER)",
+                    "label": "strong",
+                    "headline": "Strong evidence it is falling: about 0.462 days/month per decade.",
+                    "direction": "falling",
+                    "slope_per_decade": -0.4619017188563177,
+                    "ci95": [
+                        -0.7105918297861498,
+                        -0.21321160792648566
+                    ],
+                    "total_change": -2.0747085538629535,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 42.014991381806446,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                },
+                {
+                    "id": "CLOUD_AMT",
+                    "name": "Cloud cover",
+                    "units": "%",
+                    "source": "CERES / GEWEX SRB",
+                    "label": "strong",
+                    "headline": "Strong evidence it is falling: about 0.878 % per decade.",
+                    "direction": "falling",
+                    "slope_per_decade": -0.8779220779220798,
+                    "ci95": [
+                        -1.405184302798088,
+                        -0.3462890379900174
+                    ],
+                    "total_change": -3.6799567099567043,
+                    "period": "1984-01 to 2025-12",
+                    "years_to_detect": 41.6596723872091,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                },
+                {
+                    "id": "EVLAND",
+                    "name": "Evaporation from land",
+                    "units": "mm/day",
+                    "source": "MERRA-2",
+                    "label": "some",
+                    "headline": "Some evidence it is rising: about 0.0259 mm/day per decade.",
+                    "direction": "rising",
+                    "slope_per_decade": 0.025860449411667045,
+                    "ci95": [
+                        0.003368275710835232,
+                        0.049686434849634226
+                    ],
+                    "total_change": 0.11615651860740409,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 41.10095075744945,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_trend",
+                    "typical_note": "Both agree, and this trend survives the stricter checks.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                }
+            ]
+        },
+        {
+            "key": "not_yet",
+            "title": "Not proven yet",
+            "items": [
+                {
+                    "id": "WS2M",
+                    "name": "Wind speed",
+                    "units": "m/s",
+                    "source": "MERRA-2 (via POWER)",
+                    "label": "not_yet",
+                    "headline": "Not significant yet. If it keeps changing at this rate, about 24 more years of data would show it.",
+                    "direction": "falling",
+                    "slope_per_decade": -0.0313740348799718,
+                    "ci95": [
+                        -0.06541895626864061,
+                        0.0023587909750327203
+                    ],
+                    "total_change": -0.14092170666920617,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 68.51447895797486,
+                    "more_years_needed": 23.51447895797486,
+                    "typical_outcome": "agree_none",
+                    "typical_note": "Both agree: no proven trend.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                }
+            ]
+        },
+        {
+            "key": "none",
+            "title": "No meaningful trend",
+            "items": [
+                {
+                    "id": "PRECTOTCORR",
+                    "name": "Rainfall",
+                    "units": "mm/day",
+                    "source": "MERRA-2 (gauge-corrected)",
+                    "label": "none",
+                    "headline": "No meaningful trend: any change is lost in natural ups and downs.",
+                    "direction": "rising",
+                    "slope_per_decade": 0.023591967925468013,
+                    "ci95": [
+                        -0.031944568986644994,
+                        0.07847076933229476
+                    ],
+                    "total_change": 0.10596725593189346,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 101.55923148655937,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_none",
+                    "typical_note": "Both agree: no proven trend.",
+                    "second_witness": {
+                        "available": true,
+                        "name": "NASA GPCP v3.3 rainfall",
+                        "kind": "satellites + rain gauges",
+                        "independence": "partly independent",
+                        "period": "1983-01 to 2025-12",
+                        "nasa_verdict": "not_yet",
+                        "nasa_slope_per_decade": 0.034858454125594185,
+                        "witness_verdict": "not_yet",
+                        "witness_slope_per_decade": 0.031070762278414456,
+                        "witness_units_note": "",
+                        "monthly_correlation": 0.9556272048150465,
+                        "agrees": true,
+                        "note": "Confirmed: NASA GPCP v3.3 rainfall also finds no proven trend."
+                    }
+                },
+                {
+                    "id": "GWETTOP",
+                    "name": "Topsoil wetness",
+                    "units": "fraction (0 dry \u2013 1 saturated)",
+                    "source": "MERRA-2",
+                    "label": "none",
+                    "headline": "No meaningful trend: any change is lost in natural ups and downs.",
+                    "direction": "falling",
+                    "slope_per_decade": -0.0033593414194673698,
+                    "ci95": [
+                        -0.013455160933417006,
+                        0.007873055331841928
+                    ],
+                    "total_change": -0.01508904187577422,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 453.29225588759056,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_none",
+                    "typical_note": "Both agree: no proven trend.",
+                    "second_witness": {
+                        "available": true,
+                        "name": "ESA CCI Soil Moisture (European Space Agency)",
+                        "kind": "satellite microwave",
+                        "independence": "independent",
+                        "period": "1992-01 to 2024-12",
+                        "nasa_verdict": "not_yet",
+                        "nasa_slope_per_decade": 0.006348792781600211,
+                        "witness_verdict": "strong",
+                        "witness_slope_per_decade": -0.0021772219169596016,
+                        "witness_units_note": "ESA reports m\u00b3/m\u00b3; NASA a 0\u20131 wetness fraction, so compare direction, not size.",
+                        "monthly_correlation": 0.27974756362886966,
+                        "agrees": false,
+                        "note": "Caution: ESA CCI Soil Moisture (European Space Agency) shows a falling trend that NASA's record does not."
+                    }
+                },
+                {
+                    "id": "GWETROOT",
+                    "name": "Root-zone soil wetness",
+                    "units": "fraction (0 dry \u2013 1 saturated)",
+                    "source": "MERRA-2",
+                    "label": "none",
+                    "headline": "No meaningful trend: any change is lost in natural ups and downs.",
+                    "direction": "falling",
+                    "slope_per_decade": -0.003657504359889821,
+                    "ci95": [
+                        -0.01516037139463307,
+                        0.0090095717068434
+                    ],
+                    "total_change": -0.016428290416505058,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 432.3347183826969,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_none",
+                    "typical_note": "Both agree: no proven trend.",
+                    "second_witness": {
+                        "available": true,
+                        "name": "ESA CCI Soil Moisture (European Space Agency)",
+                        "kind": "satellite microwave",
+                        "independence": "independent",
+                        "period": "1992-01 to 2024-12",
+                        "nasa_verdict": "not_yet",
+                        "nasa_slope_per_decade": 0.007714781674579669,
+                        "witness_verdict": "strong",
+                        "witness_slope_per_decade": -0.0021772219169596016,
+                        "witness_units_note": "ESA reports m\u00b3/m\u00b3; NASA a 0\u20131 wetness fraction, so compare direction, not size.",
+                        "monthly_correlation": 0.25313154699951285,
+                        "agrees": false,
+                        "note": "Caution: ESA CCI Soil Moisture (European Space Agency) shows a falling trend that NASA's record does not."
+                    }
+                },
+                {
+                    "id": "RH2M",
+                    "name": "Relative humidity",
+                    "units": "%",
+                    "source": "MERRA-2 (via POWER)",
+                    "label": "none",
+                    "headline": "No meaningful trend: any change is lost in natural ups and downs.",
+                    "direction": "falling",
+                    "slope_per_decade": -0.029650014907367718,
+                    "ci95": [
+                        -0.2944420913496821,
+                        0.24111445350521163
+                    ],
+                    "total_change": -0.13317798362559288,
+                    "period": "1981-01 to 2025-12",
+                    "years_to_detect": 292.83209159755734,
+                    "more_years_needed": null,
+                    "typical_outcome": "agree_none",
+                    "typical_note": "Both agree: no proven trend.",
+                    "second_witness": {
+                        "available": false,
+                        "note": "No independent second witness for this variable and place yet."
+                    }
+                }
+            ]
+        }
+    ],
+    "errors": [],
+    "fooled_count": 0,
+    "fooled_variables": [],
+    "summary": "10 proven changes, 1 not proven yet, 4 with no meaningful trend."
+}

@@ -51,6 +51,14 @@ Key fields (see [`docs/examples/analyse_T2M_lincolnshire.json`](docs/examples/an
 
 Errors: 400 bad box, 404 unknown variable, 422 too little data, 502 NASA POWER failed. Show the `detail` text.
 
+### NEW: what makes us different (show these prominently)
+**A. Typical vs Detective.** Every `/api/analyse` result has `result.typical_vs_detective`:
+`typical_says` (what a typical straight-line analysis would claim), `outcome` (`fooled`, `agree_trend`, `missed`, `agree_none`) and `note` (one sentence for the card). Show the two side by side: *"A typical analysis says… / The Detective says…"*. On maps, `summary.story` gives the sentence and `summary.n_significant_typical` vs `summary.n_significant_fdr` gives the numbers. Each cell also has `significant_typical`, so you can toggle "typical map" vs "Detective map" (**the key demo**: England soil, typical 89 of 137 cells → Detective 0).
+
+**B. Place report card.** `GET /api/report-card?lat_min=..&lat_max=..&lon_min=..&lon_max=..` runs all 15 variables for the place. `groups` contains **Proven change / Not proven yet / No meaningful trend**. Each item has `name`, `headline`, `slope_per_decade`, `ci95`, `units`, `more_years_needed` (for "not yet"), `typical_note` and `second_witness`. `summary` is one sentence. First call takes ~10–20 s (15 NASA requests), then it's cached. Example: [`docs/examples/report_card_lincolnshire.json`](docs/examples/report_card_lincolnshire.json).
+
+**C. Second witness.** `/api/analyse` and each report-card item have `second_witness`: `available`, `name` (e.g. Met Office HadCET, NASA GPCP, ESA CCI soil moisture), `agrees` (true → ✔ "Confirmed" badge, false → ⚠ "Caution" badge), `note`, `monthly_correlation`, `period`. If `available` is false, show nothing or "no second witness yet".
+
 ### `GET /api/map?var=GWETROOT&lat_min=50&lat_max=55.5&lon_min=-6&lon_max=2`
 One trend per grid cell (0.5° × 0.625°). Each cell: `lat`, `lon` (cell centre), `slope_per_decade`, `p`, `significant_raw`, `significant_fdr`.
 - Colour: diverging by `slope_per_decade` (blue falling, red rising; reverse for rainfall and soil).
