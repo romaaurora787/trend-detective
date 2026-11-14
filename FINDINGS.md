@@ -87,6 +87,7 @@ Rules were committed **before** testing, then tested on 111 global and 71 UK gri
 - **Amazon drying confirmed:** IMERG −0.63 vs NASA POWER −0.65 mm/day/decade over the same 1998–2025 years (GPCP agrees too).
 - **Sahel wetting:** GPCP confirms it from 1983; IMERG (from 1998) only leans wetter, because most of the recovery happened before 1998. Say "wetter since the 1980s droughts".
 - **Delhi rain rising: NOT confirmed** by GPCP or IMERG (NASA POWER's rate is about twice theirs). Treat as unproven.
+- **Beijing rain rising: confirmed** (IMERG +0.12 vs NASA POWER +0.11 mm/day/decade since 1998, both proven). All 13 demo places now have IMERG cached; UK places correlate with NASA POWER at r ≈ 0.95–0.97.
 - **East Africa rain rising since 1998:** NASA POWER +0.30 vs IMERG +0.07 mm/day/decade, not confirmed. MERRA-2 probably overstates it.
 
 **Amazon drying is real and growing:** rain −0.53 mm/day/decade, confirmed by NASA GPCP v3.3; **drought months (SPI-3 ≤ −1) 0.9 a year in the 1980s → 9.4 a year in the last 10 years**; driest 12 months ended Jan 2016 (the 2015–16 El Niño). VPD +0.08 kPa/decade (strong).
