@@ -81,6 +81,8 @@ Rules were committed **before** testing, then tested on 111 global and 71 UK gri
 
 **Delhi: nights hotter at the ground, days not** (MODIS land surface temperature): night +0.70 °C/decade (Aqua satellite agrees: +0.62, both proven). Late morning −0.43 °C/decade on Terra (proven), but Aqua's afternoon pass only leans the same way (−0.24, p = 0.18), so say "daytime ground heat is not rising", not "days are cooling". Same place: greener (NDVI up) and the air less "thirsty" (VPD −0.11 kPa/decade). Irrigation and greening are a likely reason the daytime surface isn't heating; nights keep warming.
 
+**Cities hold heat at night (MODIS, ground temperature at ~22:30):** London +0.37 °C/decade (Aqua +0.46), both proven; Lincolnshire +0.29 (Aqua +0.26, not proven).
+
 **Amazon drying is real and growing:** rain −0.53 mm/day/decade, confirmed by NASA GPCP v3.3; **drought months (SPI-3 ≤ −1) 0.9 a year in the 1980s → 9.4 a year in the last 10 years**; driest 12 months ended Jan 2016 (the 2015–16 El Niño). VPD +0.08 kPa/decade (strong).
 
 **Climate modes:** Spain's winter rain follows the North Atlantic Oscillation (r = −0.65); Lincolnshire's winter temperature too (r = +0.53), and its warming survives removing the NAO (+0.36 °C/decade). East Africa rain follows the Indian Ocean Dipole and El Niño.
