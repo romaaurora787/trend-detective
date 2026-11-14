@@ -64,3 +64,15 @@ def search(q: str, limit: int = 8) -> list[dict]:
                     "population": pop, "label": ", ".join(x for x in (name, region if region != name else "", country) if x),
                     "box": box_for(lat, lon)})
     return out
+
+
+def search_box(box: list[float], limit: int = 5) -> list[dict]:
+    """Largest places inside a box (for 'big city' detection and labels)."""
+    out = []
+    for r, *_ in _rows():  # already sorted by population, largest first
+        name, _, country, region, lat, lon, pop = r
+        if box[0] <= lat <= box[1] and box[2] <= lon <= box[3]:
+            out.append({"name": name, "country": country, "lat": lat, "lon": lon, "population": pop})
+            if len(out) >= limit:
+                break
+    return out
