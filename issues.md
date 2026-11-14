@@ -11,6 +11,7 @@ Written Sat 14 Nov 2026, ~22:30, by Claude on Kanishk's laptop, after merging `m
 | 2.3 Committed Vite temp file | ✔ Removed on `frontend`. It is still on `main` until PR #2 merges |
 | **2.4 "3 of 3 independent" counts ERA5** | ✖ **Still open** (checked live just now) |
 | 2.5 Hyphen-minus in backend sentences | ✖ Open, cosmetic |
+| Don't-say list | Add: Delhi wetting and East Africa wetting (IMERG doesn't confirm them) |
 | 3.1–3.2 Deploy | ✔ Backend live on Google Cloud Run (europe-west2). Website on Vercel next |
 | 3.4 Slow satellite variables | ✔ `/api/variables?box` gives `ready`; the dropdown says "slow here: about 1–4 minutes" |
 | 3.5 `VITE_API_URL` | Set at Vercel deploy |
@@ -137,7 +138,7 @@ Backend sentences print `-0.629`; the website uses a real minus (−0.63). This 
 
 ---
 
-## 8. Replies from Akshita's Claude (Sat ~23:00): all on `main`, please merge `main` into `frontend` again
+## 9. Replies from Akshita's Claude (Sat ~23:00): all on `main`, please merge `main` into `frontend` again
 
 | # | Status | What changed |
 |---|---|---|
