@@ -307,3 +307,43 @@ def map_story(n_cells: int, n_typical: int, n_fdr: int, n_up: int, n_down: int, 
         return (f"A typical map would show {n_typical} of {n_cells} places changing. "
                 f"{n_fdr} are real ({real}); the other {n_typical - n_fdr} could be chance.")
     return f"{n_fdr} of {n_cells} places show a real change ({real})."
+
+
+def robustness(series: pd.Series, units: str = "") -> dict:
+    """Does the verdict depend on where the record starts or ends?
+
+    Re-runs the full analysis on shifted windows: start +5 / +10 years, end -5
+    years. A verdict is "robust" if every window agrees on proven vs not proven
+    and on direction. Trend start and end points are a classic way to be fooled.
+    """
+    s = series.dropna().sort_index()
+    y0, y1 = s.index[0].year, s.index[-1].year
+    windows = [("full record", y0, y1), (f"start {y0 + 5}", y0 + 5, y1), (f"start {y0 + 10}", y0 + 10, y1),
+               (f"end {y1 - 5}", y0, y1 - 5)]
+    rows = []
+    for name, a, b in windows:
+        sub = s[(s.index.year >= a) & (s.index.year <= b)]
+        if len(sub) < 240:  # need 20 years
+            continue
+        r = analyse(sub, units)
+        rows.append({"window": name, "period": f"{a}–{b}", "label": r["verdict"]["label"],
+                     "slope_per_decade": r["sen_slope_per_decade"], "ci95": r["sen_ci95_per_decade"]})
+    if len(rows) < 2:
+        return {"robust": None, "windows": rows, "headline": "Record too short to test robustness."}
+    proven = [r["label"] in {"strong", "some"} for r in rows]
+    signs = {np.sign(r["slope_per_decade"]) for r in rows if r["label"] in {"strong", "some"}}
+    robust = (all(proven) and len(signs) == 1) or not any(proven)
+    full = rows[0]
+    if robust and all(proven):
+        lo = min(r["slope_per_decade"] for r in rows)
+        hi = max(r["slope_per_decade"] for r in rows)
+        msg = (f"Robust: the trend stays proven whichever years we start or end on "
+               f"({lo:+.3g} to {hi:+.3g} {units} per decade across {len(rows)} windows).")
+    elif robust:
+        msg = f"Robust: no window shows a proven trend, whichever years we start or end on ({len(rows)} windows)."
+    else:
+        flips = [r for r in rows[1:] if (r["label"] in {"strong", "some"}) != (full["label"] in {"strong", "some"})]
+        f = flips[0] if flips else rows[1]
+        msg = (f"Fragile: the verdict depends on the years chosen. The {full['period']} record says "
+               f"'{full['label'].replace('_', ' ')}', but {f['period']} says '{f['label'].replace('_', ' ')}'. Treat it with care.")
+    return {"robust": bool(robust), "windows": rows, "headline": msg}

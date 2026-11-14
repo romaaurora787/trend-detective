@@ -5,13 +5,17 @@ AI-use note: drafted with Claude (Anthropic) during the hackathon.
 
 from __future__ import annotations
 
+import functools
 import json
 import math
+import threading
+from collections import OrderedDict
 from pathlib import Path
 
 import numpy as np
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 
 from concurrent.futures import ThreadPoolExecutor
 
@@ -19,6 +23,31 @@ from . import beyond, context, places, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
+
+
+
+# Results of the heavy endpoints are kept in memory, so a repeat visit (or a
+# judge clicking back and forth) is instant and never re-asks NASA.
+_MEMO: "OrderedDict[tuple, object]" = OrderedDict()
+_MEMO_MAX = 512
+_MEMO_LOCK = threading.Lock()
+
+
+def memo(fn):
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        key = (fn.__name__, args, tuple(sorted(kwargs.items())))
+        with _MEMO_LOCK:
+            if key in _MEMO:
+                _MEMO.move_to_end(key)
+                return _MEMO[key]
+        out = fn(*args, **kwargs)
+        with _MEMO_LOCK:
+            _MEMO[key] = out
+            while len(_MEMO) > _MEMO_MAX:
+                _MEMO.popitem(last=False)
+        return out
+    return wrapper
 
 app = FastAPI(title="Earth System Trend Detective API")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["GET"], allow_headers=["*"])
@@ -63,6 +92,7 @@ def variables():
 
 
 @app.get("/api/analyse")
+@memo
 def analyse(
     var: str,
     lat_min: float = Query(...), lat_max: float = Query(...),
@@ -80,6 +110,10 @@ def analyse(
         result = stats.analyse(series, units=meta["units"])
     except ValueError as e:
         raise HTTPException(422, str(e))
+    try:
+        result["robustness"] = stats.robustness(series, units=meta["units"])
+    except Exception as e:  # never break the main verdict
+        result["robustness"] = {"robust": None, "windows": [], "headline": f"Robustness check unavailable ({type(e).__name__})."}
     anomalies, _ = stats.deseasonalise(series)
     t = stats.to_decimal_year(anomalies.index)
     t_mid = (t[0] + t[-1]) / 2
@@ -119,6 +153,7 @@ GROUPS = [
 
 
 @app.get("/api/report-card")
+@memo
 def report_card(
     lat_min: float = Query(...), lat_max: float = Query(...),
     lon_min: float = Query(...), lon_max: float = Query(...),
@@ -175,6 +210,7 @@ def report_card(
 
 
 @app.get("/api/map")
+@memo
 def trend_map(
     var: str,
     lat_min: float = Query(...), lat_max: float = Query(...),
@@ -225,6 +261,7 @@ def trend_map(
 
 
 @app.get("/api/beyond")
+@memo
 def beyond_the_line(
     var: str,
     lat_min: float = Query(...), lat_max: float = Query(...),
@@ -250,6 +287,7 @@ def place_search(q: str = Query(..., min_length=2, max_length=80), limit: int = 
 
 
 @app.get("/api/context")
+@memo
 def case_context(
     var: str,
     lat_min: float = Query(...), lat_max: float = Query(...),
@@ -293,6 +331,61 @@ def case_context(
     except Exception as e:
         out["beyond"] = {"error": f"{type(e).__name__}: {str(e)[:150]}"}
     return _clean(out)
+
+
+@app.get("/api/evidence.csv")
+def evidence_csv(
+    var: str,
+    lat_min: float = Query(...), lat_max: float = Query(...),
+    lon_min: float = Query(...), lon_max: float = Query(...),
+):
+    """Download the evidence: monthly values, seasons-removed values and the
+    trend line, with the verdict numbers and citation as header lines."""
+    meta = _var(var)
+    _bbox(lat_min, lat_max, lon_min, lon_max)
+    try:
+        series, n = power.fetch_area_series(var, lat_min, lat_max, lon_min, lon_max)
+    except power.PowerError as e:
+        raise HTTPException(502, str(e))
+    s = series.dropna()
+    try:
+        r = stats.analyse(s, units=meta["units"])
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    anom, clim = stats.deseasonalise(s)
+    t = stats.to_decimal_year(anom.index)
+    slope = r["sen_slope_per_decade"] / 10
+    t_mid = (t[0] + t[-1]) / 2
+    a_mid = float(np.median(anom.to_numpy() - slope * (t - t_mid)))
+    trend = a_mid + slope * (t - t_mid)
+    lo, hi = r["sen_ci95_per_decade"]
+    head = [
+        f"# Earth System Trend Detective: evidence file",
+        f"# Variable: {meta['name']} ({meta['id']}), units {meta['units']}, source {meta['source']} via NASA POWER",
+        f"# Box: lat {lat_min} to {lat_max}, lon {lon_min} to {lon_max} ({n} NASA grid cells, area-weighted mean)",
+        f"# Period: {r['start']} to {r['end']} ({r['n_months']} months)",
+        f"# Verdict: {r['verdict']['label']} | {r['verdict']['headline']}",
+        f"# Sen slope per decade: {r['sen_slope_per_decade']:.6g} (95% range {lo:.6g} to {hi:.6g}), method {r['slope_method']}",
+        f"# Mann-Kendall (Hamed-Rao, 12 lags) p = {r['mk_hamed_rao']['p']:.6g}; OLS with effective n p = {r['ols_neff']['p']:.6g} (n_eff {r['ols_neff']['n_eff']:.1f})",
+        f"# Typical analysis (months treated as independent) p = {r['typical_vs_detective']['typical_p']:.6g}",
+        f"# Years to detect (Weatherhead 1998): {r['years_to_detect']}",
+        f"# Citation: NASA POWER Project, power.larc.nasa.gov; {meta['source']}. Analysis code: github (Earth System Trend Detective).",
+        "month,value,seasonal_normal,anomaly,trend_line",
+    ]
+    lines = [f"{d:%Y-%m},{v:.6g},{clim[d.month]:.6g},{a:.6g},{tl:.6g}"
+             for d, v, a, tl in zip(anom.index, s.reindex(anom.index).to_numpy(), anom.to_numpy(), trend)]
+    fname = f"trend-detective_{meta['id']}_{lat_min}_{lat_max}_{lon_min}_{lon_max}.csv"
+    return Response("\n".join(head + lines) + "\n", media_type="text/csv",
+                    headers={"Content-Disposition": f'attachment; filename="{fname}"'})
+
+
+@app.get("/api/world")
+def world():
+    """World report (precomputed by scripts/world_report.py)."""
+    p = DATA / "world_report.json"
+    if not p.exists():
+        raise HTTPException(404, "World report not computed yet")
+    return json.loads(p.read_text())
 
 
 @app.get("/api/links")

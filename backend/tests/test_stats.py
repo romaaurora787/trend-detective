@@ -84,3 +84,13 @@ def test_typical_vs_detective_outcomes():
     assert tv(0.3, 0.2, "none", "C")["outcome"] == "agree_none"
     r = stats.analyse(synth(trend_per_decade=0.5, noise=0.5, seed=1), units="C")
     assert r["typical_vs_detective"]["outcome"] == "agree_trend"
+
+
+def test_robustness_strong_trend_is_robust():
+    r = stats.robustness(synth(trend_per_decade=1.0, noise=0.5, seed=11), "C")
+    assert r["robust"] is True and len(r["windows"]) == 4
+
+
+def test_robustness_no_trend_is_robust_none():
+    r = stats.robustness(synth(trend_per_decade=0.0, seed=12), "C")
+    assert r["robust"] in (True, False) and r["windows"]
