@@ -62,6 +62,9 @@ All `GET` unless marked. Boxes are `lat_min,lat_max,lon_min,lon_max`. `/api/anal
 - `/api/events?lat_min=..` — NASA EONET natural events nearby (sparse before 2016).
 - `/api/analyse` now also returns `result.vs_world` for temperature variables (rate vs NASA GISTEMP global).
 - Catalogue now has 19 variables (added snow depth, dew point, day–night range, heat radiation from the sky).
+- **Vegetation greenness `NDVI`** (20th variable): NASA MODIS Terra MOD13Q1 v6.1, 250 m, 16-day composites 2000–2025, read from the open Cloud-Optimised GeoTIFFs on Microsoft Planetary Computer (no login). Good-quality land pixels inside the box are averaged (cloud, snow and water left out) and turned into a monthly series, so `/api/analyse`, `/api/cross-examine`, `/api/compare`, `/api/hunch?id=greener` all work on it. **First look at a new box takes ~0.5–2 min** (hundreds of satellite images); cached after. `/api/witnesses?var=NDVI` adds **MODIS on Aqua** as an independent second satellite. Not on the grid map or in the world report (it isn't on the POWER grid). Code: `ndvi.py`.
+- `/api/extreme-days?lat_min=..` — yearly counts from NASA POWER **daily** data: hot days (above the place's own 1-in-10 day), 35 °C days, tropical nights (≥20 °C), humid-heat days (wet-bulb ≥25 °C), frost nights, cold nights; each tested (Yue–Wang MK) with 1980s vs last-10-years. Code: `heat.py`.
+- `data/world_report.json` now has an **instrument alibi** per variable (`alibi` counts and `n_proven_after_alibi`; per point `cells[].alibi`): e.g. cloud cover 88 proven points, 42 of them could be the 2001 instrument switch.
 
 ### NEW: what makes us different (show these prominently)
 **A. Typical vs Detective.** Every `/api/analyse` result has `result.typical_vs_detective`:
@@ -116,6 +119,8 @@ docs/examples/  real API responses
 - NASA POWER Project (NASA Langley Research Center), Prediction Of Worldwide Energy Resources, https://power.larc.nasa.gov. MERRA-2 (GMAO) meteorology; CERES / GEWEX SRB solar and cloud.
 - Methods: Mann (1945); Kendall (1975); Sen (1968); Hamed & Rao (1998); Yue & Wang (2004); Weatherhead et al. (1998); Benjamini & Hochberg (1995); Wilks (2016).
 - Places: GeoNames cities15000 (CC BY 4.0), geonames.org.
+- Greenness: Didan, K. (2021) MOD13Q1 MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061, NASA EOSDIS LP DAAC, doi:10.5067/MODIS/MOD13Q1.061 (and MYD13Q1 for Aqua); served by Microsoft Planetary Computer.
+- Second witnesses: ERA5 (Copernicus C3S, via Open-Meteo, CC BY 4.0); NOAA NCEI GHCN monthly station summaries; NOAA CPC Oceanic Niño Index; NASA GISTEMP v4; NASA EONET.
 - Libraries: pymannkendall, statsmodels, scipy, numpy, pandas, FastAPI.
 
 ## AI use

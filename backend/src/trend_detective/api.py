@@ -19,7 +19,7 @@ from fastapi.responses import Response
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import beyond, compare as cmp, context, crossexam, era5, events, globalref, guide, places, stations, power, stats, witnesses
+from . import beyond, compare as cmp, context, crossexam, era5, events, globalref, guide, heat, places, stations, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -135,7 +135,7 @@ def analyse(
             "annual_anomalies": annual.round(4).tolist(),
         },
         "second_witness": _witness(var, [lat_min, lat_max, lon_min, lon_max], series, meta["units"]),
-        "citation": f"NASA POWER Project, {meta['source']} monthly data, power.larc.nasa.gov (accessed Nov 2026)",
+        "citation": meta.get("citation") or f"NASA POWER Project, {meta['source']} monthly data, power.larc.nasa.gov (accessed Nov 2026)",
     })
 
 
@@ -216,8 +216,18 @@ def all_witnesses(
     w = _witness(var, box, series, meta["units"])
     if w.get("available"):
         out.append(w)
+    if meta.get("satellite"):
+        try:
+            from . import ndvi
+            out.append(witnesses.compare_witness(
+                "MODIS on NASA's Aqua satellite (since mid-2002)", "satellite",
+                "A second satellite with its own sensor and calibration, passing over in the afternoon instead of the morning: "
+                "independent of Terra's sensor drift, same kind of measurement",
+                series, ndvi.monthly(box, platform="aqua"), meta["units"]))
+        except Exception as ex:
+            out.append({"available": False, "name": "MODIS Aqua", "note": f"Aqua record unavailable ({type(ex).__name__})."})
     try:
-        e = era5.monthly(var, (lat_min + lat_max) / 2, (lon_min + lon_max) / 2)
+        e = era5.monthly(var, (lat_min + lat_max) / 2, (lon_min + lon_max) / 2) if var in era5.MAP else None
         if e is not None:
             out.append(witnesses.compare_witness(
                 "ERA5 (ECMWF reanalysis, via Open-Meteo)", "reanalysis",
@@ -317,6 +327,19 @@ def natural_events(lat_min: float = Query(...), lat_max: float = Query(...),
         raise HTTPException(502, f"NASA EONET unavailable ({type(e).__name__})")
 
 
+@app.get("/api/extreme-days")
+@memo
+def extreme_days(lat_min: float = Query(...), lat_max: float = Query(...),
+                 lon_min: float = Query(...), lon_max: float = Query(...)):
+    """Hot days, 35 °C days, tropical nights, humid heat, frost nights, cold days per year (NASA POWER daily)."""
+    box = [lat_min, lat_max, lon_min, lon_max]
+    _bbox(*box)
+    try:
+        return _clean(heat.heat_report((lat_min + lat_max) / 2, (lon_min + lon_max) / 2))
+    except power.PowerError as e:
+        raise HTTPException(502, str(e))
+
+
 def _witness(var, box, series, units):
     try:
         return witnesses.second_witness(var, box, series, units)
@@ -365,8 +388,11 @@ def report_card(
             item["second_witness"] = _witness(meta["id"], box, series, meta["units"])
         return item
 
+    # satellite greenness is slow the first time: include it only once it has been read for this box
+    from . import ndvi
+    metas = [m for m in CATALOGUE if not m.get("satellite") or ndvi._cache_path(box).exists()]
     with ThreadPoolExecutor(6) as ex:
-        items = list(ex.map(one, CATALOGUE))
+        items = list(ex.map(one, metas))
     groups = []
     for key, title, labels in GROUPS:
         members = [i for i in items if i.get("label") in labels]
@@ -397,6 +423,8 @@ def trend_map(
 ):
     """Per-grid-cell trend with Benjamini-Hochberg FDR (q=0.10)."""
     meta = _var(var)
+    if meta.get("satellite"):
+        raise HTTPException(422, "The grid map is for NASA POWER variables; greenness is analysed for the whole box.")
     _bbox(lat_min, lat_max, lon_min, lon_max)
     # POWER needs >= 2 degrees each way; small boxes show the surrounding area.
     lat_min, lat_max = power._widen(lat_min, lat_max, 90)

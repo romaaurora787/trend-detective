@@ -94,6 +94,8 @@ HUNCHES = [
     {"id": "sunnier", "text": "It's sunnier than it used to be", "var": "ALLSKY_SFC_SW_DWN", "season": None, "dir": 1},
     {"id": "cleaner_air", "text": "The air is getting clearer (less haze)", "var": "AOD_55", "season": None, "dir": -1},
     {"id": "hotter", "text": "It's getting hotter", "var": "T2M", "season": None, "dir": 1},
+    {"id": "greener", "text": "It's getting greener (more plant growth)", "var": "NDVI", "season": None, "dir": 1},
+    {"id": "browner", "text": "The land is drying up and turning brown", "var": "NDVI", "season": "summer", "dir": -1},
 ]
 BY_HUNCH = {h["id"]: h for h in HUNCHES}
 _SEASON = {"summer": [6, 7, 8], "winter": [12, 1, 2]}
