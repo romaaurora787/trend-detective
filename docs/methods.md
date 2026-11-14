@@ -10,7 +10,9 @@ Is this variable really changing here, or is it just natural ups and downs? If i
 ## 2. Remove the seasons
 Lincoln's monthly temperature swings by about 13 °C between winter and summer. The long-term change is about 1.5 °C, so it is hidden inside that swing. We subtract each calendar month's 45-year average. What is left, the **anomaly**, is the part that can show a trend.
 
-## 3. Two independent tests, both corrected for "sticky" noise
+## 3. Two different tests, both corrected for "sticky" noise
+The two tests run on the same data, so they are not independent evidence. Requiring both to pass guards against one test's assumptions (straight line, normal noise) driving the verdict.
+
 Natural variability is **autocorrelated**: a warm month tends to be followed by another warm month. Standard tests assume every month is independent, so they become over-confident and see trends that aren't there. Our synthetic experiment (section 6) shows this.
 
 | Test | What it does | Correction |
@@ -29,8 +31,8 @@ Natural variability is **autocorrelated**: a warm month tends to be followed by 
 | **Strong evidence** | Both corrected tests p < 0.01 |
 | **Some evidence** | Both corrected tests p < 0.05 |
 | **Mixed** | One test p < 0.05, the other not |
-| **Not significant yet** | Neither test p < 0.05, but at this rate it would show within 100 years |
-| **No meaningful trend** | Neither significant, and it would take more than 100 years |
+| **Not significant yet** | Neither test p < 0.05, but if today's rate is real it would show within 100 years of data |
+| **No trend detected** | Neither significant, and a change this small would take more than 100 years to show. This is an absence of evidence, not proof that nothing is changing. |
 
 Requiring **both** tests to agree keeps false alarms at about 5% (section 6).
 
@@ -60,6 +62,8 @@ We generated 45-year monthly series with a seasonal cycle and autocorrelated noi
 **Starting point:** NASA GES DISC's own published approach (Acker et al., SeaWiFS chlorophyll time series) fits a least-squares line to monthly Giovanni data and tests it with an F-test. We build on it with seasonal removal, a robust slope, autocorrelation correction and multiple-testing control.
 
 ## 6b. Cross-checks against other records (real data, same engine)
+In the app each check shows one of three badges. **Confirmed**: a *fully independent* record (HadCET thermometers, ESA satellite soil moisture, NOAA weather stations) proves the same trend. **Consistent**: both records find no proven trend, or the other record shares input data with MERRA-2 (GPCP and IMERG rainfall, ERA5). **Caution**: the records disagree. The witness list counts how many records agree and, separately, how many of those are fully independent.
+
 | Check | Other record | NASA (via POWER) | Monthly anomaly correlation |
 |---|---|---|---|
 | **Temperature, Central England, 1981–2025** | Met Office HadCET (thermometers): **+0.31 °C/decade** (0.21 to 0.41), strong | MERRA-2 T2M, 25 cells: **+0.32 °C/decade** (0.21 to 0.43), strong | **0.99** |
@@ -77,6 +81,8 @@ For trends that are not significant yet, we estimate the years of monthly data n
 n* ≈ [ (3.3 σ / |ω|) · √((1 + φ)/(1 − φ)) ]^(2/3)
 
 Here ω is the trend per year, σ is the monthly noise standard deviation and φ is its lag-1 autocorrelation. Example: Lincolnshire wind speed is falling slightly, but not significantly yet; at that rate it needs about 69 years of data, so about 24 more.
+
+**Caveat:** ω is the trend measured so far, which is itself uncertain (that is why it is not significant yet). So the app says "**if today's rate is real** and continues, about N more years". It is a guide to scale, not a forecast.
 
 ## 8. Maps: many tests at once
 Testing 150 grid cells at the 5% level gives about 7 "significant" cells by pure chance. We control the **false discovery rate** with Benjamini & Hochberg (1995) at q = 0.10, as recommended for climate maps by Wilks (2016).

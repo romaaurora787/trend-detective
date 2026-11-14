@@ -157,16 +157,19 @@ export function WitnessList({ varId, box, fallback }: { varId: string; box: Box;
     <>
       <p className="w-head">{data!.headline}</p>
       <ul className="witnesses">
-        {list.map((w) => (
+        {list.map((w) => {
+          const b = badgeOf(w) ?? "caution";
+          return (
           <li key={w.name}>
-            <span className={`badge b-${w.agrees ? "confirmed" : "caution"}`}>{w.agrees ? "Agrees" : "Disagrees"}</span>
+            <span className={`badge b-${b}`}>{{ confirmed: "Confirmed", consistent: "Consistent", caution: "Caution" }[b]}</span>
             <div>
               <strong>{w.name}</strong>
               <span className="note">{w.witness_verdict ? `${LABELS[w.witness_verdict]}` : ""}{w.monthly_correlation != null ? ` · month-to-month r = ${w.monthly_correlation.toFixed(2)}` : ""}</span>
               {w.independence && w.independence !== "independent" && <span className="note">{w.independence}</span>}
             </div>
           </li>
-        ))}
+          );
+        })}
       </ul>
     </>
   );

@@ -1,4 +1,4 @@
-"""Feature C: "second witness" checks against records independent of MERRA-2.
+"""Feature C: "second witness" checks against other records (independent or partly independent of MERRA-2).
 
 For a variable and box, find an independent dataset that covers it, run the
 same stats engine on both over the same period, and report whether the second
@@ -136,6 +136,12 @@ def second_witness(var: str, box, nasa: pd.Series, units: str) -> dict:
     return compare_witness(name, kind, independence, nasa, other, units, note)
 
 
+def fully_independent(independence: str | None) -> bool:
+    """'independent', 'Independent: a real thermometer…' count; 'partly…' and '…not fully independent' don't."""
+    s = (independence or "").lower()
+    return s.startswith("independent") and "not fully" not in s
+
+
 def compare_witness(name, kind, independence, nasa: pd.Series, other: pd.Series, units: str, units_note: str = "") -> dict:
     """Verdict on the NASA record vs one witness record over their shared period."""
     nasa = nasa.dropna()
@@ -153,16 +159,29 @@ def compare_witness(name, kind, independence, nasa: pd.Series, other: pd.Series,
     corr = float(pd.concat([an, bn], axis=1, join="inner").corr().iloc[0, 1])
     pa, pb = _proven(ra["verdict"]["label"]), _proven(rb["verdict"]["label"])
     same_dir = np.sign(ra["sen_slope_per_decade"]) == np.sign(rb["sen_slope_per_decade"])
-    if pa and pb and same_dir:
-        agrees, note = True, f"Confirmed: {name} also shows a real {ra['verdict']['direction']} trend."
+    # badge: "confirmed" only when a fully independent record proves the same trend.
+    # Two "no proven trend" results, or agreement with a record that shares
+    # input data with MERRA-2 (GPCP, ERA5, IMERG), is consistency, not confirmation.
+    direction = ra["verdict"]["direction"]
+    if pa and pb and same_dir and fully_independent(independence):
+        agrees, badge = True, "confirmed"
+        note = f"Confirmed: {name}, an independent record, also shows a real {direction} trend."
+    elif pa and pb and same_dir:
+        agrees, badge = True, "consistent"
+        note = (f"Consistent: {name} also shows a real {direction} trend. It shares some input data "
+                "with NASA's record, so this is a consistency check, not independent proof.")
     elif not pa and not pb:
-        agrees, note = True, f"Confirmed: {name} also finds no proven trend."
+        agrees, badge = True, "consistent"
+        note = f"Consistent: {name} also finds no proven trend."
     elif pa and not pb:
-        agrees, note = False, f"Caution: {name} does not confirm this trend. Treat it as unproven."
+        agrees, badge = False, "caution"
+        note = f"Caution: {name} does not confirm this trend. Treat it as unproven."
     elif pb and not pa:
-        agrees, note = False, f"Caution: {name} shows a {rb['verdict']['direction']} trend that NASA's record does not."
+        agrees, badge = False, "caution"
+        note = f"Caution: {name} shows a {rb['verdict']['direction']} trend that NASA's record does not."
     else:
-        agrees, note = False, f"Caution: {name} shows the opposite direction."
+        agrees, badge = False, "caution"
+        note = f"Caution: {name} shows the opposite direction."
     return {
         "available": True,
         "name": name,
@@ -175,6 +194,7 @@ def compare_witness(name, kind, independence, nasa: pd.Series, other: pd.Series,
         "witness_slope_per_decade": rb["sen_slope_per_decade"],
         "witness_units_note": units_note,
         "monthly_correlation": corr,
-        "agrees": bool(agrees),
+        "agrees": bool(agrees),  # kept for compatibility: true for confirmed or consistent
+        "badge": badge,  # confirmed | consistent | caution
         "note": note,
     }

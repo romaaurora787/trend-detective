@@ -308,7 +308,8 @@ def all_witnesses(
             out.append({"available": False, "name": "Weather station", "note": f"Station record unavailable ({type(ex).__name__})."})
     ok = [x for x in out if x.get("available")]
     agree = sum(bool(x.get("agrees")) for x in ok)
-    head = (f"{agree} of {len(ok)} independent records agree with NASA's verdict." if ok
+    n_ind = sum(witnesses.fully_independent(x.get("independence")) for x in ok)
+    head = (f"{agree} of {len(ok)} records agree with NASA's verdict ({n_ind} of them fully independent)." if ok
             else "No second witness available for this variable here.")
     return _clean({"variable": meta, "box": box, "witnesses": out, "n_agree": agree, "n_available": len(ok),
                    "headline": head, "credit": "ERA5: Copernicus Climate Change Service, served by Open-Meteo (CC BY 4.0). Stations: NOAA NCEI Global Summary of the Month (GHCN)."})
@@ -438,7 +439,7 @@ def _witness(var, box, series, units):
 GROUPS = [
     ("proven", "Proven change", {"strong", "some"}),
     ("not_yet", "Not proven yet", {"not_yet", "mixed"}),
-    ("none", "No meaningful trend", {"none"}),
+    ("none", "No trend detected", {"none"}),
 ]
 
 
@@ -516,7 +517,7 @@ def report_card(
         "fooled_count": len(fooled),
         "fooled_variables": fooled,
         "summary": (f"{len(groups[0]['items'])} proven changes, {len(groups[1]['items'])} not proven yet, "
-                    f"{len(groups[2]['items'])} with no meaningful trend."
+                    f"{len(groups[2]['items'])} with no trend detected."
                     + (f" A typical analysis would also have claimed trends in: {', '.join(fooled)}." if fooled else "")),
     })
 
