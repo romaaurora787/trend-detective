@@ -15,6 +15,7 @@ export type Badge = "confirmed" | "consistent" | "caution";
 
 export interface Variable {
   id: string; name: string; units: string; source: string; plain: string; tags: string[]; caveat: string;
+  ready?: boolean; wait?: string;
 }
 export interface Witness {
   available: boolean; name?: string; badge?: Badge; agrees?: boolean; independence?: string; note: string;
@@ -44,6 +45,7 @@ export interface ReportItem {
   slope_per_decade: number; ci95: [number, number]; total_change: number; period: string;
   years_to_detect: number | null; more_years_needed: number | null;
   typical_outcome: string; typical_note: string; second_witness?: Witness;
+  instrument_check?: { status: string; headline: string };
 }
 export interface Report {
   box: Box; summary: string; fooled_count: number;
@@ -65,7 +67,7 @@ export interface TrendMap {
 type Sec<T> = Partial<T> & { headline?: string; error?: string };
 type Slope = { slope_per_decade: number; label: Label };
 export interface CrossExam {
-  score: { passed: number | null; of: number; proven: boolean; headline: string };
+  score: { passed: number | null; of: number; proven: boolean; headline: string; checks?: string[]; rule_note?: string };
   alibi?: Sec<{ status: string; changes: { date: string; what: string; tested?: boolean; before?: Slope & { period: string }; after?: Slope & { period: string } }[] }>;
   el_nino?: Sec<{ status: string; how_linked?: string; before?: Slope; after?: Slope }>;
   climate_modes?: Sec<{ status: string; strongest?: string; before?: Slope; after?: Slope }>;
@@ -105,7 +107,7 @@ async function get<T>(path: string): Promise<T> {
 }
 
 export const api = {
-  variables: () => get<{ variables: Variable[] }>("/api/variables"),
+  variables: (b: Box) => get<{ variables: Variable[] }>(`/api/variables?${q(b)}`),
   analyse: (v: string, b: Box) => get<Analysis>(`/api/analyse?var=${v}&${q(b)}`),
   report: (b: Box) => get<Report>(`/api/report-card?${q(b)}`),
   map: (v: string, b: Box) => get<TrendMap>(`/api/map?var=${v}&${q(b)}`),

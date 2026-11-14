@@ -2,6 +2,23 @@
 
 Written Sat 14 Nov 2026, ~22:30, by Claude on Kanishk's laptop, after merging `main` into `frontend`. Add to it, tick things off, and say who is on each one. Newest at the bottom of each section.
 
+**Status board (Sat ~23:55):**
+
+| Issue | Status |
+|---|---|
+| 2.1 Report card ignores the instrument switch | ✔ Fixed on `main` (`c399b56`); the website shows ⚠ + the headline on report-card rows |
+| 2.2 Tests 5 min | ✔ Fixed (`175821c`, now ~10 s) |
+| 2.3 Committed Vite temp file | ✔ Removed on `frontend`. It is still on `main` until PR #2 merges |
+| **2.4 "3 of 3 independent" counts ERA5** | ✖ **Still open** (checked live just now) |
+| 2.5 Hyphen-minus in backend sentences | ✖ Open, cosmetic |
+| 3.1–3.2 Deploy | ✔ Backend live on Google Cloud Run (europe-west2). Website on Vercel next |
+| 3.4 Slow satellite variables | ✔ `/api/variables?box` gives `ready`; the dropdown says "slow here: about 1–4 minutes" |
+| 3.5 `VITE_API_URL` | Set at Vercel deploy |
+| 4 Score rules written after the result | ✔ `score.checks` + `rule_note`; the website shows them under "How the 5 checks are scored" |
+| 4 Giovanni links opened in a browser | ✖ Still needs a person logged in to Earthdata |
+| 5 Credits | ✔ README/methods (main) and the site footer (frontend) |
+| 6 PR #1 wording-fixes | ✖ Open: close it and re-apply by hand |
+
 **State now:**
 - **`frontend` branch:** contains all of `main` (merged cleanly, no conflicts).
 - **Backend tests:** 60 pass here.

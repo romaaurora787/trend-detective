@@ -60,9 +60,9 @@ export default function App() {
   useEffect(() => {
     const on = () => setS(readHash());
     addEventListener("hashchange", on);
-    api.variables().then((d) => setVars(d.variables)).catch(() => {});
     return () => removeEventListener("hashchange", on);
   }, []);
+  useEffect(() => { api.variables(s.box).then((d) => setVars(d.variables)).catch(() => {}); }, [s.box.join()]);
 
   const go = (next: Partial<typeof s>) => {
     const n = { ...s, ...next };
@@ -101,7 +101,7 @@ export default function App() {
             <label className="grow">
               <span>Variable</span>
               <select value={s.varId} onChange={(e) => go({ varId: e.target.value })}>
-                {vars.map((v) => <option key={v.id} value={v.id}>{v.name} ({v.units})</option>)}
+                {vars.map((v) => <option key={v.id} value={v.id}>{v.name} ({v.units}){v.ready === false ? ` · slow here: ${v.wait}` : ""}</option>)}
               </select>
             </label>
           )}
