@@ -155,7 +155,7 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
             </dl>
           </details>
           {v.caveat && <p className="note caveat">{v.caveat}</p>}
-          <button className="btn" onClick={onReport}>See all 15 variables for {placeName(data.box)}</button>
+          <button className="btn" onClick={onReport}>See everything changing in {placeName(data.box)}</button>
         </aside>
       </div>
       <p className="cite">{data.citation}. Trend is not cause: we detect change, we do not explain it.</p>

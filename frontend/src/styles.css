@@ -57,7 +57,7 @@ button, select { font: inherit; color: inherit; }
 .skip:focus { left: var(--space-md); }
 
 /* ---------- shell ---------- */
-.shell { background: var(--shell); color: var(--shell-ink); position: sticky; top: 0; z-index: 1000; }
+.shell { background: var(--shell); color: var(--shell-ink); position: sticky; top: 0; z-index: 1100; } /* above Leaflet controls (1000) */
 .shell :focus-visible { outline-color: var(--shell-ink); }
 .shell-row {
   max-width: 1320px; margin: 0 auto; padding: 0 var(--space-lg);
