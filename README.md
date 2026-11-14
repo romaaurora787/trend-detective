@@ -51,6 +51,18 @@ Key fields (see [`docs/examples/analyse_T2M_lincolnshire.json`](docs/examples/an
 
 Errors: 400 bad box, 404 unknown variable, 422 too little data, 502 NASA POWER failed. Show the `detail` text.
 
+### NEW (Sat night): cross-examination, comparison, witnesses, guides
+All `GET` unless marked. Boxes are `lat_min,lat_max,lon_min,lon_max`. `/api/analyse` and `/api/cross-examine` take optional `start`/`end` years (≥10 years).
+- `/api/cross-examine?var=..&lat_min=..` — the sceptic's questions. `alibi` (documented satellite/model input changes: step-vs-trend + each single-source segment), `el_nino` (NOAA ONI regressed out, Foster & Rahmstorf 2011; El Niño vs La Niña years), `leave_one_out`, `walk_forward` (first half → second half), `all_windows` (every start/end year ≥15 yrs), `decades` (+ speed-up test), `extremes` (early vs recent, top years), `resolution` (grid cells behind the number), `could_overturn[]`, `score`.
+- `/api/compare?var=T2M&a=52.6,53.7,-1.0,0.4&b=50.5,51.8,-0.6,0.8&name_a=..&name_b=..` — tests the trend of A − B; labels `opposite_fitted_directions` / `supported_opposite_trends` / `rates_differ`, plus a `trap` warning when "one significant, one not" would mislead.
+- `/api/witnesses?var=..&lat_min=..` — every independent record: Met Office / GPCP / ESA where available, **ERA5 anywhere** (Open-Meteo, ~1 request/min first time, then cached), **nearest NOAA weather station** (GHCN monthly) for temperature, rain and frost.
+- `/api/profile?lat_min=..` — what kind of place this is, from its own data (hot desert, wet tropics, cold/snowy, hot, temperate, + coast, big city), with suggested variables.
+- `/api/hunches`, `/api/hunch?id=hotter_summers&lat_min=..` — fact-check common beliefs: real / leaning / not backed up / the opposite (seasons flip south of the equator).
+- `POST /api/upload` `{"csv": "date,value\n2001-01,4.2...", "units": "°C", "name": "My station"}` — your own data through the same Detective, cross-examination and beyond-the-line.
+- `/api/events?lat_min=..` — NASA EONET natural events nearby (sparse before 2016).
+- `/api/analyse` now also returns `result.vs_world` for temperature variables (rate vs NASA GISTEMP global).
+- Catalogue now has 19 variables (added snow depth, dew point, day–night range, heat radiation from the sky).
+
 ### NEW: what makes us different (show these prominently)
 **A. Typical vs Detective.** Every `/api/analyse` result has `result.typical_vs_detective`:
 `typical_says` (what a typical straight-line analysis would claim), `outcome` (`fooled`, `agree_trend`, `missed`, `agree_none`) and `note` (one sentence for the card). Show the two side by side: *"A typical analysis says… / The Detective says…"*. On maps, `summary.story` gives the sentence and `summary.n_significant_typical` vs `summary.n_significant_fdr` gives the numbers. Each cell also has `significant_typical`, so you can toggle "typical map" vs "Detective map" (**the key demo**: England soil, typical 89 of 137 cells → Detective 0).

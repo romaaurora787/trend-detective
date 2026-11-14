@@ -3,6 +3,7 @@ responses are cached in data/cache (no network needed)."""
 from fastapi.testclient import TestClient
 
 from trend_detective.api import app
+from trend_detective.catalogue import CATALOGUE
 
 c = TestClient(app)
 LINCS = "lat_min=52.6&lat_max=53.7&lon_min=-1.0&lon_max=0.4"
@@ -17,7 +18,7 @@ def ok(path):
 
 def test_health_and_variables():
     assert ok("/api/health").json()["ok"]
-    assert len(ok("/api/variables").json()["variables"]) == 15
+    assert len(ok("/api/variables").json()["variables"]) == len(CATALOGUE)
 
 
 def test_analyse_has_all_panels():
@@ -31,7 +32,7 @@ def test_analyse_has_all_panels():
 
 def test_report_card_groups():
     d = ok(f"/api/report-card?{LINCS}").json()
-    assert sum(len(g["items"]) for g in d["groups"]) + len(d["errors"]) == 15
+    assert sum(len(g["items"]) for g in d["groups"]) + len(d["errors"]) == len(CATALOGUE)
 
 
 def test_map_story():
@@ -62,3 +63,15 @@ def test_static_endpoints():
 def test_bad_input():
     assert c.get(f"/api/analyse?var=NOPE&{LINCS}").status_code == 404
     assert c.get("/api/analyse?var=T2M&lat_min=0&lat_max=20&lon_min=0&lon_max=5").status_code == 400
+
+
+def test_new_cached_endpoints_on_lincolnshire():
+    q = "lat_min=52.6&lat_max=53.7&lon_min=-1.0&lon_max=0.4"
+    x = ok(f"/api/cross-examine?var=T2M&{q}").json()
+    assert x["score"]["passed"] == 5 and x["alibi"]["status"] == "no_known_change"
+    c = ok("/api/compare?var=T2M&a=52.6,53.7,-1.0,0.4&b=50.5,51.8,-0.6,0.8").json()
+    assert "rates_differ" in c["labels"]
+    h = ok(f"/api/hunch?id=hotter_summers&{q}").json()
+    assert h["verdict"] == "real"
+    a = ok(f"/api/analyse?var=T2M&{q}&start=1991&end=2020").json()
+    assert a["result"]["start"] == "1991-01" and a["result"]["vs_world"]["ratio"] > 0

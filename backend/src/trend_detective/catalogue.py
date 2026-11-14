@@ -84,6 +84,26 @@ CATALOGUE = [
         "tags": ["arctic", "farm"],
         "caveat": "Mostly zero in summer; trend uses regression instead of Sen's slope.",
     },
+    {
+        "id": "SNODP", "name": "Snow depth", "units": "cm", "source": "MERRA-2 (via POWER)",
+        "plain": "How deep the snow on the ground is, on average.",
+        "tags": ["arctic"], "caveat": "Model estimate; zero for most of the year in mild places.",
+    },
+    {
+        "id": "T2MDEW", "name": "Dew point (mugginess)", "units": "°C", "source": "MERRA-2 (via POWER)",
+        "plain": "The temperature at which the air would form dew. Higher means stickier, more humid air.",
+        "tags": ["city", "coast", "rainforest"], "caveat": "",
+    },
+    {
+        "id": "T2M_RANGE", "name": "Day–night temperature range", "units": "°C", "source": "MERRA-2 (via POWER)",
+        "plain": "How much warmer the day gets than the night, on average.",
+        "tags": ["desert", "city", "farm"], "caveat": "",
+    },
+    {
+        "id": "ALLSKY_SFC_LW_DWN", "name": "Heat radiation from the sky", "units": "MJ/m²/day", "source": "CERES / GEWEX SRB",
+        "plain": "Infrared heat sent down to the ground by the air, clouds and greenhouse gases.",
+        "tags": ["any"], "caveat": "Data source changes in 2001 (GEWEX SRB to CERES): check the instrument alibi.",
+    },
 ]
 
 BY_ID = {v["id"]: v for v in CATALOGUE}

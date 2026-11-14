@@ -108,3 +108,24 @@ Same as `/api/beyond` (see README). Five small tiles:
   - **Watchable demo tours** (the brief asks for "demonstration examples the user could watch").
   - A **compare-two-places** view once `/api/compare` lands.
 - **Correction:** don't show the world report's cloud row as "88 proven" (see FINDINGS §2c).
+
+## 8. NEW (Sat ~23:30): parity with every good rival feature + more. Backend is ready for all of these (see README "cross-examination…")
+**Case page, new "Cross-examination" block** (`/api/cross-examine`), one row per check with ✔ / ⚠:
+- Instrument alibi (`alibi.headline`; if `changes[].tested`, a tiny before/after slope pair; draw a dashed vertical line at `changes[].date` on the chart)
+- El Niño removed (`el_nino.before` vs `.after` slope; `how_linked` sentence)
+- One year carrying it? (`leave_one_out.headline`)
+- Two halves (`walk_forward.status`: confirmed / continuing / faded / reversed / emerging)
+- **"Did you pick good dates?" heat map** (`all_windows.cells[]`: x = start, y = end, colour = slope sign, solid = p<0.05). TerraPulse has this; ours adds the verdict sentence.
+- Speeding up? (`decades.decades[]` as 4–5 bars + `decades.headline`)
+- Early vs recent + top 3 years (`extremes`)
+- "What could overturn this" list (`could_overturn[]`) and `score.headline`
+- Resolution badge (`resolution.label`: resolved / marginal / sub-cell)
+**Witnesses panel** → switch to `/api/witnesses` (list): one row per witness with name, `independence`, verdicts, r; header `headline` ("3 of 3 independent records agree"). Show station distance.
+**Compare mode** (`/api/compare`): pick a second place → two lines + difference chart (`chart.difference_anomaly`), the headline, and the `trap` box in amber. Demo pairs: Sahel vs Amazon rain (opposite, both proven); Lincolnshire vs London temperature (can't tell apart); Lincolnshire vs Svalbard (rates differ).
+**Custom period**: start/end year selectors → pass `start`/`end` to `/api/analyse` and `/api/cross-examine`.
+**"Guess first" hunches** (`/api/hunches` + `/api/hunch`): user picks a hunch, guesses true/false, then sees the verdict. Works anywhere.
+**Place profile** (`/api/profile`): a line under the place name ("Looks like: hot climate, big city") + suggested variables as chips.
+**Upload your data** (`POST /api/upload`): textarea / file → same result layout.
+**vs the world** (`result.vs_world.headline`): "Warming 1.6× as fast as the planet".
+**Natural events** (`/api/events`): small list under the chart; note the sparse archive.
+**From rivals, frontend-only, worth copying:** climate stripes per verdict; shareable link (state in URL hash, you have this); time-lapse/year slider on the map; hatching for cells that fail FDR; a 6-question quiz; a teacher page (lesson plan + printable case); English + one more language; accessibility check (axe); 30-second demo video and ≤7 slides.

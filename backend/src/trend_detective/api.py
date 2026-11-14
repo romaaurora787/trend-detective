@@ -13,13 +13,13 @@ from collections import OrderedDict
 from pathlib import Path
 
 import numpy as np
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import beyond, context, places, power, stats, witnesses
+from . import beyond, compare as cmp, context, crossexam, era5, events, globalref, guide, places, stations, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -97,15 +97,12 @@ def analyse(
     var: str,
     lat_min: float = Query(...), lat_max: float = Query(...),
     lon_min: float = Query(...), lon_max: float = Query(...),
+    start: int | None = Query(None, ge=1981, le=2025), end: int | None = Query(None, ge=1981, le=2025),
 ):
-    """Area-average series for the box + full verdict + chart data."""
+    """Area-average series for the box + full verdict + chart data.
+    Optional start/end years pick a custom period (at least 10 years)."""
     meta = _var(var)
-    _bbox(lat_min, lat_max, lon_min, lon_max)
-    try:
-        series, n_cells = power.fetch_area_series(var, lat_min, lat_max, lon_min, lon_max)
-    except power.PowerError as e:
-        raise HTTPException(502, str(e))
-    series = series.dropna()
+    series, n_cells = _series(var, [lat_min, lat_max, lon_min, lon_max], start, end)
     try:
         result = stats.analyse(series, units=meta["units"])
     except ValueError as e:
@@ -114,6 +111,10 @@ def analyse(
         result["robustness"] = stats.robustness(series, units=meta["units"])
     except Exception as e:  # never break the main verdict
         result["robustness"] = {"robust": None, "windows": [], "headline": f"Robustness check unavailable ({type(e).__name__})."}
+    try:
+        result["vs_world"] = globalref.vs_world(var, result["sen_slope_per_decade"], result["start"], result["end"])
+    except Exception:
+        result["vs_world"] = None
     anomalies, _ = stats.deseasonalise(series)
     t = stats.to_decimal_year(anomalies.index)
     t_mid = (t[0] + t[-1]) / 2
@@ -136,6 +137,184 @@ def analyse(
         "second_witness": _witness(var, [lat_min, lat_max, lon_min, lon_max], series, meta["units"]),
         "citation": f"NASA POWER Project, {meta['source']} monthly data, power.larc.nasa.gov (accessed Nov 2026)",
     })
+
+
+@app.get("/api/cross-examine")
+@memo
+def cross_examine(
+    var: str,
+    lat_min: float = Query(...), lat_max: float = Query(...),
+    lon_min: float = Query(...), lon_max: float = Query(...),
+    start: int | None = Query(None, ge=1981, le=2025), end: int | None = Query(None, ge=1981, le=2025),
+):
+    """The sceptic's questions: instrument alibi, El Niño, one year, two halves,
+    every start/end year, speed-up, extremes, grid resolution."""
+    meta = _var(var)
+    box = [lat_min, lat_max, lon_min, lon_max]
+    series, n_cells = _series(var, box, start, end)
+    return _clean({"variable": meta, "box": box, "n_cells": n_cells,
+                   **crossexam.cross_examine(var, series, meta["units"], box, n_cells)})
+
+
+def _series(var, box, start=None, end=None):
+    _bbox(*box)
+    try:
+        series, n_cells = power.fetch_area_series(var, *box)
+    except power.PowerError as e:
+        raise HTTPException(502, str(e))
+    series = series.dropna()
+    if start:
+        series = series[series.index.year >= start]
+    if end:
+        series = series[series.index.year <= end]
+    if len(series) < 120:
+        raise HTTPException(422, "Need at least 10 years of data in the chosen period.")
+    return series, n_cells
+
+
+def _parse_box(txt: str) -> list[float]:
+    try:
+        b = [float(x) for x in txt.split(",")]
+        assert len(b) == 4
+    except Exception:
+        raise HTTPException(422, "A box is lat_min,lat_max,lon_min,lon_max")
+    return b
+
+
+@app.get("/api/compare")
+@memo
+def compare_places(
+    var: str, a: str = Query(..., description="lat_min,lat_max,lon_min,lon_max"), b: str = Query(...),
+    name_a: str = Query("Place A", max_length=80), name_b: str = Query("Place B", max_length=80),
+    start: int | None = Query(None, ge=1981, le=2025), end: int | None = Query(None, ge=1981, le=2025),
+):
+    """Are two places really changing differently? Tests the trend of A − B."""
+    meta = _var(var)
+    ba, bb = _parse_box(a), _parse_box(b)
+    sa, na = _series(var, ba, start, end)
+    sb, nb = _series(var, bb, start, end)
+    try:
+        out = cmp.compare(sa, sb, meta["units"], ba, bb, name_a, name_b)
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    return _clean({"variable": meta, "n_cells": [na, nb], **out})
+
+
+@app.get("/api/witnesses")
+@memo
+def all_witnesses(
+    var: str,
+    lat_min: float = Query(...), lat_max: float = Query(...),
+    lon_min: float = Query(...), lon_max: float = Query(...),
+):
+    """Every independent record we can put next to NASA's for this place:
+    the regional witnesses (Met Office, GPCP, ESA) plus ERA5 anywhere on Earth."""
+    meta = _var(var)
+    box = [lat_min, lat_max, lon_min, lon_max]
+    series, _ = _series(var, box)
+    out = []
+    w = _witness(var, box, series, meta["units"])
+    if w.get("available"):
+        out.append(w)
+    try:
+        e = era5.monthly(var, (lat_min + lat_max) / 2, (lon_min + lon_max) / 2)
+        if e is not None:
+            out.append(witnesses.compare_witness(
+                "ERA5 (ECMWF reanalysis, via Open-Meteo)", "reanalysis",
+                "Different centre and model, but shares many observations with MERRA-2: supporting, not fully independent",
+                series, e, meta["units"], era5.MAP[var][2]))
+    except Exception as ex:
+        out.append({"available": False, "name": "ERA5", "note": f"ERA5 unavailable ({type(ex).__name__})."})
+    if var in stations.MAP:
+        try:
+            st = stations.find_station(var, (lat_min + lat_max) / 2, (lon_min + lon_max) / 2)
+            if st:
+                w = witnesses.compare_witness(
+                    f"Weather station {st['name']} ({st['distance_km']} km away)", "station",
+                    "Independent: a real thermometer / rain gauge (NOAA GHCN), but one spot, not a ~50 km area",
+                    series, stations.monthly(var, st["id"]), meta["units"],
+                    "Station values describe one spot; compare direction and verdict.")
+                w["station"] = st
+                out.append(w)
+            else:
+                out.append({"available": False, "name": "Weather station", "note": "No long-running NOAA station within about 200 km."})
+        except Exception as ex:
+            out.append({"available": False, "name": "Weather station", "note": f"Station record unavailable ({type(ex).__name__})."})
+    ok = [x for x in out if x.get("available")]
+    agree = sum(bool(x.get("agrees")) for x in ok)
+    head = (f"{agree} of {len(ok)} independent records agree with NASA's verdict." if ok
+            else "No second witness available for this variable here.")
+    return _clean({"variable": meta, "box": box, "witnesses": out, "n_agree": agree, "n_available": len(ok),
+                   "headline": head, "credit": "ERA5: Copernicus Climate Change Service, served by Open-Meteo (CC BY 4.0). Stations: NOAA NCEI Global Summary of the Month (GHCN)."})
+
+
+@app.get("/api/profile")
+@memo
+def place_profile(lat_min: float = Query(...), lat_max: float = Query(...),
+                  lon_min: float = Query(...), lon_max: float = Query(...)):
+    """What kind of place is this (from its own NASA data) and what is worth investigating here?"""
+    box = [lat_min, lat_max, lon_min, lon_max]
+    _bbox(*box)
+    try:
+        return _clean(guide.profile(box))
+    except power.PowerError as e:
+        raise HTTPException(502, str(e))
+
+
+@app.get("/api/hunches")
+def hunch_list():
+    """Common beliefs about the weather that the app can test."""
+    return {"hunches": [{"id": h["id"], "text": h["text"], "variable": h["var"]} for h in guide.HUNCHES]}
+
+
+@app.get("/api/hunch")
+@memo
+def hunch_check(id: str, lat_min: float = Query(...), lat_max: float = Query(...),
+                lon_min: float = Query(...), lon_max: float = Query(...)):
+    """Fact-check one hunch at a place: real trend / leaning / not backed up / the opposite."""
+    h = guide.BY_HUNCH.get(id)
+    if not h:
+        raise HTTPException(404, f"Unknown hunch '{id}'")
+    box = [lat_min, lat_max, lon_min, lon_max]
+    meta = _var(h["var"])
+    series, _ = _series(h["var"], box)
+    return _clean({"variable": meta, "box": box, **guide.hunch(h, series, meta["units"], (lat_min + lat_max) / 2)})
+
+
+@app.post("/api/upload")
+def upload(csv: str = Body(..., embed=True, max_length=2_000_000), units: str = Body("", embed=True, max_length=40),
+           name: str = Body("Your data", embed=True, max_length=80)):
+    """Your own record (e.g. a school weather station): two columns, date and value.
+    Runs the same Detective, cross-examination and beyond-the-line checks."""
+    try:
+        series = guide.parse_csv(csv)
+        result = stats.analyse(series, units)
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    result["robustness"] = stats.robustness(series, units)
+    xe = {k: f() for k, f in [("el_nino", lambda: crossexam.el_nino(series, units)),
+                              ("leave_one_out", lambda: crossexam.leave_one_out(series)),
+                              ("walk_forward", lambda: crossexam.walk_forward(series, units)),
+                              ("all_windows", lambda: crossexam.all_windows(series)),
+                              ("decades", lambda: crossexam.decades(series, units)),
+                              ("extremes", lambda: crossexam.extremes(series, units))]}
+    anomalies, _ = stats.deseasonalise(series)
+    return _clean({"name": name, "result": result, "cross_exam": xe, "beyond": beyond.beyond(series),
+                   "chart": {"dates": [d.strftime("%Y-%m") for d in series.index], "values": series.round(4).tolist(),
+                             "anomalies": anomalies.round(4).tolist()}})
+
+
+@app.get("/api/events")
+@memo
+def natural_events(lat_min: float = Query(...), lat_max: float = Query(...),
+                   lon_min: float = Query(...), lon_max: float = Query(...)):
+    """NASA EONET natural events (wildfires, storms, floods, volcanoes) near the place."""
+    box = [lat_min, lat_max, lon_min, lon_max]
+    _bbox(*box)
+    try:
+        return _clean(events.nearby(box))
+    except Exception as e:
+        raise HTTPException(502, f"NASA EONET unavailable ({type(e).__name__})")
 
 
 def _witness(var, box, series, units):
