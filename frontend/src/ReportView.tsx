@@ -43,7 +43,7 @@ export function ReportView({ box, onOpen }: { box: Box; onOpen: (varId: string) 
         <h1><span className="fig-no">Table 1</span> Report card: {placeName(box)}</h1>
         <p className="status" role="status">
           {error ? <span className="error">{error}</span>
-            : ready ? `${boxText(box)} · 15 NASA variables, 1981–2025` : `Running all 15 checks for this place: the first time takes about 20 seconds (${secs} s)…`}
+            : ready ? `${boxText(box)} · ${data.groups.reduce((n, g) => n + g.items.length, 0)} NASA records` : `Checking every NASA record for this place: the first time takes about 20 seconds (${secs} s)…`}
         </p>
       </header>
       {ready && (
