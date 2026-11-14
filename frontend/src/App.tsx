@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { api, examples, type Box, type Variable } from "./api";
+import { api, examples, type Box, type PlaceHit, type Variable } from "./api";
 import { CaseView } from "./CaseView";
-import { PLACES, placeName, sameBox } from "./lib";
+import { PLACES, nameBox, placeName, sameBox } from "./lib";
 import { ReportView } from "./ReportView";
 import { MethodsView } from "./MethodsView";
 
@@ -20,12 +20,36 @@ const ROUTES: { id: Route; label: string }[] = [
 function readHash() {
   const [path, qs] = location.hash.replace(/^#\/?/, "").split("?");
   const p = new URLSearchParams(qs);
-  const box = p.get("box")?.split(",").map(Number);
-  return {
-    route: (ROUTES.some((r) => r.id === path) ? path : "case") as Route,
-    varId: p.get("var") ?? "T2M",
-    box: (box?.length === 4 && box.every(Number.isFinite) ? box : PLACES[0].box) as Box,
-  };
+  const b = p.get("box")?.split(",").map(Number);
+  const box = (b?.length === 4 && b.every(Number.isFinite) ? b : PLACES[0].box) as Box;
+  const name = p.get("name") ?? "";
+  if (name) nameBox(box, name);
+  return { route: (ROUTES.some((r) => r.id === path) ? path : "case") as Route, varId: p.get("var") ?? "T2M", box, name };
+}
+
+/** Type-ahead over 34,215 GeoNames places (backend /api/places). Native datalist, no widget library. */
+function PlaceSearch({ onPick }: { onPick: (h: PlaceHit) => void }) {
+  const [q, setQ] = useState("");
+  const [hits, setHits] = useState<PlaceHit[]>([]);
+  useEffect(() => {
+    if (q.trim().length < 2) return;
+    const t = setTimeout(() => api.places(q).then((d) => setHits(d.results)).catch(() => setHits([])), 200);
+    return () => clearTimeout(t);
+  }, [q]);
+  return (
+    <label className="grow search">
+      <span>Search</span>
+      <input type="search" list="place-hits" value={q} placeholder="Any city or town…" autoComplete="off"
+        onChange={(e) => {
+          const v = e.target.value;
+          const hit = hits.find((h) => h.label === v);
+          if (hit) { onPick(hit); setQ(""); setHits([]); } else setQ(v);
+        }} />
+      <datalist id="place-hits">
+        {hits.map((h) => <option key={h.label} value={h.label}>{h.population.toLocaleString("en-GB")} people</option>)}
+      </datalist>
+    </label>
+  );
 }
 
 export default function App() {
@@ -42,7 +66,8 @@ export default function App() {
 
   const go = (next: Partial<typeof s>) => {
     const n = { ...s, ...next };
-    location.hash = `/${n.route}?var=${n.varId}&box=${n.box.join(",")}`;
+    if (next.box && next.name === undefined) n.name = "";
+    location.hash = `/${n.route}?var=${n.varId}&box=${n.box.join(",")}${n.name ? `&name=${encodeURIComponent(n.name)}` : ""}`;
     if (next.route) scrollTo({ top: 0 });
   };
   const preset = PLACES.findIndex((p) => sameBox(p.box, s.box));
@@ -58,15 +83,16 @@ export default function App() {
           </a>
           <nav aria-label="Views">
             {ROUTES.map((r) => (
-              <a key={r.id} href={`#/${r.id}?var=${s.varId}&box=${s.box.join(",")}`} aria-current={s.route === r.id ? "page" : undefined}>{r.label}</a>
+              <a key={r.id} href={`#/${r.id}?var=${s.varId}&box=${s.box.join(",")}${s.name ? `&name=${encodeURIComponent(s.name)}` : ""}`} aria-current={s.route === r.id ? "page" : undefined}>{r.label}</a>
             ))}
           </nav>
         </div>
         <div className="shell-row controls">
+          <PlaceSearch onPick={(h) => go({ box: h.box, name: h.label })} />
           <label>
-            <span>Place</span>
+            <span>Demo cases</span>
             <select value={preset} onChange={(e) => { const i = +e.target.value; if (i >= 0) go({ box: PLACES[i].box }); }}>
-              {preset < 0 && <option value={-1}>{placeName(s.box)} (your box)</option>}
+              {preset < 0 && <option value={-1}>{placeName(s.box)}{s.name ? "" : " (your box)"}</option>}
               {PLACES.map((p, i) => <option key={p.name} value={i}>{p.name}</option>)}
             </select>
           </label>
@@ -94,7 +120,8 @@ export default function App() {
       </div>
       <footer className="foot">
         <p>NASA Space Apps Challenge 2026 · Lincoln · Akshita &amp; Kanishk</p>
-        <p>Data: NASA POWER (MERRA-2, CERES), Met Office HadCET, NASA GPCP, ESA CCI Soil Moisture. Code drafted with help from Claude (Anthropic); every verdict number is computed by our statistics code, never by AI.</p>
+        <p>Data: NASA POWER (MERRA-2, CERES / GEWEX SRB); NASA MODIS via Microsoft Planetary Computer; NASA GPM IMERG and GPCP (GES DISC); NASA GISTEMP v4; NASA EONET; Met Office HadCET (Open Government Licence); ESA CCI Soil Moisture; ERA5 and CMIP6 models served by Open-Meteo (CC BY 4.0), containing modified Copernicus Climate Change Service information; NOAA NCEI GHCN stations and NOAA PSL / CPC climate indices. Places: GeoNames (CC BY 4.0). Map tiles: Esri.</p>
+        <p>Code drafted with help from Claude (Anthropic); every verdict number is computed by our statistics code, never by AI.</p>
       </footer>
     </>
   );

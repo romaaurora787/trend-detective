@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { api, badgeOf, examples, type Analysis, type Box } from "./api";
+import { api, examples, type Analysis, type Box } from "./api";
 import { Panel, decYear } from "./Chart";
+import { CheckOurWork, CrossExamBlock, WitnessList } from "./CrossExam";
 import { LABELS, dirTone, pText, placeName, plain, sameBox, signed } from "./lib";
 
 const DEFAULT_VAR = "T2M";
@@ -64,7 +65,6 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
   const [t0, t1] = [xs[0], xs[xs.length - 1]];
   const label = r.verdict.label;
   const w = data.second_witness;
-  const badge = badgeOf(w);
   const tv = r.typical_vs_detective;
   const lit = (k: string) => (hover == null ? null : hover === k);
   const hov = (k: string) => ({ onMouseEnter: () => setHover(k), onMouseLeave: () => setHover(null), onFocus: () => setHover(k), onBlur: () => setHover(null), tabIndex: 0 });
@@ -110,6 +110,14 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
               <dt>Tests</dt>
               <dd>{r.verdict.tests_agree ? "Both tests agree" : "The two tests disagree"} ({pText(r.mk_hamed_rao.p)} and {pText(r.ols_neff.p)})</dd>
             </div>
+            {r.robustness && (
+              <div {...hov("b")}>
+                <dt>Years chosen</dt>
+                <dd><span className={`tag ${r.robustness.robust === false ? "tag-warn" : r.robustness.robust ? "tag-ok" : ""}`}>{r.robustness.robust === false ? "Fragile" : r.robustness.robust ? "Robust" : "Untested"}</span> {r.robustness.headline.replace(/^(Robust|Fragile)[:,]?\s*(.)/i, (_, _w, c: string) => c.toUpperCase())}</dd>
+              </div>
+            )}
+            {r.vs_world && <div><dt>The planet</dt><dd>{r.vs_world.headline}</dd></div>}
+            {r.coverage && <div><dt>Record</dt><dd>{r.coverage.headline}</dd></div>}
           </dl>
 
           <section className="block" aria-labelledby="tvd">
@@ -134,15 +142,8 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
           </section>
 
           <section className="block" aria-labelledby="sw">
-            <h2 id="sw">Second witness</h2>
-            {badge ? (
-              <>
-                <p className={`badge b-${badge}`}>{{ confirmed: "Confirmed", consistent: "Consistent", caution: "Caution" }[badge]}<span> · {w.name}</span></p>
-                <p className="note">{w.note}{w.monthly_correlation != null && ` Month-to-month agreement r = ${w.monthly_correlation.toFixed(2)}.`}</p>
-              </>
-            ) : (
-              <p className="note">No independent record for this variable and place yet.</p>
-            )}
+            <h2 id="sw">Witnesses</h2>
+            <WitnessList varId={v.id} box={data.box} fallback={w} />
           </section>
 
           <details className="block details">
@@ -159,6 +160,10 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
         </aside>
       </div>
       <p className="cite">{data.citation}. Trend is not cause: we detect change, we do not explain it.</p>
+      <div className="after-plate">
+        <CrossExamBlock varId={v.id} box={data.box} units={r.units} />
+        <CheckOurWork links={r.reproduce ?? []} csv={api.evidenceUrl(v.id, data.box)} />
+      </div>
     </main>
   );
 }

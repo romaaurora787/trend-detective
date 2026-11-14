@@ -145,6 +145,7 @@ export default function MapView({ varId, box }: { varId: string; box: Box }) {
                 <div><dt>Corrected tests, one cell at a time</dt><dd>{s.n_significant_raw} cells: about {Math.round(s.n_cells * 0.05)} would pass by chance alone</dd></div>
                 <div><dt>After the false-discovery correction</dt><dd>{s.n_significant_fdr} cells ({s.n_rising_fdr} rising, {s.n_falling_fdr} falling), Benjamini-Hochberg at q = {s.fdr_q}</dd></div>
               </dl>
+              {data?.shuffled_control?.headline && <p className="control">{data.shuffled_control.headline}</p>}
               <div className="key" aria-label="Colour key">
                 <span><i className="sw sw-fall" />{flip ? "wetter" : "falling"}</span>
                 <span><i className="sw sw-rise" />{flip ? "drier" : "rising"}</span>
