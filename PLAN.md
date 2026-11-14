@@ -15,6 +15,17 @@ Repo: https://github.com/romaaurora787/trend-detective (private until submission
 | **22:00–23:00** | AI variable finder (Claude API, picks **only** from `/api/variables`; dropdown fallback). Fix bugs. | Record the screen for the video; edit to **≤30 s** with subtitles. Take screenshots (verdict card, map, proof chart). | Draft README AI-use notes; final references list |
 | **23:00–23:30** | **Together:** paste the project page text, upload images, add the video link, make the GitHub repo **public**, test all links in a private window, tick both boxes, **SUBMIT**. | | |
 
+### Website priorities for Kanishk (updated)
+Build in this order; each item uses an endpoint documented in the README:
+1. **Case page:** place + variable → charts + **verdict card** with **Typical vs Detective** side by side (`/api/analyse`) and the **second-witness badge**.
+2. **Place report card:** Proven / Not proven yet / No trend (`/api/report-card`).
+3. **"Beyond the line" strip** on the case page: records ×chance, emergence year, season bars, turning point (`/api/beyond`).
+4. **Map** with a "Typical map / Detective map" toggle (`/api/map`, `significant_typical` vs `significant_fdr`).
+5. **Methods page:** proof chart (`docs/images/proof_it_works.png`), cross-checks, linked clues (`/api/links`).
+6. AI variable finder (last; dropdown fallback).
+
+**Rate-limit rule:** NASA POWER blocks bursts. Demo places must load from `backend/data/cache/` (committed). Don't fire many calls in parallel from the browser.
+
 ### Sunday (polish only, already submitted)
 FortiGuard classification request for the site · fix anything the night revealed · re-record the video if needed · resubmit by **22:00**, not 23:59.
 
