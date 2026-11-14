@@ -7,3 +7,5 @@ dist/
 .DS_Store
 backend/data/external/esa_cci_sm_monthly_europe.nc
 backend/data/*.log
+.vite/
+dist-*/

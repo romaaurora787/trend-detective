@@ -18,6 +18,18 @@ uv run pytest -q          # stats tests
 
 No login needed: data comes from the **NASA POWER** API (MERRA-2 and CERES, monthly, 1981–2025). Every response is cached in `backend/data/cache/`, so demo cases work offline. Commit the cache for the demo regions.
 
+## Run the website
+
+```bash
+cd frontend
+npm install
+npm run dev               # http://localhost:5173, talks to http://localhost:8000
+```
+
+Vite + React + TypeScript, no UI or chart library (charts are hand-drawn SVG; Leaflet for the maps). Views: Case (place → variable → verdict), Report card, Map (typical vs Detective toggle), How it works (proof charts). The saved responses in `docs/examples/` show instantly while the live server answers, so the demo never opens on a spinner.
+
+**Deploy to Vercel:** import the repo, set Root Directory to `frontend`, and add the env var `VITE_API_URL` = your Render backend URL (no trailing slash).
+
 ## API for the frontend (Kanishk)
 
 Base URL locally: `http://localhost:8000`. GET only, CORS open. Real example responses are in [`docs/examples/`](docs/examples/).
