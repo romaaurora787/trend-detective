@@ -217,6 +217,8 @@ def composites(box: list[float], workers: int = 16, platform: str = "terra", pro
     A date counts only if at least 5% of the box's pixels were clear land."""
     path = _cache_path(box, platform, product)
     cached = json.loads(path.read_text()) if path.exists() else {}
+    if cached and max(cached) >= "2025-09-01":
+        return cached  # already read through the end of the record: no need to ask the catalogue again
     items = _items(box, platform=platform, product=product)
     if not items:
         raise NdviError("No MODIS composites found here.")
