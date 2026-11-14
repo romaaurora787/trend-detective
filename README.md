@@ -70,7 +70,7 @@ All `GET` unless marked. Boxes are `lat_min,lat_max,lon_min,lon_max`. `/api/anal
 - `/api/map` now returns **`shuffled_control`**: the years are shuffled (same shuffle for every cell, so the region stays realistic), destroying any trend, and we count how many cells a typical test still calls "changing". England & Wales soil wetness: about 60 of 137 cells in pure noise.
 - `/api/analyse` returns **`result.reproduce[]`**: the exact NASA POWER API request (CSV, no login), the same box in **NASA Giovanni**, and for rain the **GPM IMERG** satellite record in Giovanni as an independent check.
 - [`notebooks/reproduce_lincolnshire.ipynb`](notebooks/reproduce_lincolnshire.ipynb): rebuilds the Lincolnshire verdict straight from the NASA POWER API with no server code; it gets the same +0.333 °C/decade.
-- **`LST_DAY` / `LST_NIGHT`**: MODIS land surface temperature (MOD11A2 v6.1, 1 km, 8-day), same reader as NDVI, Aqua as second satellite. Delhi: nights +0.70 °C/decade, days −0.43.
+- **`LST_DAY` / `LST_NIGHT`**: MODIS land surface temperature (MOD11A2 v6.1, 1 km, 8-day), same reader as NDVI, Aqua as second satellite. Delhi: nights +0.70 °C/decade (Aqua agrees), late-morning −0.43 (Aqua's afternoon pass: −0.24, not proven).
 - `all_windows` (cross-examine) now has **`timeline` + `became_proven`**: replay the record year by year — "the evidence became strong by 1999 and has stayed strong since".
 - `/api/analyse` returns **`result.coverage`** (months present / expected, longest gap; missing months are never filled).
 - `/api/models?var=T2M&lat_min=..` — **did climate models see it coming?** Observed trend vs 7 CMIP6 HighResMIP models for the same years, and their 2026–2050 range (Open-Meteo Climate API; caveats returned with it).
