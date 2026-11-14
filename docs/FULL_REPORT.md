@@ -99,15 +99,15 @@ Boxes are `lat_min, lat_max, lon_min, lon_max` query params (compare uses `a=..&
 
 - **Lincolnshire (home):** warming +0.33 °C/decade, strong; passes 5/5 cross-examination checks; proven by 1999 and every year since; 1.6× the global rate; 3 of 3 witnesses agree; **faster than all 7 climate models** (+0.14 to +0.30); hot days 30 → 59 a year, frost nights 44 → 22; winter follows the NAO (r = +0.53) and the warming survives removing it.
 - **Delhi:** greening +0.020 NDVI/decade (both satellites); **ground at night +0.70 °C/decade** (both satellites); daytime ground heat *not rising* (one satellite says cooling, the other doesn't prove it); air less "thirsty" (VPD falling); tropical nights and humid-heat days increasing.
-- **Amazon (Rondônia):** rain −0.53 mm/day/decade, confirmed by GPCP; **drought months 0.9 → 9.4 a year**; driest year ended Jan 2016; VPD rising; browning (both satellites). **Stronger than any climate model** (−0.11 to +0.03), so present it with care.
+- **Amazon (Rondônia):** rain −0.53 mm/day/decade, confirmed by GPCP **and by NASA's IMERG satellite rainfall (−0.63 vs −0.65 over 1998–2025)**; **drought months 0.9 → 9.4 a year**; driest year ended Jan 2016; VPD rising; browning (both satellites). **Stronger than any climate model** (−0.11 to +0.03), so present it with care.
 - **Beijing:** greening +0.030 NDVI/decade (China's tree planting). Haze: Delhi up, Beijing down.
 - **Svalbard:** +0.60 °C/decade (3× global), **weaker than all models** (reanalyses disagree in the Arctic: say so).
 - **Spain:** winter rain follows the NAO (r = −0.65).
 - **England & Wales soil map:** 89 cells "significant" on a typical map → 0 after our checks; in pure noise a typical test still marks ~60 of 137.
 - **London vs Lincolnshire nights** (MODIS): London's ground at night +0.37/+0.46 °C/decade (both satellites, strong); Lincolnshire +0.29 (Terra) / +0.26 (Aqua, not proven). Good for compare mode (urban heat).
-- **Comparisons:** Sahel vs Amazon rain = opposite, both proven; Lincolnshire vs London air temperature = can't tell apart.
+- **Comparisons:** Sahel vs Amazon rain = opposite, both proven (Sahel wetting confirmed by GPCP from 1983; IMERG from 1998 only leans wetter); Lincolnshire vs London air temperature = can't tell apart.
 
-**Don't say:** "Delhi days are cooling"; "cloud cover is falling" (instrument alibi); anything about cause (we detect, we don't attribute); "the models are wrong" (they had real ocean temperatures until 2014).
+**Don't say:** "Delhi days are cooling"; "Delhi / East Africa are getting wetter" (IMERG and GPCP don't confirm); "cloud cover is falling" (instrument alibi); anything about cause (we detect, we don't attribute); "the models are wrong" (they had real ocean temperatures until 2014).
 
 ---
 
@@ -116,7 +116,7 @@ Boxes are `lat_min, lat_max, lon_min, lon_max` query params (compare uses `a=..&
 1. `git pull` on `main`; `cd backend && uv sync && uv run pytest -q` → expect **60 passed**.
 2. Start the API and open each demo case in `/docs`: `/api/analyse`, `/api/cross-examine`, `/api/witnesses`, `/api/models`, `/api/drought`, `/api/extreme-days` for Lincolnshire `52.6,53.7,-1.0,0.4`. Check the numbers in §6 match.
 3. Run the notebook (`notebooks/reproduce_lincolnshire.ipynb`) → +0.333 °C/decade.
-4. Open 2–3 of the `result.reproduce[]` Giovanni links while logged in to Earthdata. **The Giovanni ids were built from its naming pattern; T2M, PRECTOTCORR, GWETTOP, AOD were confirmed against public examples, the rest (GWETROOT, SNODP, T2MDEW, CLDTOT, SWGDN, LWGAB, IMERG) have not been opened yet.** Remove any that don't load (`reproduce.py` `GIO` dict).
+4. Open 2–3 of the `result.reproduce[]` Giovanni links while logged in to Earthdata. Every variable name was checked against NASA's file descriptions (OPeNDAP), and the id pattern against public Giovanni URLs, but **the Giovanni pages themselves haven't been opened in a browser yet**. Remove any that don't load (`reproduce.py` `GIO` dict).
 5. On the `frontend` branch, check that `api.ts` still matches the response shapes (new fields only were added; nothing renamed, except `report-card` gained `not_yet_read`).
 6. Read every number the website shows against the API (no hand-typed numbers in the UI).
 
@@ -145,7 +145,7 @@ Boxes are `lat_min, lat_max, lon_min, lon_max` query params (compare uses `a=..&
 **Backend left to do (Akshita's Claude can do these)**
 - Climate models for Sahel and Spain: Open-Meteo **daily** limit hit; retry tomorrow (cache then fills).
 - Finish the LST cache for the remaining demo places (background job running), and rerun `scripts/prewarm.py` once Open-Meteo resets (it now backs off instead of hammering).
-- **With the new Earthdata accounts:** GPM IMERG rainfall as a witness for any place, Giovanni link verification, maybe OMI NO₂ (2020 lockdown dip) and GRACE groundwater. See §10.
+- **Done:** GPM IMERG rainfall witness (`imerg.py`). **Next with Earthdata:** maybe OMI NO₂ (2020 lockdown dip) and GRACE groundwater.
 
 ---
 
@@ -162,7 +162,7 @@ Boxes are `lat_min, lat_max, lon_min, lon_max` query params (compare uses `a=..&
 
 ## 10. Accounts and data access
 
-- **NASA Earthdata** (both) and **CEDA** (Akshita) accounts now exist. Nothing in the code uses them yet: everything above runs without a login.
+- **NASA Earthdata** (both) and **CEDA** (Akshita) accounts exist. Akshita's laptop has a working token in `backend/.env` and the GES DISC app approved, which powers the **IMERG rainfall witness**. Everything else runs without a login. On another machine without a token, the IMERG witness says "unavailable" and nothing else breaks.
 - To let code use Earthdata **without anyone pasting a password into chat**: the account owner creates an Earthdata **user token** (urs.earthdata.nasa.gov → *Generate Token*) and puts it in `backend/.env` as `EARTHDATA_TOKEN=...` themselves. `.env` is git-ignored; code reads the environment variable; Claude must not open or print the file.
 - Also approve **NASA GESDISC DATA ARCHIVE** and **LP DAAC** under *Applications → Authorized Apps* (needed for IMERG and AppEEARS downloads).
 
