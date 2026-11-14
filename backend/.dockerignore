@@ -1,0 +1,10 @@
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+tests
+scripts
+data/*.log
+data/external/esa_cci_sm_monthly_europe.nc
+data/external/esa_cci_sm_monthly_east_africa.nc
+data/external/esa_cci_sm_monthly_uk.nc

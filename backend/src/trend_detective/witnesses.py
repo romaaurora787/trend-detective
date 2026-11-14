@@ -132,13 +132,20 @@ def second_witness(var: str, box, nasa: pd.Series, units: str) -> dict:
     if not found:
         return {"available": False, "note": "No independent second witness for this variable and place yet."}
     name, kind, independence, other = found
+    note = "" if var in ("T2M", "PRECTOTCORR") else "ESA reports m³/m³; NASA a 0–1 wetness fraction, so compare direction, not size."
+    return compare_witness(name, kind, independence, nasa, other, units, note)
+
+
+def compare_witness(name, kind, independence, nasa: pd.Series, other: pd.Series, units: str, units_note: str = "") -> dict:
+    """Verdict on the NASA record vs one witness record over their shared period."""
     nasa = nasa.dropna()
     nasa.index = pd.to_datetime(nasa.index)
+    other = other.dropna()
     start = max(nasa.index[0], other.index[0])
     end = min(nasa.index[-1], other.index[-1])
     a, b = nasa[start:end], other[start:end]
     if len(a) < 120 or len(b) < 120:
-        return {"available": False, "note": f"{name} overlaps too briefly with the NASA record."}
+        return {"available": False, "name": name, "note": f"{name} overlaps too briefly with the NASA record."}
     ra = stats.analyse(a, units)
     rb = stats.analyse(b, "")
     an, _ = stats.deseasonalise(a)
@@ -166,7 +173,7 @@ def second_witness(var: str, box, nasa: pd.Series, units: str) -> dict:
         "nasa_slope_per_decade": ra["sen_slope_per_decade"],
         "witness_verdict": rb["verdict"]["label"],
         "witness_slope_per_decade": rb["sen_slope_per_decade"],
-        "witness_units_note": "" if var in ("T2M", "PRECTOTCORR") else "ESA reports m³/m³; NASA a 0–1 wetness fraction, so compare direction, not size.",
+        "witness_units_note": units_note,
         "monthly_correlation": corr,
         "agrees": bool(agrees),
         "note": note,
