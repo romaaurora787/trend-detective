@@ -1,4 +1,4 @@
-"""Feature C: "second witness" checks against records independent of MERRA-2.
+"""Feature C: "second witness" checks against other records (independent or partly independent of MERRA-2).
 
 For a variable and box, find an independent dataset that covers it, run the
 same stats engine on both over the same period, and report whether the second
@@ -146,16 +146,28 @@ def second_witness(var: str, box, nasa: pd.Series, units: str) -> dict:
     corr = float(pd.concat([an, bn], axis=1, join="inner").corr().iloc[0, 1])
     pa, pb = _proven(ra["verdict"]["label"]), _proven(rb["verdict"]["label"])
     same_dir = np.sign(ra["sen_slope_per_decade"]) == np.sign(rb["sen_slope_per_decade"])
-    if pa and pb and same_dir:
-        agrees, note = True, f"Confirmed: {name} also shows a real {ra['verdict']['direction']} trend."
+    # badge: "confirmed" only when an independent record proves the same trend.
+    # Two "no proven trend" results, or agreement with a record that shares
+    # input data with MERRA-2 (GPCP), is consistency, not confirmation.
+    if pa and pb and same_dir and independence == "independent":
+        agrees, badge = True, "confirmed"
+        note = f"Confirmed: {name}, an independent record, also shows a real {ra['verdict']['direction']} trend."
+    elif pa and pb and same_dir:
+        agrees, badge = True, "consistent"
+        note = (f"Consistent: {name} also shows a real {ra['verdict']['direction']} trend. It shares some "
+                "input data with NASA's record, so this is a consistency check, not independent proof.")
     elif not pa and not pb:
-        agrees, note = True, f"Confirmed: {name} also finds no proven trend."
+        agrees, badge = True, "consistent"
+        note = f"Consistent: {name} also finds no proven trend."
     elif pa and not pb:
-        agrees, note = False, f"Caution: {name} does not confirm this trend. Treat it as unproven."
+        agrees, badge = False, "caution"
+        note = f"Caution: {name} does not confirm this trend. Treat it as unproven."
     elif pb and not pa:
-        agrees, note = False, f"Caution: {name} shows a {rb['verdict']['direction']} trend that NASA's record does not."
+        agrees, badge = False, "caution"
+        note = f"Caution: {name} shows a {rb['verdict']['direction']} trend that NASA's record does not."
     else:
-        agrees, note = False, f"Caution: {name} shows the opposite direction."
+        agrees, badge = False, "caution"
+        note = f"Caution: {name} shows the opposite direction."
     return {
         "available": True,
         "name": name,
@@ -169,5 +181,6 @@ def second_witness(var: str, box, nasa: pd.Series, units: str) -> dict:
         "witness_units_note": "" if var in ("T2M", "PRECTOTCORR") else "ESA reports m³/m³; NASA a 0–1 wetness fraction, so compare direction, not size.",
         "monthly_correlation": corr,
         "agrees": bool(agrees),
+        "badge": badge,  # confirmed | consistent | caution
         "note": note,
     }

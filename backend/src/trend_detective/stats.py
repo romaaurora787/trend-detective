@@ -35,7 +35,7 @@ from statsmodels.stats.multitest import multipletests
 ALPHA = 0.05  # significance level for verdicts
 STRONG_ALPHA = 0.01
 FDR_Q = 0.10  # map false discovery rate (Wilks 2016 recommends 0.10)
-WEATHERHEAD_MAX_YEARS = 100  # beyond this we call it "no meaningful trend"
+WEATHERHEAD_MAX_YEARS = 100  # beyond this we call it "no trend detected"
 # Hamed-Rao uses only autocorrelation lags up to 12 months. With all lags
 # (the pymannkendall default) spurious significant lags made the variance
 # unstable (occasionally negative) and 95% CIs covered only ~86-90% in our
@@ -208,11 +208,17 @@ def _verdict(p_mk, p_ols, slope, lo, hi, years_needed, record_years, units) -> V
         more = max(years_needed - record_years, 0)
         return Verdict(
             "not_yet",
-            f"Not significant yet. If it keeps changing at this rate, about {more:.0f} more years of data would show it.",
+            f"Not significant yet. If today's rate is real and continues, about {more:.0f} more years of data would show it.",
             direction,
             True,
         )
-    return Verdict("none", "No meaningful trend: any change is lost in natural ups and downs.", direction, True)
+    return Verdict(
+        "none",
+        f"No trend detected: any change is too small to stand out from natural ups and downs "
+        f"within {WEATHERHEAD_MAX_YEARS} years of data.",
+        direction,
+        True,
+    )
 
 
 def analyse(series: pd.Series, units: str = "", alpha: float = ALPHA) -> dict:
