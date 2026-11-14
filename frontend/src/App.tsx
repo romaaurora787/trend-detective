@@ -78,8 +78,8 @@ export default function App() {
       <header className="shell">
         <div className="shell-row">
           <a className="brand" href="#/case">
-            <svg viewBox="0 0 32 32" aria-hidden><path d="M5 23 L12 18 L17 20 L27 8" /></svg>
-            Earth System Trend Detective
+            <span className="tag">[NASA SPACE APPS 2026]</span>
+            Trend Detective
           </a>
           <nav aria-label="Views">
             {ROUTES.map((r) => (
@@ -115,11 +115,11 @@ export default function App() {
       <div id="content">
         {s.route === "case" && <CaseView varId={s.varId} box={s.box} onReport={() => go({ route: "report" })} />}
         {s.route === "report" && <ReportView box={s.box} onOpen={(varId) => go({ route: "case", varId })} />}
-        {s.route === "map" && <Suspense fallback={<main className="page"><p className="status">Loading the map…</p></main>}><MapView varId={s.varId} box={s.box} /></Suspense>}
+        {s.route === "map" && <Suspense fallback={<main className="sheet"><p className="status pad">Loading the map…</p></main>}><MapView varId={s.varId} box={s.box} /></Suspense>}
         {s.route === "methods" && <MethodsView />}
       </div>
       <footer className="foot">
-        <p>NASA Space Apps Challenge 2026 · Lincoln · Akshita &amp; Kanishk</p>
+        <p className="tag">[CREDITS] NASA Space Apps Challenge 2026 · Lincoln · Akshita &amp; Kanishk</p>
         <p>Data: NASA POWER (MERRA-2, CERES / GEWEX SRB); NASA MODIS via Microsoft Planetary Computer; NASA GPM IMERG and GPCP (GES DISC); NASA GISTEMP v4; NASA EONET; Met Office HadCET (Open Government Licence); ESA CCI Soil Moisture; ERA5 and CMIP6 models served by Open-Meteo (CC BY 4.0), containing modified Copernicus Climate Change Service information; NOAA NCEI GHCN stations and NOAA PSL / CPC climate indices. Places: GeoNames (CC BY 4.0). Map tiles: Esri.</p>
         <p>Code drafted with help from Claude (Anthropic); every verdict number is computed by our statistics code, never by AI.</p>
       </footer>

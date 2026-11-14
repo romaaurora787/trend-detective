@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, examples, type Validation } from "./api";
-import { Panel } from "./Chart";
+import { Panel, Reveal } from "./Chart";
 
 const pct = (xs: number[]) => xs.map((x) => x * 100);
 
@@ -10,13 +10,14 @@ export function MethodsView() {
   const fa = v.validation, pw = v.validation_power;
 
   return (
-    <main className="page methods">
-      <header className="fig-head">
-        <h1>How the Detective decides</h1>
+    <main className="sheet methods">
+      <section className="frame hero hero-sm">
+        <div className="bar-top"><span className="tag">[METHODS] How the Detective decides</span><span className="tag">[PROOF] synthetic data, known answers</span></div>
+        <h1 className="hero-line">Real change, <span className="hl">or natural noise?</span></h1>
         <p className="lede">Is this variable really changing here, or is it natural ups and downs? If it is changing, how fast, and how sure are we? If we can't tell yet, how long until we could?</p>
-      </header>
+      </section>
 
-      <div className="plate proof">
+      <Reveal className="frame proof">
         <Panel letter="a" height={220} yDomain={[0, 60]} xTicks={fa.phis} xFmt={(x) => x.toFixed(2)} yLabel="%"
           title={<>False alarms when there is <strong>no</strong> real trend ({fa.n_sims} synthetic series per point), against how "sticky" the noise is. The ideal is 5%.</>}
           series={[
@@ -35,10 +36,10 @@ export function MethodsView() {
           ]}>
           <p className="key"><span><i className="sw sw-naive" />Naive test</span><span><i className="sw sw-ours" />Our verdict</span><span><i className="sw sw-base" />Straight line on raw monthly data</span></p>
         </Panel>
-      </div>
+      </Reveal>
       <p className="cite">Fig. 3 | Proof it works, on synthetic data where we know the answer. The naive test finds trends that do not exist (up to {Math.round(Math.max(...fa.false_alarm_rate.naive_ols_anomalies) * 100)}% of the time). The raw straight line almost never raises a false alarm but misses real trends because the seasons drown them. Ours stays near 5% and still catches real trends.</p>
 
-      <article className="prose">
+      <article className="frame prose">
         <h2>1. The evidence</h2>
         <p>NASA POWER (NASA Langley Research Center) serves NASA's MERRA-2 reanalysis and CERES / GEWEX SRB satellite data, monthly from January 1981 to December 2025. For a box we average every NASA grid cell inside it (0.5° × 0.625°), weighted by area.</p>
 

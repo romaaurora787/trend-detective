@@ -47,6 +47,9 @@ export function signed(x: number | null | undefined): string {
   return v > 0 ? `+${s}` : v < 0 ? `−${s}` : "0";
 }
 
+/** "fraction (0 dry – 1 saturated)" → "fraction", for axis labels. */
+export const short = (u: string) => u.split(" (")[0];
+
 export const plain = (x: number, d = 0) => x.toFixed(d).replace("-", "−");
 
 export function pText(p: number | null | undefined): string {

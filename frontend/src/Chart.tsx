@@ -1,16 +1,62 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createElement, useEffect, useRef, useState, type ReactNode } from "react";
 
-/** Width of an element, tracked. Charts draw at real pixels so text never stretches. */
-export function useWidth<T extends HTMLElement>(): [React.RefObject<T>, number] {
+/** Size of an element, tracked. Charts draw at real pixels so text never stretches. */
+export function useSize<T extends HTMLElement>(): [React.RefObject<T>, number, number] {
   const ref = useRef<T>(null);
-  const [w, setW] = useState(0);
+  const [s, setS] = useState([0, 0]);
   useEffect(() => {
     if (!ref.current) return;
-    const ro = new ResizeObserver(([e]) => setW(Math.floor(e.contentRect.width)));
+    const ro = new ResizeObserver(([e]) => setS([Math.floor(e.contentRect.width), Math.floor(e.contentRect.height)]));
     ro.observe(ref.current);
     return () => ro.disconnect();
   }, []);
+  return [ref, s[0], s[1]];
+}
+export function useWidth<T extends HTMLElement>(): [React.RefObject<T>, number] {
+  const [ref, w] = useSize<T>();
   return [ref, w];
+}
+
+export const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/** True once the element has scrolled into view. */
+export function useInView<T extends Element>(): [React.RefObject<T>, boolean] {
+  const ref = useRef<T>(null);
+  const [v, setV] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); io.disconnect(); } }, { rootMargin: "0px 0px -12% 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return [ref, v];
+}
+
+/** A section whose children rise in (CSS .reveal / .in) the first time it is seen. */
+export function Reveal({ tag = "section", className = "", children, ...rest }: { tag?: string; className?: string; children: ReactNode; [k: string]: unknown }) {
+  const [ref, v] = useInView<HTMLElement>();
+  return createElement(tag, { ref, className: `reveal${v ? " in" : ""} ${className}`, ...rest }, children);
+}
+
+/** Eases a number from its last value to the next (count-up, count-down). */
+export function useTween(to: number, dur = 900) {
+  const [v, setV] = useState(to);
+  const from = useRef(to);
+  useEffect(() => {
+    if (still()) { from.current = to; setV(to); return; }
+    const a = from.current, t0 = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const k = Math.min(1, (now - t0) / dur), x = a + (to - a) * (1 - (1 - k) ** 3);
+      from.current = x;
+      setV(x);
+      if (k < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [to, dur]);
+  return v;
 }
 
 export const decYear = (d: string) => {
@@ -18,7 +64,7 @@ export const decYear = (d: string) => {
   return y + (m - 0.5) / 12;
 };
 
-function niceTicks(lo: number, hi: number, n = 4): number[] {
+export function niceTicks(lo: number, hi: number, n = 4): number[] {
   const span = hi - lo || 1;
   const step0 = span / n;
   const mag = 10 ** Math.floor(Math.log10(step0));
@@ -28,7 +74,7 @@ function niceTicks(lo: number, hi: number, n = 4): number[] {
   return out;
 }
 
-const fmtTick = (v: number) => (Math.abs(v) < 1e-9 ? "0" : String(v).replace("-", "−"));
+export const fmtTick = (v: number) => (Math.abs(v) < 1e-9 ? "0" : String(v).replace("-", "−"));
 
 export interface Series { xs: number[]; ys: (number | null)[]; cls: string; kind?: "line" | "bar" }
 
@@ -90,7 +136,8 @@ export function Panel({
               ) : (
                 <path
                   key={i}
-                  className={s.cls}
+                  className={`${s.cls} draw`}
+                  pathLength={1}
                   d={s.xs.map((x, j) => (s.ys[j] == null ? "" : `${j && s.ys[j - 1] != null ? "L" : "M"}${X(x).toFixed(1)},${Y(s.ys[j] as number).toFixed(1)}`)).join("")}
                 />
               ),

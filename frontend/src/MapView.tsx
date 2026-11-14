@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { api, examples, type Box, type TrendMap } from "./api";
-import { boxText, placeName, risingIsBlue, sameBox, signed } from "./lib";
+import { api, examples, type Box, type MapCell, type TrendMap } from "./api";
+import { useTween } from "./Chart";
+import { boxText, pText, placeName, risingIsBlue, sameBox, short, signed } from "./lib";
 
 const TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}";
 const ATTR = "Tiles &copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors";
@@ -18,7 +19,10 @@ function useLeaflet(el: React.RefObject<HTMLDivElement>, box: Box, zoom?: number
     if (zoom) m.setView([(box[0] + box[1]) / 2, (box[2] + box[3]) / 2], zoom, { animate: false });
     else m.fitBounds(bounds(box), { padding: [16, 16], animate: false });
     map.current = m;
-    return () => { m.remove(); map.current = null; };
+    // Leaflet doesn't notice its box resizing (the flex layout settles after mount).
+    const ro = new ResizeObserver(() => m.invalidateSize({ animate: false }));
+    ro.observe(el.current);
+    return () => { ro.disconnect(); m.remove(); map.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return map;
@@ -47,7 +51,7 @@ export function Picker({ box, onPick }: { box: Box; onPick: (b: Box) => void }) 
     const m = map.current;
     if (!m) return;
     rect.current?.remove();
-    rect.current = L.rectangle(bounds(next), { color: css("--rise"), weight: 2, fillOpacity: 0.12 }).addTo(m);
+    rect.current = L.rectangle(bounds(next), { color: css("--signal"), weight: 2, fillOpacity: 0.15 }).addTo(m);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [next.join()]);
 
@@ -55,9 +59,9 @@ export function Picker({ box, onPick }: { box: Box; onPick: (b: Box) => void }) 
     <div className="picker">
       <div ref={el} className="leaflet-host" aria-label="Map: click to choose the centre of your box" />
       <div className="picker-bar">
-        <p>Click anywhere on the map. Your box: <strong>{boxText(next)}</strong></p>
+        <p><span className="tag">[YOUR BOX]</span> {boxText(next)}</p>
         <label>
-          <span>Size</span>
+          <span className="tag">Size</span>
           <select value={size} onChange={(e) => setSize(+e.target.value)}>
             {[0.5, 1, 2, 5, 10].map((s) => <option key={s} value={s}>{s}° × {s}°</option>)}
           </select>
@@ -70,92 +74,134 @@ export function Picker({ box, onPick }: { box: Box; onPick: (b: Box) => void }) 
 
 const MAP_DEFAULT: Box = [50.0, 55.5, -6.0, 2.0];
 
+/** The map shows the region around a place: at least 5° × 8°, so there are enough cells to compare. */
+export function mapBox(b: Box): Box {
+  const grow = (lo: number, hi: number, min: number, lim: number): [number, number] => {
+    if (hi - lo >= min) return [lo, hi];
+    const c = Math.min(Math.max((lo + hi) / 2, -lim + min / 2), lim - min / 2);
+    return [+(c - min / 2).toFixed(2), +(c + min / 2).toFixed(2)];
+  };
+  const [a, z] = grow(b[0], b[1], 5, 90), [w, e] = grow(b[2], b[3], 8, 180);
+  return [a, z, w, e];
+}
+
+/** Colour of a cell: paper at zero, full ink at the strongest slope; hue by direction. */
+function cellFill(slope: number, max: number, flip: boolean) {
+  const k = Math.min(Math.abs(slope) / max, 1) ** 0.8;
+  const hue = (slope >= 0) !== flip ? 36 : 258;
+  return `oklch(${(95 - 43 * k).toFixed(1)}% ${(0.02 + 0.17 * k).toFixed(3)} ${hue})`;
+}
+
 export default function MapView({ varId, box }: { varId: string; box: Box }) {
-  const isDefault = varId === examples.map.variable.id && sameBox(box, MAP_DEFAULT);
+  const area = mapBox(box);
+  const isDefault = varId === examples.map.variable.id && sameBox(area, MAP_DEFAULT);
   const [data, setData] = useState<TrendMap | null>(isDefault ? examples.map : null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<"typical" | "detective">("typical");
+  const [cell, setCell] = useState<MapCell | null>(null);
   const el = useRef<HTMLDivElement>(null);
-  const map = useLeaflet(el, box);
+  const map = useLeaflet(el, area);
   const layer = useRef<L.LayerGroup | null>(null);
 
   useEffect(() => {
     let live = true;
     setLoading(true);
     setError(null);
-    api.map(varId, box)
+    setData(isDefault ? examples.map : null);
+    api.map(varId, area)
       .then((d) => live && setData(d))
       .catch((e: Error) => live && setError(e.message))
       .finally(() => live && setLoading(false));
     return () => { live = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [varId, box.join()]);
+  }, [varId, area.join()]);
 
+  const ok = data?.cells.filter((c) => c.slope_per_decade != null) ?? [];
+  const max = Math.max(...ok.map((c) => Math.abs(c.slope_per_decade!)), 1e-9);
+  const flip = data ? risingIsBlue(data.variable.id) : false;
+
+  // Cells are drawn once per dataset; the Typical/Detective switch is a CSS class, so it animates.
   useEffect(() => {
     const m = map.current;
     if (!m || !data) return;
     layer.current?.remove();
     const g = L.layerGroup().addTo(m);
-    const slopes = data.cells.map((c) => Math.abs(c.slope_per_decade ?? 0));
-    const max = Math.max(...slopes) || 1;
-    const flip = risingIsBlue(data.variable.id);
-    const [rise, fall, ink] = [css("--rise"), css("--fall"), css("--ink")];
-    for (const c of data.cells) {
-      if (c.slope_per_decade == null) continue;
-      const sig = mode === "typical" ? c.significant_typical : c.significant_fdr;
-      const up = c.slope_per_decade >= 0;
-      const strength = Math.abs(c.slope_per_decade) / max;
-      L.rectangle([[c.lat - 0.25, c.lon - 0.3125], [c.lat + 0.25, c.lon + 0.3125]], {
-        stroke: sig, color: ink, weight: sig ? 1.5 : 0,
-        fillColor: up !== flip ? rise : fall,
-        fillOpacity: sig ? 0.25 + 0.55 * strength : 0.06 + 0.1 * strength,
-      }).bindTooltip(`${signed(c.slope_per_decade)} ${data.variable.units} per decade${sig ? (mode === "typical" ? " · typical analysis calls this real" : " · survives the correction") : ""}`).addTo(g);
-    }
-    m.fitBounds(L.latLngBounds(data.cells.map((c) => [c.lat, c.lon] as [number, number])).pad(0.08), { animate: false });
+    const ink = css("--ink");
+    const lat = data.cells.length > 1 ? Math.min(...data.cells.map((a) => Math.abs(a.lat - data.cells[0].lat)).filter((d) => d > 1e-6), 0.5) : 0.5;
+    const lon = data.cells.length > 1 ? Math.min(...data.cells.map((a) => Math.abs(a.lon - data.cells[0].lon)).filter((d) => d > 1e-6), 0.625) : 0.625;
+    data.cells.forEach((c, i) => {
+      if (c.slope_per_decade == null) return;
+      L.rectangle([[c.lat - lat / 2, c.lon - lon / 2], [c.lat + lat / 2, c.lon + lon / 2]], {
+        className: `cell${c.significant_typical ? " st" : ""}${c.significant_fdr ? " sf" : ""}`,
+        color: ink, weight: 1.5, fillColor: cellFill(c.slope_per_decade, max, flip), fillOpacity: 1,
+      }).on("mouseover click", () => setCell(c)).addTo(g).getElement()?.setAttribute("style", `--i:${i % 40}`);
+    });
+    L.rectangle(bounds(box), { className: "place-box", color: ink, weight: 2, fill: false, dashArray: "6 5", interactive: false }).addTo(g);
+    m.fitBounds(L.latLngBounds(data.cells.map((c) => [c.lat, c.lon] as [number, number])).pad(0.06), { animate: false });
     layer.current = g;
-  }, [data, mode, map]);
+    setCell(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, map]);
 
   const s = data?.summary;
-  const n = mode === "typical" ? s?.n_significant_typical : s?.n_significant_fdr;
-  const flip = data ? risingIsBlue(data.variable.id) : false;
+  const n = useTween(s ? (mode === "typical" ? s.n_significant_typical : s.n_significant_fdr) : 0, 800);
+  const u = data ? short(data.variable.units) : "";
+
   return (
-    <main className="page mapv" aria-busy={loading}>
-      <header className="fig-head">
-        <h1><span className="fig-no">Fig. 2</span> {data?.variable.name ?? "Trend"} map, {placeName(box)}</h1>
-        <p className="status" role="status">
-          {error ? <span className="error">{error}</span> : loading ? "Testing every NASA grid cell in this area…" : "Each square is one NASA grid cell (about 50 km), tested on its own. Boxes under 2° are widened to 2°."}
-        </p>
-      </header>
-      <div className="plate">
+    <main className="sheet mapv" aria-busy={loading}>
+      <section className="frame hero hero-sm">
+        <div className="bar-top">
+          <span className="tag">[MAP] {data?.variable.name ?? "Trend"} · around {placeName(box)}</span>
+          <span className="tag" role="status">{error ? <span className="error">{error}</span> : loading ? "[LIVE] testing every NASA grid cell in this area…" : `[${s?.n_cells ?? 0} cells] each about 50 km, tested on its own`}</span>
+        </div>
+        <h1 className="hero-line">
+          {s ? <>{s.n_significant_typical} cells look like change. <span className="hl">{s.n_significant_fdr} survive.</span></> : <>Testing every cell <span className="hl">one by one…</span></>}
+        </h1>
+      </section>
+
+      <section className={`frame map-sheet mode-${mode}`}>
         <div className="map-host-wrap">
           <div ref={el} className="leaflet-host tall" aria-label="Trend map" />
+          <div className="ramp" aria-label="Colour key">
+            <span className="tag">{flip ? "drier" : "falling"} {signed(-max)}</span>
+            <i className={flip ? "flip" : undefined} />
+            <span className="tag">{signed(max)} {flip ? "wetter" : "rising"}</span>
+            <span className="tag ramp-u">{u} per decade · outlined = counted as real · dashed = {placeName(box)}</span>
+          </div>
         </div>
-        <aside className="legend">
+        <aside className="map-side">
           <div className="seg" role="radiogroup" aria-label="Which analysis">
             <button role="radio" aria-checked={mode === "typical"} onClick={() => setMode("typical")}>Typical analysis</button>
             <button role="radio" aria-checked={mode === "detective"} onClick={() => setMode("detective")}>The Detective</button>
           </div>
           {s && (
             <>
-              <p className="bignum"><strong className="n">{n}</strong> of {s.n_cells} cells {mode === "typical" ? "look like real change" : "show proven change"}</p>
-              <p className="headline">{s.story}</p>
-              <dl className="facts">
-                <div><dt>Typical analysis</dt><dd>{s.n_significant_typical} cells: a straight-line test that treats every month as independent</dd></div>
-                <div><dt>Corrected tests, one cell at a time</dt><dd>{s.n_significant_raw} cells: about {Math.round(s.n_cells * 0.05)} would pass by chance alone</dd></div>
-                <div><dt>After the false-discovery correction</dt><dd>{s.n_significant_fdr} cells ({s.n_rising_fdr} rising, {s.n_falling_fdr} falling), Benjamini-Hochberg at q = {s.fdr_q}</dd></div>
-              </dl>
-              {data?.shuffled_control?.headline && <p className="control">{data.shuffled_control.headline}</p>}
-              <div className="key" aria-label="Colour key">
-                <span><i className="sw sw-fall" />{flip ? "wetter" : "falling"}</span>
-                <span><i className="sw sw-rise" />{flip ? "drier" : "rising"}</span>
-                <span><i className="sw sw-sig" />outlined: counted as real in this view</span>
+              <p className="map-n"><b>{Math.round(n)}</b><small>/{s.n_cells}</small></p>
+              <p className="tag">{mode === "typical" ? "cells a typical analysis calls real" : "cells with proven change after correction"}</p>
+              <p className="big-line">{s.story}</p>
+              <ol className="ladder">
+                <li className={mode === "typical" ? "on" : undefined}><b>{s.n_significant_typical}</b><span>Typical: a straight-line test that treats every month as independent.</span></li>
+                <li><b>{s.n_significant_raw}</b><span>Corrected tests, one cell at a time. About {Math.round(s.n_cells * 0.05)} would pass by chance alone.</span></li>
+                <li className={mode === "detective" ? "on" : undefined}><b>{s.n_significant_fdr}</b><span>After the false-discovery correction ({s.n_rising_fdr} rising, {s.n_falling_fdr} falling; Benjamini-Hochberg, q = {s.fdr_q}).</span></li>
+              </ol>
+              {data?.shuffled_control?.headline && <p className="control"><span className="tag">[CONTROL]</span> {data.shuffled_control.headline}</p>}
+              <div className="inspect" aria-live="polite">
+                <p className="tag">[CELL] {cell ? `${cell.lat.toFixed(2)}°, ${cell.lon.toFixed(2)}°` : "hover or tap a square"}</p>
+                {cell && (
+                  <dl className="stats">
+                    <div><dt>Trend</dt><dd><b>{signed(cell.slope_per_decade)}</b> {u} per decade</dd></div>
+                    <div><dt>Corrected test</dt><dd>{pText(cell.p)}</dd></div>
+                    <div><dt>Typical says</dt><dd>{cell.significant_typical ? "real change" : "no trend"}</dd></div>
+                    <div><dt>Detective says</dt><dd>{cell.significant_fdr ? "proven change" : "not proven"}</dd></div>
+                  </dl>
+                )}
               </div>
             </>
           )}
           {!isDefault && <a className="btn ghost" href="#/map?var=GWETROOT&box=50,55.5,-6,2">See the false-alarm lesson: England soil wetness</a>}
         </aside>
-      </div>
+      </section>
     </main>
   );
 }

@@ -459,10 +459,10 @@ def all_windows(series: pd.Series, min_years: int = 15) -> dict:
             became = c["end"]
             break
     if became is not None:
-        when = (f" Replaying the record from {first}, the evidence became strong by {became} "
-                f"and has stayed strong every year since.")
+        when = (f" Replaying the record from {first}, the evidence became proven (p < 0.05) by {became} "
+                f"and has stayed proven every year since.")
     elif timeline and timeline[-1]["p"] < ALPHA:
-        when = f" Replaying the record from {first}, the evidence has only just become strong (it came and went before)."
+        when = f" Replaying the record from {first}, the evidence has only just become proven (it came and went before)."
     else:
         when = ""
     return {"n_windows": n, "same_direction": int(same), "proven_same_direction": int(sig_same),

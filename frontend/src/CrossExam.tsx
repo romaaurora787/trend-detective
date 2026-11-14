@@ -1,13 +1,14 @@
-// Cross-examination block, witnesses list, "check our work". AI-use note: drafted with Claude (Anthropic).
-import { useEffect, useState, type ReactNode } from "react";
+// Cross-examination grid, witnesses list, "check our work". AI-use note: drafted with Claude (Anthropic).
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { api, badgeOf, examples, type Box, type CrossExam, type Witness, type Witnesses } from "./api";
-import { useWidth } from "./Chart";
+import { useInView, useTween } from "./Chart";
 import { LABELS, dirTone, sameBox, signed } from "./lib";
 
-const HOME: Box = [52.6, 53.7, -1.0, 0.4];
+export const HOME: Box = [52.6, 53.7, -1.0, 0.4];
+export const isHome = (varId: string, box: Box) => varId === "T2M" && sameBox(box, HOME);
 
 /** Live fetch with a saved example for the home case, so the demo never opens empty. */
-function useLive<T>(load: () => Promise<T>, key: string, example: T | null) {
+export function useLive<T>(load: () => Promise<T>, key: string, example: T | null) {
   const [s, set] = useState<{ key: string; data: T | null; error: string | null }>({ key, data: example, error: null });
   useEffect(() => {
     let live = true;
@@ -19,46 +20,18 @@ function useLive<T>(load: () => Promise<T>, key: string, example: T | null) {
   return s.key === key ? s : { data: example, error: null };
 }
 
-/** Replay: the p-value if the record had ended in each year. Log scale, 0.05 line. */
-function Replay({ timeline, proven }: { timeline: { end: number; p: number | null }[]; proven: number | null }) {
-  const [ref, w] = useWidth<HTMLDivElement>();
-  const h = 96, m = { l: 52, r: 8, t: 6, b: 20 };
-  const pts = timeline.filter((t) => t.p != null && t.p > 0);
-  if (pts.length < 2) return null;
-  const [x0, x1] = [pts[0].end, pts[pts.length - 1].end];
-  const lo = -8;
-  const X = (v: number) => m.l + ((v - x0) / (x1 - x0 || 1)) * (w - m.l - m.r);
-  const Y = (p: number) => m.t + (Math.max(Math.log10(p), lo) / lo) * (h - m.t - m.b);
-  const ticks: [number, string][] = [[1, "p = 1"], [0.05, "0.05"], [1e-4, "0.0001"], [1e-8, "10⁻⁸"]];
-  return (
-    <div ref={ref} className="mini" aria-label={`Replay: the evidence became strong by ${proven ?? "—"}`} role="img">
-      {w > 0 && (
-        <svg width={w} height={h}>
-          {ticks.map(([p, t]) => (
-            <g key={t}>
-              <line className={p === 0.05 ? "axis-zero" : "grid"} x1={m.l} x2={w - m.r} y1={Y(p)} y2={Y(p)} />
-              <text className="tick" x={m.l - 6} y={Y(p)} dy="0.32em" textAnchor="end">{t}</text>
-            </g>
-          ))}
-          {[x0, x1].map((v) => <text key={v} className="tick" x={X(v)} y={h - 4} textAnchor={v === x0 ? "start" : "end"}>to {v}</text>)}
-          {proven && <line className="mark-line" x1={X(proven)} x2={X(proven)} y1={m.t} y2={h - m.b} />}
-          {proven && <text className="tick unit" x={X(proven) + 4} y={h - m.b - 4}>strong by {proven}</text>}
-          <path className="s-replay" d={pts.map((t, i) => `${i ? "L" : "M"}${X(t.end).toFixed(1)},${Y(t.p as number).toFixed(1)}`).join("")} />
-        </svg>
-      )}
-    </div>
-  );
-}
+export const useCrossExam = (varId: string, box: Box) =>
+  useLive(() => api.crossExam(varId, box), `${varId}|${box}`, isHome(varId, box) ? examples.crossExam : null);
 
 function MonthBars({ months, varId }: { months: { month: string; slope_per_decade: number; proven_fdr: boolean }[]; varId: string }) {
   const max = Math.max(...months.map((m) => Math.abs(m.slope_per_decade)), 1e-9);
   return (
     <div className="months" role="img" aria-label={`Change per decade by month; solid = proven: ${months.map((m) => `${m.month} ${signed(m.slope_per_decade)}${m.proven_fdr ? " proven" : ""}`).join(", ")}`}>
-      {months.map((m) => (
+      {months.map((m, i) => (
         <div key={m.month} className="month">
           <div className="month-col">
             <i className={`t-${dirTone(varId, m.slope_per_decade)} ${m.proven_fdr ? "solid" : "faint"} ${m.slope_per_decade >= 0 ? "up" : "down"}`}
-              style={{ height: `${(Math.abs(m.slope_per_decade) / max) * 50}%` }} />
+              style={{ height: `${(Math.abs(m.slope_per_decade) / max) * 50}%`, "--i": i } as CSSProperties} />
           </div>
           <span>{m.month[0]}</span>
         </div>
@@ -69,18 +42,11 @@ function MonthBars({ months, varId }: { months: { month: string; slope_per_decad
 
 type Row = { name: string; sec: { headline?: string; error?: string } | undefined; pass?: boolean; extra?: ReactNode };
 
-export function CrossExamBlock({ varId, box, units }: { varId: string; box: Box; units: string }) {
-  const home = varId === "T2M" && sameBox(box, HOME);
-  const { data: x, error } = useLive(() => api.crossExam(varId, box), `${varId}|${box}`, home ? examples.crossExam : null);
+export function CrossExamBlock({ x, error, varId, units }: { x: CrossExam | null; error: string | null; varId: string; units: string }) {
+  const [ref, seen] = useInView<HTMLDivElement>();
+  const passed = useTween(seen && x?.score.proven ? x.score.passed ?? 0 : 0, 1200);
+  if (!x) return <p className="status pad" role="status">{error ? <span className="error">{error}</span> : "Putting this trend through the sceptic's checks…"}</p>;
 
-  if (!x) {
-    return (
-      <section className="xexam" aria-labelledby="xe-h" aria-busy={!error}>
-        <h2 id="xe-h" className="fig-head-sm"><span className="fig-no">Fig. 1, continued</span> Cross-examination</h2>
-        <p className="status" role="status">{error ? <span className="error">{error}</span> : "Putting this trend through our sceptic's checks…"}</p>
-      </section>
-    );
-  }
   const scored = x.score.proven;
   // Same pass rules as backend crossexam.py score, so the marks add up to its "passed N of 5".
   const is = (s: { status?: string } | undefined, ok: string[]) => (s?.status ? ok.includes(s.status) : undefined);
@@ -89,12 +55,11 @@ export function CrossExamBlock({ varId, box, units }: { varId: string; box: Box;
   const rows: Row[] = [
     { name: "A change of instrument?", sec: a, pass: is(a, ["survives", "survives_weakly", "no_known_change"]),
       extra: tested.map((c) => <p key={c.date} className="pair">{c.before!.period}: <b>{signed(c.before!.slope_per_decade)}</b> · {c.after!.period}: <b>{signed(c.after!.slope_per_decade)}</b> {units}/decade</p>) },
-    { name: "El Niño removed", sec: en, pass: is(en, ["survives", "none"]), extra: en?.how_linked && <p className="note">{en.how_linked}</p> },
+    { name: "El Niño removed", sec: en, pass: is(en, ["survives", "none"]), extra: en?.how_linked && <p className="pair">{en.how_linked}</p> },
     { name: "One year carrying it?", sec: lo, pass: lo?.flips ? !lo.flips.length : undefined },
     { name: "Found in both halves?", sec: wf, pass: is(wf, ["confirmed", "continuing", "neither"]) },
-    { name: "Cherry-picked dates?", sec: aw, pass: aw?.proven_opposite != null ? !aw.proven_opposite : undefined,
-      extra: aw?.timeline && <Replay timeline={aw.timeline} proven={aw.became_proven ?? null} /> },
-    { name: "Other ocean cycles removed", sec: cm, extra: cm?.strongest && <p className="note">{cm.strongest}</p> },
+    { name: "Cherry-picked dates?", sec: aw, pass: aw?.proven_opposite != null ? !aw.proven_opposite : undefined },
+    { name: "Other ocean cycles removed", sec: cm, extra: cm?.strongest && <p className="pair">{cm.strongest}</p> },
     { name: "Which months?", sec: se, extra: se?.months && <MonthBars months={se.months} varId={varId} /> },
     { name: "Speeding up?", sec: x.decades },
     { name: "Sudden or gradual?", sec: x.change_point },
@@ -102,72 +67,72 @@ export function CrossExamBlock({ varId, box, units }: { varId: string; box: Box;
   ];
 
   return (
-    <section className="xexam" aria-labelledby="xe-h">
-      <h2 id="xe-h" className="fig-head-sm"><span className="fig-no">Fig. 1, continued</span> Cross-examination</h2>
-      <p className="xe-score">
-        {scored && <strong className="n">{x.score.passed} of {x.score.of}</strong>}
-        <span>{x.score.headline}</span>
-      </p>
+    <>
+      <div ref={ref} className="score">
+        <p className="score-n" aria-label={scored ? `${x.score.passed} of ${x.score.of} checks passed` : undefined}>
+          {scored ? <>{Math.round(passed)}<small>/{x.score.of}</small></> : <small>—</small>}
+        </p>
+        <div className="score-text">
+          <p className="tag">[SCORE] {scored ? "checks passed" : "not scored: nothing proven to test"}</p>
+          <p className="big-line">{x.score.headline}</p>
+          {x.score.checks && (
+            <details className="details">
+              <summary>How the {x.score.of} checks are scored</summary>
+              <ol>{x.score.checks.map((c) => <li key={c}>{c}</li>)}</ol>
+              {x.score.rule_note && <p className="note">{x.score.rule_note}</p>}
+            </details>
+          )}
+        </div>
+      </div>
       <ol className="checks">
-        {rows.filter((r) => r.sec && !r.sec.error && r.sec.headline).map((r) => {
+        {rows.filter((r) => r.sec && !r.sec.error && r.sec.headline).map((r, i) => {
           const mark = r.pass === undefined || !scored ? "info" : r.pass ? "ok" : "warn";
           return (
-            <li key={r.name} className={`check c-${mark}`}>
-              <span className="check-mark">{mark === "ok" ? "✔ Holds" : mark === "warn" ? "⚠ Caution" : "Context"}</span>
-              <div className="check-body">
-                <h3>{r.name}</h3>
-                <p>{r.sec!.headline}</p>
-                {r.extra}
-              </div>
+            <li key={r.name} className={`check c-${mark}`} style={{ "--n": i } as CSSProperties}>
+              <p className="tag">[{String(i + 1).padStart(2, "0")}] <span className="check-mark">{mark === "ok" ? "✔ Holds" : mark === "warn" ? "⚠ Caution" : "Context"}</span></p>
+              <h3>{r.name}</h3>
+              <p>{r.sec!.headline}</p>
+              {r.extra}
             </li>
           );
         })}
       </ol>
-      {x.score.checks && (
-        <details className="block details rules-note">
-          <summary>How the {x.score.of} checks are scored</summary>
-          <ol>{x.score.checks.map((c) => <li key={c}>{c}</li>)}</ol>
-          {x.score.rule_note && <p className="note">{x.score.rule_note}</p>}
-        </details>
-      )}
       {x.could_overturn && x.could_overturn.length > 0 && (
         <div className="overturn">
-          <h3>What could still overturn this</h3>
+          <p className="tag">[STILL OPEN] What could overturn this</p>
           <ul>{x.could_overturn.map((t) => <li key={t}>{t}</li>)}</ul>
         </div>
       )}
-    </section>
+    </>
   );
 }
 
+const BADGE = { confirmed: "Confirmed", consistent: "Consistent", caution: "Caution" };
+
 export function WitnessList({ varId, box, fallback }: { varId: string; box: Box; fallback: Witness }) {
-  const home = varId === "T2M" && sameBox(box, HOME);
-  const { data } = useLive<Witnesses | null>(() => api.witnesses(varId, box), `${varId}|${box}`, home ? examples.witnesses : null);
+  const { data } = useLive<Witnesses | null>(() => api.witnesses(varId, box), `${varId}|${box}`, isHome(varId, box) ? examples.witnesses : null);
   const list = data?.witnesses.filter((w) => w.available) ?? [];
   if (!list.length) {
     const b = badgeOf(fallback);
     return b ? (
-      <>
-        <p className={`badge b-${b}`}>{{ confirmed: "Confirmed", consistent: "Consistent", caution: "Caution" }[b]}<span> · {fallback.name}</span></p>
-        <p className="note">{fallback.note}</p>
-      </>
-    ) : <p className="note">{data ? "No independent record for this variable and place yet." : "Asking the other records…"}</p>;
+      <ul className="witnesses"><li style={{ "--n": 0 } as CSSProperties}><span className={`badge b-${b}`}>{BADGE[b]}</span><div><strong>{fallback.name}</strong><span className="note">{fallback.note}</span></div></li></ul>
+    ) : <p className="note pad">{data ? "No independent record for this variable and place yet." : "Asking the other records…"}</p>;
   }
   return (
     <>
-      <p className="w-head">{data!.headline}</p>
+      <p className="big-line pad">{data!.headline}</p>
       <ul className="witnesses">
-        {list.map((w) => {
+        {list.map((w, i) => {
           const b = badgeOf(w) ?? "caution";
           return (
-          <li key={w.name}>
-            <span className={`badge b-${b}`}>{{ confirmed: "Confirmed", consistent: "Consistent", caution: "Caution" }[b]}</span>
-            <div>
-              <strong>{w.name}</strong>
-              <span className="note">{w.witness_verdict ? `${LABELS[w.witness_verdict]}` : ""}{w.monthly_correlation != null ? ` · month-to-month r = ${w.monthly_correlation.toFixed(2)}` : ""}</span>
-              {w.independence && w.independence !== "independent" && <span className="note">{w.independence}</span>}
-            </div>
-          </li>
+            <li key={w.name} style={{ "--n": i } as CSSProperties}>
+              <span className={`badge b-${b}`}>{BADGE[b]}</span>
+              <div>
+                <strong>{w.name}</strong>
+                <span className="note">{w.witness_verdict ? `${LABELS[w.witness_verdict]}` : ""}{w.monthly_correlation != null ? ` · month-to-month r = ${w.monthly_correlation.toFixed(2)}` : ""}</span>
+                {w.independence && w.independence !== "independent" && <span className="note">{w.independence}</span>}
+              </div>
+            </li>
           );
         })}
       </ul>
@@ -176,14 +141,19 @@ export function WitnessList({ varId, box, fallback }: { varId: string; box: Box;
 }
 
 export function CheckOurWork({ links, csv }: { links: { name: string; url: string; note: string }[]; csv: string }) {
+  const all = [
+    ...links,
+    { name: "Download the evidence (CSV)", url: csv, note: "Every month, the seasonal normal, the trend line and the verdict." },
+    { name: "Rebuild the number yourself (notebook)", url: "https://github.com/romaaurora787/trend-detective/blob/main/notebooks/reproduce_lincolnshire.ipynb", note: "Uses only NASA's public API." },
+  ];
   return (
-    <section className="block" aria-labelledby="cow">
-      <h2 id="cow">Check our work</h2>
-      <ul className="links">
-        {links.map((l) => <li key={l.url}><a href={l.url} target="_blank" rel="noreferrer">{l.name}</a><span className="note">{l.note}</span></li>)}
-        <li><a href={csv}>Download the evidence (CSV)</a><span className="note">Every month, the seasonal normal, the trend line and the verdict.</span></li>
-        <li><a href="https://github.com/romaaurora787/trend-detective/blob/main/notebooks/reproduce_lincolnshire.ipynb" target="_blank" rel="noreferrer">Rebuild the number yourself (notebook)</a><span className="note">Uses only NASA's public API.</span></li>
-      </ul>
-    </section>
+    <ul className="links">
+      {all.map((l, i) => (
+        <li key={l.url} style={{ "--n": i } as CSSProperties}>
+          <a href={l.url} target={l.url === csv ? undefined : "_blank"} rel="noreferrer">{l.name} <span aria-hidden>↗</span></a>
+          <span className="note">{l.note}</span>
+        </li>
+      ))}
+    </ul>
   );
 }

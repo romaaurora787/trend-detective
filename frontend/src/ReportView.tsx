@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { api, badgeOf, examples, type Box, type Report, type ReportItem } from "./api";
-import { LABELS, boxText, dirTone, placeName, sameBox, signed } from "./lib";
+import { Reveal } from "./Chart";
+import { LABELS, boxText, dirTone, placeName, sameBox, short, signed } from "./lib";
 
 /** The 95% range drawn to scale around zero: a range that clears zero is a proven direction. */
 function Interval({ it }: { it: ReportItem }) {
@@ -38,20 +39,23 @@ export function ReportView({ box, onOpen }: { box: Box; onOpen: (varId: string) 
 
   const ready = data && sameBox(data.box, box);
   return (
-    <main className="page report" aria-busy={!ready}>
-      <header className="fig-head">
-        <h1><span className="fig-no">Table 1</span> Report card: {placeName(box)}</h1>
-        <p className="status" role="status">
-          {error ? <span className="error">{error}</span>
-            : ready ? `${boxText(box)} · ${data.groups.reduce((n, g) => n + g.items.length, 0)} NASA records` : `Checking every NASA record for this place: the first time takes about 20 seconds (${secs} s)…`}
-        </p>
-      </header>
+    <main className="sheet report" aria-busy={!ready}>
+      <section className="frame hero hero-sm">
+        <div className="bar-top">
+          <span className="tag">[REPORT CARD] {placeName(box)}</span>
+          <span className="tag" role="status">
+            {error ? <span className="error">{error}</span>
+              : ready ? `[${data.groups.reduce((n, g) => n + g.items.length, 0)} NASA records] ${boxText(box)}` : `[LIVE] checking every NASA record for this place: the first time takes about 20 s (${secs} s)…`}
+          </span>
+        </div>
+        <h1 className="hero-line">Everything measured in {placeName(box)}. <span className="hl">What's really changing?</span></h1>
+        {ready && <p className="lede">{data.summary}</p>}
+      </section>
       {ready && (
         <>
-          <p className="summary">{data.summary}</p>
-          {data.groups.map((g) => g.items.length > 0 && (
-            <section key={g.key} className="rgroup" aria-labelledby={`g-${g.key}`}>
-              <h2 id={`g-${g.key}`}>{g.title} <span className="count">{g.items.length}</span></h2>
+          {data.groups.map((g, gi) => g.items.length > 0 && (
+            <Reveal key={g.key} className="frame sec rgroup" aria-labelledby={`g-${g.key}`}>
+              <h2 id={`g-${g.key}`} className="sec-title"><span className="tag">[{String(gi + 1).padStart(2, "0")}]</span>{g.title} <span className="count">{g.items.length}</span></h2>
               <div className="rtable" role="table">
                 <div className="rrow rhead" role="row">
                   <span role="columnheader">Variable</span>
@@ -60,13 +64,13 @@ export function ReportView({ box, onOpen }: { box: Box; onOpen: (varId: string) 
                   <span role="columnheader">A typical analysis</span>
                   <span role="columnheader">Second witness</span>
                 </div>
-                {g.items.map((it) => {
+                {g.items.map((it, i) => {
                   const b = it.second_witness ? badgeOf(it.second_witness) : null;
                   return (
-                    <button key={it.id} className={`rrow v-${it.label}`} role="row" onClick={() => onOpen(it.id)} aria-label={`${it.name}: ${LABELS[it.label]}. Open the case.`}>
-                      <span role="cell" className="rname">{it.name}</span>
+                    <button key={it.id} className={`rrow v-${it.label}`} style={{ "--n": i } as CSSProperties} role="row" onClick={() => onOpen(it.id)} aria-label={`${it.name}: ${LABELS[it.label]}. Open the case.`}>
+                      <span role="cell" className="rname">{it.name} <span aria-hidden className="go">→</span></span>
                       <span role="cell" className="rrate">
-                        <span className="n">{signed(it.slope_per_decade)} {it.units}</span>
+                        <span className={`num t-${dirTone(it.id, it.slope_per_decade)}`}>{signed(it.slope_per_decade)} {short(it.units)}</span>
                         <span className="rci">{signed(it.ci95[0])} to {signed(it.ci95[1])}</span>
                         <Interval it={it} />
                       </span>
@@ -81,9 +85,9 @@ export function ReportView({ box, onOpen }: { box: Box; onOpen: (varId: string) 
                   );
                 })}
               </div>
-            </section>
+            </Reveal>
           ))}
-          {data.errors.length > 0 && <p className="note">Could not check: {data.errors.map((e) => e.name).join(", ")}.</p>}
+          {data.errors.length > 0 && <p className="note pad">Could not check: {data.errors.map((e) => e.name).join(", ")}.</p>}
         </>
       )}
     </main>

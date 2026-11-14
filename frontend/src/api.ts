@@ -24,11 +24,11 @@ export interface Witness {
 export interface Analysis {
   variable: Variable; box: Box; n_cells: number; citation: string; second_witness: Witness;
   result: {
-    start: string; end: string; units: string; seasonal_amplitude: number;
+    start: string; end: string; units: string; seasonal_amplitude: number; n_months?: number; mean?: number;
     sen_slope_per_decade: number; sen_ci95_per_decade: [number, number]; slope_method: string;
     total_change: number; years_to_detect: number | null; record_years: number;
     mk_hamed_rao: { p: number }; ols_neff: { p: number; lag1_autocorr: number; n_eff: number };
-    typical_vs_detective: { typical_says: string; outcome: "fooled" | "agree_trend" | "missed" | "agree_none"; note: string };
+    typical_vs_detective: { typical_says: string; typical_slope_per_decade?: number; outcome: "fooled" | "agree_trend" | "missed" | "agree_none"; note: string };
     verdict: { label: Label; headline: string; direction: string; tests_agree: boolean };
     robustness?: { robust: boolean | null; headline: string };
     coverage?: { headline: string };
