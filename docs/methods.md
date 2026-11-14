@@ -83,6 +83,23 @@ Testing 150 grid cells at the 5% level gives about 7 "significant" cells by pure
 
 **Real example:** root-zone soil wetness over England and Wales, 137 cells. **18** look significant on their own; **0** survive the correction. Without the correction we would have reported a drying or wetting signal that isn't there.
 
+## 8b. Does the verdict depend on the years chosen? (robustness)
+Where a trend line starts and ends can make or break it. Every verdict is re-run on four windows: the full record, starting 5 and 10 years later, and ending 5 years earlier. It is **Robust** if all windows agree on proven or not proven, and on direction. Otherwise it is **Fragile**, and the app says so. Lincolnshire warming is robust (+0.28 to +0.33 °C/decade across all four windows); Lincolnshire evaporation is fragile ("some evidence" for 1981–2025, "mixed" if the record ends in 2020).
+
+## 8c. Beyond the trend line, and how we checked those methods
+| Question | Method | False alarms on no-trend synthetic weather |
+|---|---|---|
+| Are records broken more often than chance? | Record counts in the last third of the record vs a permutation null that shuffles **whole years in 5-year blocks** | 5–7% (two-sided limit 10%). Shuffling single months gave **13–22%**, so we changed it |
+| Is it getting more erratic? | Spread of detrended anomalies, second half vs first, same block permutation | 4.5–7.5% (target 5%). A standard Levene test on months gave **15–19%** |
+| Did the trend turn at some year? | Straight line vs "hinge" (two joined lines), BIC gain > 10 | ≤ 7.7% even with strongly persistent years; real breaks found 93% of the time |
+| When did it rise out of the noise? | First year the trend-implied change stays above 2× the year-to-year noise | ~0% |
+| Which season? | Mann-Kendall per season, **Holm-corrected** across the four seasons | ≤ 10% (single seasons uncorrected gave 12%) |
+
+Claims that failed the corrected tests were removed from our findings (for example "Amazon daytime highs 22% more erratic").
+
+## 8d. The world report
+The same engine run on 15 variables at 111 land points (a regular grid, 45°S–65°N): **1,615 checks**. A typical analysis (months treated as independent) claims a trend in 72% of them; the Detective proves 52%. **28% of typical claims can't be supported.** For root-zone soil moisture it is more than half (57 of 86). The Detective never proved a trend the typical analysis missed, so the difference is entirely over-claiming, not different findings.
+
 ## 9. What this does *not* tell you
 - **Trend ≠ cause.** We detect change; we don't attribute it.
 - **MERRA-2 is a reanalysis:** a model constrained by observations. Soil wetness and evaporation are model estimates.
@@ -98,6 +115,8 @@ Testing 150 grid cells at the 5% level gives about 7 "significant" cells by pure
 - Sen, P. K. (1968). Estimates of the regression coefficient based on Kendall's tau. *JASA* 63, 1379–1389.
 - Weatherhead, E. C. et al. (1998). Factors affecting the detection of trends. *J. Geophys. Res.* 103(D14), 17149–17161.
 - Wilks, D. S. (2016). "The stippling shows statistically significant grid points". *BAMS* 97, 2263–2273.
+- Benestad, R. E. (2003). How often can we expect a record event? *Climate Research* 25, 3–13.
+- Holm, S. (1979). A simple sequentially rejective multiple test procedure. *Scand. J. Statist.* 6, 65–70.
 - Yue, S. & Wang, C. (2004). The Mann-Kendall test modified by effective sample size. *Water Resour. Manage.* 18, 201–218.
 - Acker, J. G. et al. Time-series analysis of SeaWiFS chlorophyll (NASA GES DISC, NTRS).
 - NASA POWER Project, power.larc.nasa.gov. Gelaro, R. et al. (2017), MERRA-2, *J. Climate* 30, 5419–5454.
