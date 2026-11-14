@@ -36,6 +36,13 @@ Written Sat 14 Nov 2026, ~22:30, by Claude on Kanishk's laptop, after merging `m
   - `/api/report-card`: items carry no alibi field.
 - **Fix (Akshita's Claude):** at minimum, give `CLOUD_AMT` and `ALLSKY_SFC_SW_DWN` the same caveat as LW. Better, add `alibi` / `instrument_change: true` to report-card items, and stop labelling them `strong` unless the trend survives on CERES alone. The website will show the flag once it exists.
 - **Owner:** Akshita's Claude (backend). Kanishk's Claude will show the flag in the report card.
+- **Update (~23:30):** for **Lincolnshire specifically**, `/api/cross-examine?var=CLOUD_AMT` says the trend **survives** the 2001 switch (−0.63 before, −1.05 after; 4 of 5 checks), so the Lincolnshire report card is defensible. The problem is general: the report card never runs the check, so for places where cloud *doesn't* survive it would still say "strong". Fix as above.
+
+### 2.4 "3 of 3 independent records agree" while ERA5 says it isn't fully independent
+`/api/witnesses` `headline` counts ERA5 as independent, but ERA5's own `independence` text says it is "supporting, not fully independent". A judge will notice that. Suggest: "3 of 3 records agree (2 fully independent)". Owner: Akshita's Claude (`witnesses.py`).
+
+### 2.5 Hyphen-minus in headlines
+Backend sentences print `-0.629`; the website uses a real minus (−0.63). This is cosmetic: fix it only if it's a one-liner in the formatting helper.
 
 ### 2.2 The tests take 5 minutes, not 20 seconds
 `uv run pytest -q` took **316 s** here, with the committed cache. Something in `test_api.py` (TestClient) is going to the network, probably Open-Meteo, ERA5 or the models. That is slow and will fail when a rate limit hits. Mock it, or mark network tests `@pytest.mark.network` and skip them by default.
@@ -95,3 +102,18 @@ Written Sat 14 Nov 2026, ~22:30, by Claude on Kanishk's laptop, after merging `m
 - **Map zoom buttons:** they no longer draw over the sticky header (`.shell` z-index 1100).
 - **Report card:** the header now counts the variables from the response (23 now, was hard-coded "15").
 - **Case page button:** reads "See everything changing in {place}".
+
+## 8. Website: must-show list, built Sat ~23:30 (Kanishk's Claude)
+
+- **Cross-examination block** below the case figure, from `/api/cross-examine`:
+  - The score ("5 of 5") at the top.
+  - One row per check, marked ✔ Holds / ⚠ Caution / Context. Holds and Caution follow the same pass rules as `crossexam.py` `score`, so the marks add up to its count.
+  - The replay chart (p by end year, with "strong by 1999"), 12 month bars, before/after slopes for the instrument switch, and "What could still overturn this".
+  - Shows nothing if a section comes back as `{error}`; for a non-proven trend every row shows as Context.
+- **Witnesses list** in the legend, from `/api/witnesses`: "3 of 3 agree", one row per witness with its verdict and r, plus a note on how independent each one is.
+- **Check our work:** the `reproduce[]` links, the evidence CSV download and the notebook link.
+- **Legend facts added:** robust/fragile tag, "vs the planet" and record coverage.
+- **Place search** (`/api/places`): a type-ahead in the header. The name stays in the URL (`&name=`), so a shared link keeps it. The presets are now called "Demo cases".
+- **Map:** the shuffled-noise control sentence ("pure noise still marks ~60 of 137").
+- **Footer credits:** all data sources and licences (GeoNames, Open-Meteo/Copernicus, OGL, NOAA, Planetary Computer, IMERG, GISTEMP, EONET, Esri).
+- **Saved examples for an instant load:** `docs/examples/crossexam_T2M_lincolnshire.json` and `witnesses_T2M_lincolnshire.json`.

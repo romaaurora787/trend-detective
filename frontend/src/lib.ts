@@ -19,9 +19,15 @@ export const PLACES: Place[] = [
 
 export const sameBox = (a: Box, b: Box) => a.every((v, i) => Math.abs(v - b[i]) < 1e-6);
 
+// ponytail: names of searched places, keyed by box; seeded from the URL's &name= on load.
+const NAMED = new Map<string, string>();
+export const nameBox = (box: Box, name: string) => NAMED.set(box.join(), name);
+
 export function placeName(box: Box): string {
   const p = PLACES.find((p) => sameBox(p.box, box));
   if (p) return p.name;
+  const n = NAMED.get(box.join());
+  if (n) return n;
   const ns = (v: number) => `${Math.abs(v).toFixed(1)}°${v >= 0 ? "N" : "S"}`;
   const ew = (v: number) => `${Math.abs(v).toFixed(1)}°${v >= 0 ? "E" : "W"}`;
   return `${ns((box[0] + box[1]) / 2)}, ${ew((box[2] + box[3]) / 2)}`;
