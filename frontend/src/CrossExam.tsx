@@ -123,6 +123,13 @@ export function CrossExamBlock({ varId, box, units }: { varId: string; box: Box;
           );
         })}
       </ol>
+      {x.score.checks && (
+        <details className="block details rules-note">
+          <summary>How the {x.score.of} checks are scored</summary>
+          <ol>{x.score.checks.map((c) => <li key={c}>{c}</li>)}</ol>
+          {x.score.rule_note && <p className="note">{x.score.rule_note}</p>}
+        </details>
+      )}
       {x.could_overturn && x.could_overturn.length > 0 && (
         <div className="overturn">
           <h3>What could still overturn this</h3>

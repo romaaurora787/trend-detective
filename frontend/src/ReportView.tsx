@@ -73,6 +73,7 @@ export function ReportView({ box, onOpen }: { box: Box; onOpen: (varId: string) 
                       <span role="cell" className="rverdict">
                         <span className={`verdict v-${it.label}`}><span className="verdict-swatch" aria-hidden />{LABELS[it.label]}</span>
                         {it.more_years_needed != null && <span className="rmore">about {Math.round(it.more_years_needed)} more years</span>}
+                        {["could_be_instrument", "doubt"].includes(it.instrument_check?.status ?? "") && <span className="rmore warn">⚠ {it.instrument_check!.headline}</span>}
                       </span>
                       <span role="cell" className={`rtyp${it.typical_outcome === "fooled" ? " fooled" : ""}`}>{it.typical_note}</span>
                       <span role="cell">{b ? <span className={`badge b-${b}`}>{{ confirmed: "Confirmed", consistent: "Consistent", caution: "Caution" }[b]}</span> : <span className="muted">—</span>}</span>
