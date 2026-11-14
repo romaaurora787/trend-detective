@@ -73,7 +73,7 @@ Rules were committed **before** testing, then tested on 111 global and 71 UK gri
 - **Rain fills next month's soil:** 99%.
 - **Rejected:** dry soil → wind, cloud → day–night range. The placebo held in **0 of 182** places.
 
-## 4b. New evidence (Sun early hours): satellites, seasons, climate modes, drought
+## 4b. New evidence (Sat evening): satellites, seasons, climate modes, drought
 **Satellite greenness (MODIS NDVI, 2000–2025; Terra and Aqua agree everywhere below):**
 - **Delhi greening** +0.020 NDVI/decade (p ≈ 6e-9), **Beijing** +0.030 (p ≈ 0), **Spain** +0.016, **Sahel** +0.006 (the "re-greening"). Matches Chen et al. 2019 (China and India lead the world's greening).
 - **Amazon (Rondônia) browning** −0.0045/decade (Aqua −0.0067, p ≈ 4e-8): deforestation and drought.
