@@ -129,3 +129,13 @@ Same as `/api/beyond` (see README). Five small tiles:
 **vs the world** (`result.vs_world.headline`): "Warming 1.6× as fast as the planet".
 **Natural events** (`/api/events`): small list under the chart; note the sparse archive.
 **From rivals, frontend-only, worth copying:** climate stripes per verdict; shareable link (state in URL hash, you have this); time-lapse/year slider on the map; hatching for cells that fail FDR; a 6-question quiz; a teacher page (lesson plan + printable case); English + one more language; accessibility check (axe); 30-second demo video and ≤7 slides.
+
+## 9. NEW (Sun ~00:30): greenness from space + extreme days
+**Greenness (NDVI)** is now an ordinary variable (`id: "NDVI"`, `satellite: true`, `period: "2000–2025"`), so it appears in `/api/variables` and works in analyse / cross-examine / compare / hunches / witnesses.
+- Show a **"reading satellite images… (~1 min the first time)"** spinner when `variable.satellite` is true; demo boxes are pre-cached.
+- Hide the grid-map button for it (`/api/map` returns 422 for satellite variables).
+- Use `variable.citation` for the credit line (it's no longer always "NASA POWER").
+- Demo story: **Delhi greening** (+0.023 NDVI/decade, p ≈ 2e-9, Aqua satellite agrees) vs **Rondônia browning** (−0.006/decade, deforestation) — use compare mode. The Sahel is greening too (the "re-greening of the Sahel").
+- Hunches `greener` / `browner` are in `/api/hunches`.
+**Extreme days** (`/api/extreme-days?lat_min=..`): a small table / bar pairs "1980s → last 10 years" per index (`indices[].mean_1980s`, `.mean_last10`, `.headline`), and a mini-chart from `years[]`/`counts[]`. Rows with `rare: true` show "rare here". Lincolnshire: hot days 30 → 59 a year; frost nights 44 → 22.
+**World page**: `variables[].alibi` and `n_proven_after_alibi` → add a column "survive the instrument check" next to "proven" (cloud: 88 proven, 42 could be the 2001 switch).

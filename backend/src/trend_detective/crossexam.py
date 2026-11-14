@@ -404,8 +404,11 @@ def extremes(series: pd.Series, units: str) -> dict:
 
 
 # --------------------------------------------------------------------------- 8. resolution
-def resolution(n_cells: int, box: list[float]) -> dict:
+def resolution(n_cells: int, box: list[float], var: str = "") -> dict:
     km = 111 * (box[1] - box[0])
+    if var == "NDVI":
+        return {"label": "resolved", "n_cells": n_cells, "box_km": round(km),
+                "headline": "Satellite pixels are 250 m across: thousands of them are averaged over this area."}
     if n_cells >= 4:
         lab, msg = "resolved", f"{n_cells} NASA grid cells (~50 km each) inside this area: a regional picture."
     elif n_cells >= 2:
@@ -451,7 +454,7 @@ def cross_examine(var: str, series: pd.Series, units: str, box: list[float], n_c
                      ("all_windows", lambda: all_windows(series)),
                      ("decades", lambda: decades(series, units)),
                      ("extremes", lambda: extremes(series, units)),
-                     ("resolution", lambda: resolution(n_cells, box))]:
+                     ("resolution", lambda: resolution(n_cells, box, var))]:
         try:
             res[name] = fn()
         except Exception as e:  # one failed check never sinks the others

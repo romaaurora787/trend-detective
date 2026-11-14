@@ -58,7 +58,7 @@ NASA POWER builds **sunshine and cloud cover** from two different satellite prod
 
 **Sunshine:** 58 proven over 1984–2025 → **28 on CERES alone (18 survive)**.
 
-**Lincolnshire passes.** Sunshine rises about +0.15 kWh/m²/day per decade under *both* instruments separately, and is significant on CERES alone (p = 0.015). Cloud falls under both. A good demo of the check working both ways.
+**Lincolnshire passes.** Sunshine rises about +0.15 MJ/m²/day per decade under *both* instruments separately, and is significant on CERES alone (p = 0.015). Cloud falls under both. A good demo of the check working both ways.
 
 **Other documented source changes to build into the check:**
 - **Haze (MERRA-2 aerosol):** MISR stopped being assimilated in June 2014 and AERONET in Oct 2014 (Randles et al. 2017, Table 2).

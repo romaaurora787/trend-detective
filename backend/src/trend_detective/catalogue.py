@@ -104,6 +104,17 @@ CATALOGUE = [
         "plain": "Infrared heat sent down to the ground by the air, clouds and greenhouse gases.",
         "tags": ["any"], "caveat": "Data source changes in 2001 (GEWEX SRB to CERES): check the instrument alibi.",
     },
+    {
+        "id": "NDVI", "name": "Vegetation greenness (NDVI)", "units": "NDVI (0–1)",
+        "source": "NASA MODIS Terra MOD13Q1 v6.1 (250 m)",
+        "plain": "How green the plants are, seen from space: near 0 bare ground, 0.3 grass or crops, 0.8 dense forest.",
+        "tags": ["farm", "rainforest", "desert", "arctic"],
+        "caveat": "Satellite record starts in 2000 (shorter than the others). Cloudy, snowy and sea pixels are left out. "
+                  "First look at a new place takes a few minutes while the satellite images are read.",
+        "satellite": True, "period": "2000–2025",
+        "citation": "Didan, K. (2021). MOD13Q1 MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061. "
+                    "NASA EOSDIS LP DAAC. doi:10.5067/MODIS/MOD13Q1.061 (read via Microsoft Planetary Computer)",
+    },
 ]
 
 BY_ID = {v["id"]: v for v in CATALOGUE}

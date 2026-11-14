@@ -45,8 +45,8 @@ class PowerError(RuntimeError):
     pass
 
 
-def _get(kind: str, params: dict) -> dict:
-    key = hashlib.sha1(json.dumps([kind, params], sort_keys=True).encode()).hexdigest()[:16]
+def _get(kind: str, params: dict, base: str = BASE) -> dict:
+    key = hashlib.sha1(json.dumps([kind, params] + ([base] if base != BASE else []), sort_keys=True).encode()).hexdigest()[:16]
     path = CACHE / f"{kind}_{params['parameters']}_{key}.json"
     if path.exists():
         return json.loads(path.read_text())
@@ -57,7 +57,7 @@ def _get(kind: str, params: dict) -> dict:
             gap = MIN_GAP - (time.monotonic() - _last[0])
             if gap > 0:
                 time.sleep(gap)
-            r = httpx.get(f"{BASE}/{kind}", params=q, timeout=180)
+            r = httpx.get(f"{base}/{kind}", params=q, timeout=180)
             _last[0] = time.monotonic()
         if r.status_code != 429:
             break
@@ -147,6 +147,13 @@ def fetch_area_series(param: str, lat_min, lat_max, lon_min, lon_max) -> tuple[p
     """
     if lat_max - lat_min > MAX_SPAN or lon_max - lon_min > MAX_SPAN:
         raise PowerError("Region too large: NASA POWER allows at most 10 x 10 degrees")
+    if param == "NDVI":  # satellite greenness, not a POWER parameter
+        from . import ndvi
+        try:
+            s = ndvi.monthly([lat_min, lat_max, lon_min, lon_max])
+        except Exception as e:
+            raise PowerError(f"MODIS greenness unavailable: {e}") from e
+        return s, ndvi.equivalent_cells([lat_min, lat_max, lon_min, lon_max])
     qlat = _widen(lat_min, lat_max, 90)
     qlon = _widen(lon_min, lon_max, 180)
     df, cells = fetch_region(param, qlat[0], qlat[1], qlon[0], qlon[1])
@@ -155,3 +162,18 @@ def fetch_area_series(param: str, lat_min, lat_max, lon_min, lon_max) -> tuple[p
         clat, clon = (lat_min + lat_max) / 2, (lon_min + lon_max) / 2
         inside = [min(cells, key=lambda c: (c["lat"] - clat) ** 2 + (c["lon"] - clon) ** 2)]
     return area_mean(df, inside), len(inside)
+
+
+DAILY_BASE = "https://power.larc.nasa.gov/api/temporal/daily"
+
+
+def fetch_daily_point(params: list[str], lat: float, lon: float, start: int = START_YEAR, end: int = END_YEAR) -> pd.DataFrame:
+    """Daily values at one point (one request for several parameters)."""
+    d = _get("point", {"parameters": ",".join(params), "latitude": round(lat, 3), "longitude": round(lon, 3),
+                       "start": f"{start}0101", "end": f"{end}1231"}, base=DAILY_BASE)
+    cols = {}
+    for p in params:
+        raw = d["properties"]["parameter"][p]
+        s = pd.Series({pd.Timestamp(k): v for k, v in raw.items()}, dtype=float)
+        cols[p] = s.where(s != FILL)
+    return pd.DataFrame(cols).sort_index()
