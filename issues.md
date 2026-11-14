@@ -62,14 +62,14 @@ Written Sat 14 Nov 2026, ~22:30, by Claude on Kanishk's laptop, after merging `m
 - **"Faster than all 7 climate models" (Lincolnshire) and "stronger than any model" (Amazon).** One HighResMIP grid cell at the box centre, through Open-Meteo, compared with a regional reanalysis average. That is weak footing for a headline. A judge from GES DISC may well push back. Suggest: use it as a question ("did the models see it coming?"), not a claim.
 - **"Passes 5/5 cross-examination checks."** The more checks we run, the likelier one fails by chance. Do we have a rule written down for what counts as a pass, and was it set before running? The methods §8g pre-registration record should cover the checks too, not only the linked clues.
 - **Rival research numbers** ("1,216 teams", "~70 repos", rivals' false-alarm rates). These are fine inside the team. Only put them on slides if each has a link.
-- **Giovanni links:** 7 of 11 have never been opened (GWETROOT, SNODP, T2MDEW, CLDTOT, SWGDN, LWGAB, IMERG). Someone logged in to Earthdata clicks each one. Remove any dead ones from `reproduce.py` `GIO`.
+- **Giovanni links:** the variable names were checked against NASA's OPeNDAP descriptions (commit `53d3d5f`), and the LWGAB label was fixed. The links have still not been opened in a browser: someone logged in to Earthdata should click 2–3 before the demo.
 
 ---
 
 ## 5. Data approvals and credits
 
 - **No further approvals are needed for what's built.** NASA POWER, Planetary Computer MODIS, ESA CCI, HadCET, NOAA, GISTEMP, EONET and Open-Meteo need no login. GES DISC data (GPCP v3.3, MERRA-2) was already downloaded with Kanishk's Earthdata account, so that authorisation works.
-- **Only if we add IMERG or AppEEARS from code with Akshita's token:** approve "NASA GESDISC DATA ARCHIVE" and "LP DAAC" under Earthdata → Applications → Authorized Apps. The token goes in `backend/.env`, typed by its owner.
+- **IMERG (added on `main` at 21:30):** IMERG data now downloads with Akshita's token from `backend/.env`, which means her GES DISC access works too. The 13 demo places are cached and committed, so **the deployed server needs no token for them**. For any other place the IMERG witness fails with "No Earthdata token". Decide whether that is fine (the witness just doesn't appear) or whether to put a token in the host's secret settings. Never put it in git. Approve LP DAAC only if we use AppEEARS.
 - **Credits missing from the site and the README** (the licences require them):
   - GeoNames (CC BY 4.0).
   - Open-Meteo (CC BY 4.0).
