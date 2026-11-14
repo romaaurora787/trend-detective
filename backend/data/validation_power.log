@@ -1,0 +1,6 @@
+0.0 {'baseline_raw_ols': 0.0, 'naive_ols_anomalies': np.float64(0.233), 'ours_verdict': np.float64(0.037)}
+0.1 {'baseline_raw_ols': 0.0, 'naive_ols_anomalies': np.float64(0.747), 'ours_verdict': np.float64(0.39)}
+0.2 {'baseline_raw_ols': 0.063, 'naive_ols_anomalies': np.float64(0.993), 'ours_verdict': np.float64(0.933)}
+0.3 {'baseline_raw_ols': 0.607, 'naive_ols_anomalies': np.float64(1.0), 'ours_verdict': np.float64(0.997)}
+0.4 {'baseline_raw_ols': 0.99, 'naive_ols_anomalies': np.float64(1.0), 'ours_verdict': 1.0}
+0.6 {'baseline_raw_ols': 1.0, 'naive_ols_anomalies': np.float64(1.0), 'ours_verdict': 1.0}

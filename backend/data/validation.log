@@ -1,0 +1,5 @@
+0.0 {'baseline_raw_ols': 0.0, 'naive_ols_anomalies': np.float64(0.072), 'naive_mann_kendall': np.float64(0.064), 'ours_mk_hamed_rao': np.float64(0.072), 'ours_ols_neff': 0.066, 'ours_verdict': np.float64(0.052)}
+0.3 {'baseline_raw_ols': 0.0, 'naive_ols_anomalies': np.float64(0.16), 'naive_mann_kendall': np.float64(0.164), 'ours_mk_hamed_rao': np.float64(0.078), 'ours_ols_neff': 0.07, 'ours_verdict': np.float64(0.06)}
+0.5 {'baseline_raw_ols': 0.002, 'naive_ols_anomalies': np.float64(0.28), 'naive_mann_kendall': np.float64(0.266), 'ours_mk_hamed_rao': np.float64(0.086), 'ours_ols_neff': 0.068, 'ours_verdict': np.float64(0.06)}
+0.7 {'baseline_raw_ols': 0.006, 'naive_ols_anomalies': np.float64(0.408), 'naive_mann_kendall': np.float64(0.402), 'ours_mk_hamed_rao': np.float64(0.086), 'ours_ols_neff': 0.066, 'ours_verdict': np.float64(0.06)}
+0.85 {'baseline_raw_ols': 0.05, 'naive_ols_anomalies': np.float64(0.554), 'naive_mann_kendall': np.float64(0.56), 'ours_mk_hamed_rao': np.float64(0.096), 'ours_ols_neff': 0.068, 'ours_verdict': np.float64(0.066)}
