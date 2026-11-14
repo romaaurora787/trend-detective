@@ -78,3 +78,11 @@ def test_new_cached_endpoints_on_lincolnshire():
     assert h["verdict"] == "real"
     a = ok(f"/api/analyse?var=T2M&{q}&start=1991&end=2020").json()
     assert a["result"]["start"] == "1991-01" and a["result"]["vs_world"]["ratio"] > 0
+
+
+def test_variables_ready_flag_for_satellite_variables():
+    d = c.get("/api/variables?lat_min=52.6&lat_max=53.7&lon_min=-1.0&lon_max=0.4").json()
+    by = {v["id"]: v for v in d["variables"]}
+    assert by["T2M"]["ready"] and by["NDVI"]["ready"]  # Lincolnshire is pre-read
+    far = c.get("/api/variables?lat_min=10&lat_max=10.5&lon_min=10&lon_max=10.5").json()
+    assert not {v["id"]: v for v in far["variables"]}["NDVI"]["ready"]

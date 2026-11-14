@@ -88,8 +88,26 @@ def health():
 
 
 @app.get("/api/variables")
-def variables():
-    return {"variables": CATALOGUE, "place_types": PLACE_TYPES}
+def variables(lat_min: float | None = None, lat_max: float | None = None,
+              lon_min: float | None = None, lon_max: float | None = None):
+    """The catalogue. With a box, each variable also says whether it is instant here (`ready`)
+    or slow the first time (`ready: false`, `wait`): issue 3.4, so the site can grey out
+    satellite variables for places nobody has opened yet."""
+    if None in (lat_min, lat_max, lon_min, lon_max):
+        return {"variables": CATALOGUE, "place_types": PLACE_TYPES}
+    from . import ndvi
+    box = [lat_min, lat_max, lon_min, lon_max]
+    out = []
+    for m in CATALOGUE:
+        v = dict(m)
+        if m.get("satellite"):
+            path = ndvi._cache_path(box, product=m["id"])
+            v["ready"] = path.exists()
+            v["wait"] = None if v["ready"] else "about 1–4 minutes the first time (satellite images are read)"
+        else:
+            v["ready"], v["wait"] = True, None
+        out.append(v)
+    return {"variables": out, "place_types": PLACE_TYPES, "box": box}
 
 
 @app.get("/api/analyse")
