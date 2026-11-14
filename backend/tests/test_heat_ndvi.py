@@ -144,3 +144,15 @@ def test_models_wording_uses_direction(monkeypatch):
     assert models.compare("PRECTOTCORR", 0, 0, -0.5, 1981, 2025, "mm/day")["headline"].startswith("Stronger than every model: falling faster")
     assert models.compare("PRECTOTCORR", 0, 0, -0.05, 1981, 2025, "mm/day")["headline"].startswith("Weaker")
     assert models.compare("PRECTOTCORR", 0, 0, -0.2, 1981, 2025, "mm/day")["verdict"] == "inside"
+
+
+def test_imerg_indices_and_parser():
+    from trend_detective import imerg
+    i0, i1, j0, j1 = imerg._indices([52.6, 53.7, -1.0, 0.4])
+    assert (i0, i1, j0, j1) == (1790, 1803, 1426, 1436)  # cell centres -0.95..0.35, 52.65..53.65
+    tiny = imerg._indices([53.0, 53.01, 0.0, 0.01])
+    assert tiny[0] == tiny[1] and tiny[2] == tiny[3]  # at least one cell
+    txt = ("Dataset: x\n/Grid/lon, -0.05, 0.05\n/Grid/lat, 52.55, 52.65\n"
+           "/Grid/precipitation[0][0], 0.1, -9999.9\n/Grid/precipitation[0][1], 0.2, 0.3\n")
+    lon, lat, p = imerg._parse(txt)
+    assert p.shape == (2, 2) and lon.tolist() == [-0.05, 0.05]

@@ -251,6 +251,19 @@ def all_witnesses(
                 "Aqua passes 3 hours later than Terra, so daytime surface temperatures run warmer; compare direction." if var == "LST_DAY" else ""))
         except Exception as ex:
             out.append({"available": False, "name": "MODIS Aqua", "note": f"Aqua record unavailable ({type(ex).__name__})."})
+    if var == "PRECTOTCORR":
+        try:
+            from . import imerg
+            w = witnesses.compare_witness(
+                imerg.NAME, "satellite",
+                "Satellite rain estimates (microwave + infrared) calibrated with GPCC rain gauges: a different method "
+                "from MERRA-2's model, though both use gauge data, so not fully independent",
+                series, imerg.monthly(box), meta["units"],
+                "IMERG starts in 1998, so its verdict covers a shorter period.")
+            w["credit"] = imerg.CREDIT
+            out.append(w)
+        except Exception as ex:
+            out.append({"available": False, "name": "NASA GPM IMERG", "note": f"IMERG unavailable ({str(ex)[:120]})."})
     try:
         e = era5.monthly(var, (lat_min + lat_max) / 2, (lon_min + lon_max) / 2) if var in era5.MAP else None
         if e is not None:

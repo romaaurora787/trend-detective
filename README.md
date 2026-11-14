@@ -89,6 +89,7 @@ All `GET` unless marked. Boxes are `lat_min,lat_max,lon_min,lon_max`. `/api/anal
 - `all_windows` (cross-examine) now has **`timeline` + `became_proven`**: replay the record year by year — "the evidence became strong by 1999 and has stayed strong since".
 - `/api/analyse` returns **`result.coverage`** (months present / expected, longest gap; missing months are never filled).
 - `/api/models?var=T2M&lat_min=..` — **did climate models see it coming?** Observed trend vs 7 CMIP6 HighResMIP models for the same years, and their 2026–2050 range (Open-Meteo Climate API; caveats returned with it).
+- **NASA GPM IMERG** satellite rainfall (V07 monthly, 0.1°, 1998 onward) is now a witness in `/api/witnesses?var=PRECTOTCORR` for any box: only the box is downloaded through NASA's cloud OPeNDAP (~1 min the first time, cached after). Needs `EARTHDATA_TOKEN` in `backend/.env` (git-ignored; see `creds.py`) and the "NASA GESDISC DATA ARCHIVE" app approved on that Earthdata account. Code: `imerg.py`.
 - `data/world_report.json` now has an **instrument alibi** per variable (`alibi` counts and `n_proven_after_alibi`; per point `cells[].alibi`): e.g. cloud cover 88 proven points, 42 of them could be the 2001 instrument switch.
 
 ### NEW: what makes us different (show these prominently)
