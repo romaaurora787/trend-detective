@@ -100,6 +100,37 @@ Claims that failed the corrected tests were removed from our findings (for examp
 ## 8d. The world report
 The same engine run on 15 variables at 111 land points (a regular grid, 45°S–65°N): **1,615 checks**. A typical analysis (months treated as independent) claims a trend in 72% of them; the Detective proves 52%. **28% of typical claims can't be supported.** For root-zone soil moisture it is more than half (57 of 86). The Detective never proved a trend the typical analysis missed, so the difference is entirely over-claiming, not different findings.
 
+## 8e. The cross-examination (questions a sceptic asks)
+Run on every case (`/api/cross-examine`):
+- **Instrument alibi:** a step at each documented change of satellite or model input vs a steady trend (BIC), and the trend re-tested on each single-source segment.
+- **Climate modes:** El Niño (ONI), North Atlantic Oscillation, Indian Ocean Dipole and Pacific Decadal Oscillation are fitted **together with** the trend and removed (Foster & Rahmstorf 2011), so a mode that drifts itself can't take credit for a real trend.
+- **One year carrying it?** (leave-one-year-out) · **two halves** (found in the first, does it hold in the second?) · **every start and end year** (15+ years), with a replay of when the evidence became strong · **speeding up?** (decade rates + a quadratic test with effective sample size).
+- **Which months?** Each calendar month tested alone, Benjamini–Hochberg across the 12, plus the seasonal Kendall test and its correlated-seasons version (Hirsch et al. 1982; Hirsch & Slack 1984).
+- **When did it change?** Pettitt (1979) change point, then "sudden shift or gradual?" by BIC, and whether the year sits next to a documented data change.
+- **Grid resolution:** how many ~50 km cells really sit behind the number.
+
+## 8f. Other witnesses and checks
+- **Satellites:** MODIS NDVI (MOD13Q1) and land surface temperature (MOD11A2), Collection 6.1, Terra with Aqua as an independent second satellite. Only good-quality land pixels inside the box are averaged; missing months stay missing.
+- **ERA5** (via Open-Meteo), **NOAA GHCN** weather stations, **NASA GPCP v3.3**, **ESA CCI soil moisture**, **Met Office HadCET**.
+- **Climate models:** 7 CMIP6 HighResMIP models over the same years, with the caveat that they were given the real ocean temperatures until 2014.
+- **Drought:** SPI-3 and SPI-12 (McKee et al. 1993; WMO 2012), gamma fit per calendar month on 1981–2010.
+- **Map control:** whole years shuffled (same shuffle for every cell, so neighbours stay alike) to show how many cells a typical test marks as "changing" in pure noise.
+
+## 8g. Decided before looking, and what changed afterwards
+Git history (timestamps are public in the repo) shows the order:
+| When (Sat 14 Nov) | Commit | What was fixed in advance |
+|---|---|---|
+| 13:28 | `d34e67c` | Tests (Hamed–Rao MK, OLS with effective n), verdict cut-offs (p < 0.01 strong, p < 0.05 some, "not yet" via Weatherhead), synthetic validation. **Before any demo place was scanned.** |
+| 13:35 | `3d36213` | First demo-case scan, run with those rules. |
+| 17:41 | `6414be3` | Region rules for the linked clues **written down before** the out-of-sample test (`4b741d3`, 18:07). Two rules failed and are reported as rejected. |
+
+**Changed afterwards, and why:**
+- `0aa226c` (19:25): the records and variability tests gave false alarms in our own synthetic checks, so they moved to a 5-year block permutation and some claims were **removed** because they no longer passed.
+- `86d11b2` (19:45): our instrument-alibi scan showed many cloud and sunshine trends could be the 2001 satellite switch, so FINDINGS was corrected downward.
+
+## 8h. Reproduce it yourself
+`notebooks/reproduce_lincolnshire.ipynb` downloads NASA POWER directly (no server code) and gets the same +0.333 °C/decade. Every case also returns the exact NASA POWER request and the same box in NASA Giovanni (`result.reproduce`).
+
 ## 9. What this does *not* tell you
 - **Trend ≠ cause.** We detect change; we don't attribute it.
 - **MERRA-2 is a reanalysis:** a model constrained by observations. Soil wetness and evaporation are model estimates.
@@ -120,3 +151,15 @@ The same engine run on 15 variables at 111 land points (a regular grid, 45°S–
 - Yue, S. & Wang, C. (2004). The Mann-Kendall test modified by effective sample size. *Water Resour. Manage.* 18, 201–218.
 - Acker, J. G. et al. Time-series analysis of SeaWiFS chlorophyll (NASA GES DISC, NTRS).
 - NASA POWER Project, power.larc.nasa.gov. Gelaro, R. et al. (2017), MERRA-2, *J. Climate* 30, 5419–5454.
+- Foster, G. & Rahmstorf, S. (2011). Global temperature evolution 1979–2010. *Environ. Res. Lett.* 6, 044022.
+- Gelman, A. & Stern, H. (2006). The difference between "significant" and "not significant" is not itself statistically significant. *Am. Stat.* 60, 328–331.
+- Hirsch, R. M., Slack, J. R. & Smith, R. A. (1982). Techniques of trend analysis for monthly water quality data. *Water Resour. Res.* 18, 107–121.
+- Hirsch, R. M. & Slack, J. R. (1984). A nonparametric trend test for seasonal data with serial dependence. *Water Resour. Res.* 20, 727–732.
+- Pettitt, A. N. (1979). A non-parametric approach to the change-point problem. *Appl. Statist.* 28, 126–135.
+- McKee, T. B., Doesken, N. J. & Kleist, J. (1993). The relationship of drought frequency and duration to time scales. *8th Conf. Applied Climatology*, AMS. WMO (2012) *Standardized Precipitation Index User Guide*, WMO-No. 1090.
+- Randles, C. A. et al. (2017). The MERRA-2 aerosol reanalysis. *J. Climate* 30, 6823–6850.
+- Lyapustin, A. et al. (2014). Scientific impact of MODIS C5 calibration degradation and C6+ improvements. *Atmos. Meas. Tech.* 7, 4353–4365.
+- Didan, K. (2021). MOD13Q1 v061, NASA LP DAAC, doi:10.5067/MODIS/MOD13Q1.061. Wan, Z., Hook, S. & Hulley, G. (2021). MOD11A2 v061, doi:10.5067/MODIS/MOD11A2.061.
+- Haarsma, R. J. et al. (2016). High Resolution Model Intercomparison Project (HighResMIP v1.0) for CMIP6. *Geosci. Model Dev.* 9, 4185–4208.
+- Chen, C. et al. (2019). China and India lead in greening of the world through land-use management. *Nature Sustainability* 2, 122–129.
+- Allen, R. G. et al. (1998). *Crop evapotranspiration* (FAO-56), for saturation vapour pressure / VPD.

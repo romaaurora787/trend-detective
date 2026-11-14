@@ -101,7 +101,7 @@ Same as `/api/beyond` (see README). Five small tiles:
 - Soil wetness and evaporation have no data over the sea (cells come back null).
 - A searched city gets a 1.5° × 1.5° box (~3–6 NASA cells, about 50 km each), so it's a **regional** picture, not a street-level one.
 
-## 7. NEW (Sat ~21:00): research on the other 1,216 teams → read `docs/research_competition.md`
+## 7. NEW (Sat ~19:45): research on the other 1,216 teams → read `docs/research_competition.md`
 - Many rivals already have Hamed-Rao, FDR, a check-up, a second witness, and compare-two-places. Our pitch should lead with what only we have: the **instrument alibi**, linked clues tested on new places, records and emergence, and the world report.
 - Frontend ideas from it, for you:
   - **"Guess first" question cards** ("Is it really getting hotter here?" → the user guesses → we reveal the verdict).
@@ -109,7 +109,7 @@ Same as `/api/beyond` (see README). Five small tiles:
   - A **compare-two-places** view once `/api/compare` lands.
 - **Correction:** don't show the world report's cloud row as "88 proven" (see FINDINGS §2c).
 
-## 8. NEW (Sat ~23:30): parity with every good rival feature + more. Backend is ready for all of these (see README "cross-examination…")
+## 8. NEW (Sat ~20:15): parity with every good rival feature + more. Backend is ready for all of these (see README "cross-examination…")
 **Case page, new "Cross-examination" block** (`/api/cross-examine`), one row per check with ✔ / ⚠:
 - Instrument alibi (`alibi.headline`; if `changes[].tested`, a tiny before/after slope pair; draw a dashed vertical line at `changes[].date` on the chart)
 - El Niño removed (`el_nino.before` vs `.after` slope; `how_linked` sentence)
@@ -130,7 +130,7 @@ Same as `/api/beyond` (see README). Five small tiles:
 **Natural events** (`/api/events`): small list under the chart; note the sparse archive.
 **From rivals, frontend-only, worth copying:** climate stripes per verdict; shareable link (state in URL hash, you have this); time-lapse/year slider on the map; hatching for cells that fail FDR; a 6-question quiz; a teacher page (lesson plan + printable case); English + one more language; accessibility check (axe); 30-second demo video and ≤7 slides.
 
-## 9. NEW (Sun ~00:30): greenness from space + extreme days
+## 9. NEW (Sat ~20:40): greenness from space + extreme days
 **Greenness (NDVI)** is now an ordinary variable (`id: "NDVI"`, `satellite: true`, `period: "2000–2025"`), so it appears in `/api/variables` and works in analyse / cross-examine / compare / hunches / witnesses.
 - Show a **"reading satellite images… (~1 min the first time)"** spinner when `variable.satellite` is true; demo boxes are pre-cached.
 - Hide the grid-map button for it (`/api/map` returns 422 for satellite variables).
@@ -140,14 +140,14 @@ Same as `/api/beyond` (see README). Five small tiles:
 **Extreme days** (`/api/extreme-days?lat_min=..`): a small table / bar pairs "1980s → last 10 years" per index (`indices[].mean_1980s`, `.mean_last10`, `.headline`), and a mini-chart from `years[]`/`counts[]`. Rows with `rare: true` show "rare here". Lincolnshire: hot days 30 → 59 a year; frost nights 44 → 22.
 **World page**: `variables[].alibi` and `n_proven_after_alibi` → add a column "survive the instrument check" next to "proven" (cloud: 88 proven, 42 could be the 2001 switch).
 
-## 10. NEW (Sun ~02:00): more cross-examination, drought, VPD, control map, "check our work"
+## 10. NEW (Sat ~20:50): more cross-examination, drought, VPD, control map, "check our work"
 - **Cross-examination block**: three more rows. `seasons`: 12 small bars (Jan–Dec, `months[].slope_per_decade`, solid if `proven_fdr`) + `headline`. `change_point`: "When did it change?" sentence (`headline`); draw a dotted line at `change_point.year` when `status` is `sudden_shift`. `climate_modes`: `strongest` sentence + `headline` (before/after slope pair like El Niño).
 - **Drought panel** (`/api/drought`): SPI-12 line chart (`spi12.dates/values`, shade below −1 in amber) + the two count rows like extreme days. Show for rain-related cases.
 - **VPD** is a normal variable (`id: "VPD"`); nothing special.
 - **Map**: under the summary, the `shuffled_control.headline` in a grey box ("pure noise would still light up ~60 cells on a typical map"). Great for the "why our map is honest" story. Optional toggle: real vs shuffled.
 - **"Check our work" box** on every case: list `result.reproduce[]` as links (name + note). Put the notebook link (GitHub) there too.
 
-## 11. NEW (Sun ~03:00): replay slider, coverage, land heat from space, climate models
+## 11. NEW (Sat ~21:00): replay slider, coverage, land heat from space, climate models
 - **Replay slider** (rival xFr05en has one): `cross-examine.all_windows.timeline[]` (end year → p). Drag the end year; show "proven by {became_proven}" when reached. Simple line of p (log scale) with a 0.05 line also works.
 - **Coverage chip** under every verdict: `result.coverage.headline` (e.g. "306 of 310 months present; longest gap 4 months").
 - **LST_DAY / LST_NIGHT** are satellite variables like NDVI (same spinner, no map). Best demo: **Delhi, nights hotter / days cooler** next to Delhi greening.
