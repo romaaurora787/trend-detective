@@ -85,7 +85,8 @@ def fetch_place(p):
     grid, lat, lon = p
     try:
         g = power.fetch_point("GWETROOT", lat, lon).dropna()
-    except Exception:
+    except Exception as e:
+        print("  FETCH FAILED", grid, lat, lon, str(e)[:80], flush=True)
         return None
     if len(g) < 200:  # ocean / ice: no soil
         return None
@@ -95,8 +96,8 @@ def fetch_place(p):
             continue
         try:
             d[v] = power.fetch_point(v, lat, lon).dropna()
-        except Exception:
-            pass
+        except Exception as e:
+            print("  FETCH FAILED", grid, lat, lon, v, str(e)[:80], flush=True)
     return grid, lat, lon, d
 
 
@@ -154,7 +155,7 @@ def main():
     pts = grids()
     print(len(pts), "candidate points", flush=True)
     rows, n_land = [], 0
-    with ThreadPoolExecutor(5) as ex:
+    with ThreadPoolExecutor(2) as ex:
         for i, res in enumerate(ex.map(fetch_place, pts), 1):
             if res:
                 n_land += 1
