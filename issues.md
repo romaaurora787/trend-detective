@@ -117,3 +117,25 @@ Backend sentences print `-0.629`; the website uses a real minus (−0.63). This 
 - **Map:** the shuffled-noise control sentence ("pure noise still marks ~60 of 137").
 - **Footer credits:** all data sources and licences (GeoNames, Open-Meteo/Copernicus, OGL, NOAA, Planetary Computer, IMERG, GISTEMP, EONET, Esri).
 - **Saved examples for an instant load:** `docs/examples/crossexam_T2M_lincolnshire.json` and `witnesses_T2M_lincolnshire.json`.
+
+---
+
+## 8. Replies from Akshita's Claude (Sat ~23:00): all on `main`, please merge `main` into `frontend` again
+
+| # | Status | What changed |
+|---|---|---|
+| §1 freeze + must-show list | **Agreed.** Backend frozen apart from the fixes below | — |
+| 2.1 report card "cloud falling" | **Fixed** (`c399b56`) | Every report-card item now has `instrument_check` {status, headline}. A proven trend that a jump at a documented data change explains better is moved to "Not proven yet" (`label: "mixed"`, old label in `label_before_instrument_check`). Checked: at a flagged point in Chile, "strong" cloud becomes "Not proven: could be the instrument". **For Lincolnshire, cloud, sunshine, sky heat and haze all pass the check** (same direction before and after 2001), so its card was not actually wrong. Catalogue caveats for cloud, sunshine, haze and root-zone soil now name their data changes. **Website:** show ⚠ + `instrument_check.headline` when status is `could_be_instrument` or `doubt` |
+| 2.2 tests take 5 min | **Fixed** (`175821c`): full suite **10 s**, 62 pass | Satellite caches already read through 2025 no longer re-ask the Planetary Computer catalogue (that was 7–12 s per variable; report card 208 s → 1.7 s). IMERG likewise skips NASA's catalogue when cached. All Lincolnshire satellite caches are in git |
+| 2.3 Vite junk file | Done by Kanishk | — |
+| 3.1 Docker cache size | Open (Kanishk deploys) | If the build is too slow, tell us and Akshita's Claude will prune the cache to the 13 demo places |
+| 3.4 satellite variables slow on new places | **Backend done** (`c698604`) | `/api/variables?lat_min=..&lat_max=..&lon_min=..&lon_max=..` gives each variable `ready` (true = instant) and `wait`. **Website:** grey out or warn when `ready` is false |
+| 4 climate-model headlines | **Agreed** | Use as a question ("did the models see it coming?"), not "faster than all models" |
+| 4 "5/5 checks" | **Answered honestly** (`c399b56`) | The five pass rules were written ~20:15, after the Lincolnshire result was known: not pre-registered. `score.checks[]` lists them and `score.rule_note` says so; docs/methods.md §8g has a "Not decided in advance" list. **Website/slides:** show the checks, not just "5/5" |
+| 4 Giovanni links | **Half done** | Every variable name behind the links was checked against NASA's own file descriptions (OPeNDAP); the id pattern matches public Giovanni URLs. **Still needs a person logged in to click 2–3** |
+| 5 approvals | **Done** | Akshita approved NASA GESDISC DATA ARCHIVE + LP DAAC; her token is in her `backend/.env` (git-ignored). **IMERG satellite rainfall is now a witness** (`53d3d5f`, cached for all 13 demo places). Without a token it says "unavailable"; nothing breaks |
+| 5 credits | **Done in docs** (`c399b56`) | README "Data and credits" + full licence wording in docs/methods.md "Data credits and licences" (ERA5/Copernicus sentence, OGL for HadCET, ESA CCI papers, GeoNames, Open-Meteo, NOAA, Planetary Computer, IMERG, MODIS DOIs). **Website footer: Kanishk** |
+| 5 no NASA logo / endorsement | Agreed | Docs now say "NASA does not endorse this project" |
+| 6 PR #1 / PR #2 | Agreed | Close #1, redo its wording by hand. Merge #2 when Akshita and Kanishk say go |
+
+**New since your note (in `main`):** IMERG rainfall witness. It **confirms Amazon drying** (−0.63 vs −0.65 mm/day/decade, 1998–2025) and Beijing wetting, and **does not confirm Delhi or East Africa wetting**. Add those two to the don't-say list.
