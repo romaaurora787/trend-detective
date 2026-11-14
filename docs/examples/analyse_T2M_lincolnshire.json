@@ -56,7 +56,14 @@
             "slope_per_decade": 0.3682972935207545,
             "p": 0.019227272650093545
         },
-        "years_to_detect": 27.719490905832302,
+        "typical_vs_detective": {
+            "typical_p": 1.994852338354545e-18,
+            "typical_slope_per_decade": 0.34454365103014534,
+            "typical_says": "Real trend: rising about 0.345 \u00b0C per decade (p = 2e-18).",
+            "outcome": "agree_trend",
+            "note": "Both agree, and this trend survives the stricter checks."
+        },
+        "years_to_detect": 27.09742995246757,
         "record_years": 45.0,
         "verdict": {
             "label": "strong",
@@ -1804,6 +1811,21 @@
             0.9803,
             1.0182
         ]
+    },
+    "second_witness": {
+        "available": true,
+        "name": "Met Office Central England Temperature (HadCET)",
+        "kind": "thermometers",
+        "independence": "independent",
+        "period": "1981-01 to 2025-12",
+        "nasa_verdict": "strong",
+        "nasa_slope_per_decade": 0.33301096237132893,
+        "witness_verdict": "strong",
+        "witness_slope_per_decade": 0.30742728933144176,
+        "witness_units_note": "",
+        "monthly_correlation": 0.9710986147214465,
+        "agrees": true,
+        "note": "Confirmed: Met Office Central England Temperature (HadCET) also shows a real rising trend."
     },
     "citation": "NASA POWER Project, MERRA-2 monthly data, power.larc.nasa.gov (accessed Nov 2026)"
 }

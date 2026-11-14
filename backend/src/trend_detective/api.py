@@ -13,7 +13,9 @@ import numpy as np
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import power, stats
+from concurrent.futures import ThreadPoolExecutor
+
+from . import power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -97,7 +99,78 @@ def analyse(
             "annual_years": annual.index.tolist(),
             "annual_anomalies": annual.round(4).tolist(),
         },
+        "second_witness": _witness(var, [lat_min, lat_max, lon_min, lon_max], series, meta["units"]),
         "citation": f"NASA POWER Project, {meta['source']} monthly data, power.larc.nasa.gov (accessed Nov 2026)",
+    })
+
+
+def _witness(var, box, series, units):
+    try:
+        return witnesses.second_witness(var, box, series, units)
+    except Exception as e:  # a witness problem must never break the main verdict
+        return {"available": False, "note": f"Second witness unavailable ({type(e).__name__})."}
+
+
+GROUPS = [
+    ("proven", "Proven change", {"strong", "some"}),
+    ("not_yet", "Not proven yet", {"not_yet", "mixed"}),
+    ("none", "No meaningful trend", {"none"}),
+]
+
+
+@app.get("/api/report-card")
+def report_card(
+    lat_min: float = Query(...), lat_max: float = Query(...),
+    lon_min: float = Query(...), lon_max: float = Query(...),
+    witness: bool = True,
+):
+    """Feature B: every catalogue variable for one place, sorted by verdict."""
+    _bbox(lat_min, lat_max, lon_min, lon_max)
+    box = [lat_min, lat_max, lon_min, lon_max]
+
+    def one(meta):
+        try:
+            series, n = power.fetch_area_series(meta["id"], *box)
+            series = series.dropna()
+            r = stats.analyse(series, units=meta["units"])
+        except Exception as e:
+            return {"id": meta["id"], "name": meta["name"], "error": str(e)[:200]}
+        item = {
+            "id": meta["id"], "name": meta["name"], "units": meta["units"], "source": meta["source"],
+            "label": r["verdict"]["label"], "headline": r["verdict"]["headline"],
+            "direction": r["verdict"]["direction"],
+            "slope_per_decade": r["sen_slope_per_decade"], "ci95": r["sen_ci95_per_decade"],
+            "total_change": r["total_change"], "period": f"{r['start']} to {r['end']}",
+            "years_to_detect": r["years_to_detect"],
+            "more_years_needed": (max(r["years_to_detect"] - r["record_years"], 0)
+                                  if r["verdict"]["label"] == "not_yet" and r["years_to_detect"] else None),
+            "typical_outcome": r["typical_vs_detective"]["outcome"],
+            "typical_note": r["typical_vs_detective"]["note"],
+        }
+        if witness:
+            item["second_witness"] = _witness(meta["id"], box, series, meta["units"])
+        return item
+
+    with ThreadPoolExecutor(6) as ex:
+        items = list(ex.map(one, CATALOGUE))
+    groups = []
+    for key, title, labels in GROUPS:
+        members = [i for i in items if i.get("label") in labels]
+        if key == "proven":
+            members.sort(key=lambda i: -abs(i["slope_per_decade"] / ((i["ci95"][1] - i["ci95"][0]) or 1)))
+        if key == "not_yet":
+            members.sort(key=lambda i: i["more_years_needed"] if i["more_years_needed"] is not None else 1e9)
+        groups.append({"key": key, "title": title, "items": members})
+    fooled = [i["name"] for i in items if i.get("typical_outcome") == "fooled"]
+    return _clean({
+        "box": box,
+        "groups": groups,
+        "errors": [i for i in items if "error" in i],
+        "fooled_count": len(fooled),
+        "fooled_variables": fooled,
+        "summary": (f"{len(groups[0]['items'])} proven changes, {len(groups[1]['items'])} not proven yet, "
+                    f"{len(groups[2]['items'])} with no meaningful trend."
+                    + (f" A typical analysis would also have claimed trends in: {', '.join(fooled)}." if fooled else "")),
     })
 
 
@@ -121,26 +194,32 @@ def trend_map(
     for c in cells:
         s = df[c["id"]].dropna()
         if len(s) < 36:
-            slope, p = float("nan"), float("nan")
+            r = {"slope_per_decade": float("nan"), "p": float("nan"), "typical_p": float("nan")}
         else:
-            slope, p = stats.quick_cell_test(s)
-        out.append({**c, "slope_per_decade": slope, "p": p})
-        pvals.append(p)
+            r = stats.cell_tests(s)
+        out.append({**c, **r})
+        pvals.append(r["p"])
     sig = stats.fdr(pvals)
     for c, s_ in zip(out, sig):
         c["significant_fdr"] = bool(s_)
         c["significant_raw"] = bool(np.isfinite(c["p"]) and c["p"] < stats.ALPHA)
+        c["significant_typical"] = bool(np.isfinite(c["typical_p"]) and c["typical_p"] < stats.ALPHA)
     n_valid = int(np.isfinite(pvals).sum())
+    n_typ = sum(c["significant_typical"] for c in out)
+    n_up = sum(c["significant_fdr"] and c["slope_per_decade"] > 0 for c in out)
+    n_down = sum(c["significant_fdr"] and c["slope_per_decade"] < 0 for c in out)
     return _clean({
         "variable": meta,
         "cells": out,
         "summary": {
             "n_cells": n_valid,
+            "n_significant_typical": n_typ,
             "n_significant_raw": sum(c["significant_raw"] for c in out),
             "n_significant_fdr": int(sig.sum()),
-            "n_rising_fdr": sum(c["significant_fdr"] and c["slope_per_decade"] > 0 for c in out),
-            "n_falling_fdr": sum(c["significant_fdr"] and c["slope_per_decade"] < 0 for c in out),
+            "n_rising_fdr": n_up,
+            "n_falling_fdr": n_down,
             "fdr_q": stats.FDR_Q,
+            "story": stats.map_story(n_valid, n_typ, int(sig.sum()), n_up, n_down, meta["name"]),
         },
     })
 
