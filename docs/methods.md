@@ -124,6 +124,10 @@ Git history (timestamps are public in the repo) shows the order:
 | 13:35 | `3d36213` | First demo-case scan, run with those rules. |
 | 17:41 | `6414be3` | Region rules for the linked clues **written down before** the out-of-sample test (`4b741d3`, 18:07). Two rules failed and are reported as rejected. |
 
+**Not decided in advance (be honest about these):**
+- The **cross-examination checks and the "passed X of 5" rule** (`44dd010`, ~20:15) were written after the main Lincolnshire result was known. Read each check, not just the count.
+- The **satellite, drought, climate-mode, change-point and model comparisons** (20:39 onward) were added after the demo places were chosen. Where they weakened a claim, we changed the claim (cloud cover, Delhi daytime heat, Delhi and East Africa rain).
+
 **Changed afterwards, and why:**
 - `0aa226c` (19:25): the records and variability tests gave false alarms in our own synthetic checks, so they moved to a 5-year block permutation and some claims were **removed** because they no longer passed.
 - `86d11b2` (19:45): our instrument-alibi scan showed many cloud and sunshine trends could be the 2001 satellite switch, so FINDINGS was corrected downward.
@@ -163,3 +167,14 @@ Git history (timestamps are public in the repo) shows the order:
 - Haarsma, R. J. et al. (2016). High Resolution Model Intercomparison Project (HighResMIP v1.0) for CMIP6. *Geosci. Model Dev.* 9, 4185–4208.
 - Chen, C. et al. (2019). China and India lead in greening of the world through land-use management. *Nature Sustainability* 2, 122–129.
 - Allen, R. G. et al. (1998). *Crop evapotranspiration* (FAO-56), for saturation vapour pressure / VPD.
+
+## Data credits and licences
+- **NASA POWER** (NASA Langley Research Center POWER Project), MERRA-2 (NASA GMAO), CERES / GEWEX SRB. NASA data are free to use; NASA does not endorse this project.
+- **NASA GPM IMERG** Final V07 monthly: Huffman, G. J. et al. (2023), NASA GES DISC, doi:10.5067/GPM/IMERG/3B-MONTH/07.
+- **NASA GPCP v3.3** monthly precipitation (NASA GES DISC). **NASA GISTEMP v4** (GISS). **NASA EONET** natural events.
+- **NASA MODIS** MOD13Q1 / MYD13Q1 v6.1 (Didan 2021, doi:10.5067/MODIS/MOD13Q1.061) and MOD11A2 / MYD11A2 v6.1 (Wan, Hook & Hulley 2021, doi:10.5067/MODIS/MOD11A2.061), NASA LP DAAC, read via **Microsoft Planetary Computer**.
+- **ERA5:** contains modified Copernicus Climate Change Service information [2026]. Neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains. Served by **Open-Meteo** (CC BY 4.0), which also serves the **CMIP6 HighResMIP** model data (Haarsma et al. 2016).
+- **ESA CCI Soil Moisture** v09.2: Dorigo, W. et al. (2017), ESA CCI Soil Moisture for improved Earth system understanding, *Remote Sens. Environ.* 203, 185–215; Gruber, A. et al. (2019), *Earth Syst. Sci. Data* 11, 717–739.
+- **Met Office Hadley Centre Central England Temperature (HadCET):** © Crown copyright, Met Office, Open Government Licence v3.0.
+- **NOAA:** CPC Oceanic Niño Index and NAO index; PSL Dipole Mode Index (HadISST); NCEI ERSST v5 PDO index; NCEI GHCN monthly station summaries (public domain).
+- **GeoNames** cities15000 (CC BY 4.0), geonames.org.
