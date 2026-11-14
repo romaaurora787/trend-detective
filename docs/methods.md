@@ -65,6 +65,10 @@ We generated 45-year monthly series with a seasonal cycle and autocorrelated noi
 | **Temperature, Central England, 1981–2025** | Met Office HadCET (thermometers): **+0.31 °C/decade** (0.21 to 0.41), strong | MERRA-2 T2M, 25 cells: **+0.32 °C/decade** (0.21 to 0.43), strong | **0.99** |
 | **Rainfall, Lincoln box, 1983–2025** | NASA GPCP v3.3 (satellite + gauges): +0.031 mm/day/decade, not significant yet | MERRA-2 PRECTOTCORR, 15 cells: +0.029 mm/day/decade, not significant yet | **0.97** |
 
+| **Soil moisture, 1992–2024** (Space Agency partner data) | **ESA CCI Soil Moisture COMBINED v09.2** (satellite microwave, daily → monthly, months with ≥5 valid days) | MERRA-2 topsoil wetness | 0.38 (Lincoln box) to 0.74 (Iberia) |
+
+**Soil moisture:** NASA and ESA agree that **no region we tested (Lincoln, England & Wales, Iberia, Northern Europe) shows a significant soil-moisture trend since 1992.** Their month-to-month agreement is only moderate (r = 0.4–0.7). They measure different things: ESA sees the top few centimetres from space, while MERRA-2 is a model's topsoil layer in different units. At grid-cell level they disagree. ESA flags 39 of 205 England cells after the correction (16 wetter, 23 drier), while MERRA-2 flags none. Satellite soil-moisture records can contain jumps when sensors change, so we treat single-cell soil trends as **"needs a second witness"**, not a finding.
+
 MERRA-2 does not assimilate land station air temperatures, so the HadCET agreement is close to an independent confirmation. MERRA-2's corrected rainfall partly uses gauge and GPCP information, so the rainfall agreement shows consistency, not independence.
 
 ## 7. How long until we'd know?
