@@ -29,13 +29,26 @@ Across **1,615 place-variable checks** worldwide, a typical analysis claims a tr
 | Humidity (water in the air) | 83 (81 / 2) | 100 | 17 |
 | **Wind speed** | 40 (**8 / 32**) | 52 | 12 |
 | Rainfall | 39 (26 / 13) | 50 | 11 |
-| Cloud cover | 88 (39 / 49) | 97 | 9 |
+| Cloud cover ⚠️ | ~~88 (39 / 49)~~ **47 survive the instrument check** (see 2c) | 97 | 9 |
 
 **Takeaways:**
 - **Soil moisture is where typical analyses mislead most:** over half the world's apparent soil trends don't survive.
 - **Nights warming everywhere** (88 up, 0 down) and **frost retreating everywhere** it's proven (35 of 35).
 - **Winds mostly slowing** where a change is proven (32 of 40), consistent with the reported global "stilling" of surface winds.
 - "Unsupported" means *not proven once persistence is allowed for*, not proven false.
+
+## 2c. The instrument alibi: we caught our own data (`backend/scripts/instrument_alibi_scan.py`)
+NASA POWER sunshine and cloud come from **GEWEX SRB (1984–2000)** and then **CERES (2001 on)**.
+
+**Cloud cover:**
+- A single jump at 2001 explains the "trend" better than a trend at **59%** of proven places. With the jump at other years it's 6–36%; temperature (no switch) gives 14%.
+- On CERES alone (2001–2025), **47 of 88** survive and **15 reverse direction**.
+
+**Sunshine:** 58 → 28 proven on CERES alone.
+
+**Lincolnshire passes:** sunshine rises about +0.15 per decade under *both* instruments, and is significant on CERES alone (p = 0.015).
+
+Details and the other documented source changes (haze 2014, soil streams 1991/2001/2011, rain by latitude) are in [docs/research_competition.md](docs/research_competition.md).
 
 ## 3. Beyond the trend line ([beyond_scan.md](docs/beyond_scan.md))
 The methods were re-checked for false alarms on synthetic weather where nothing is changing (`backend/scripts/validate_beyond.py`). Shuffling month by month gave too many false alarms (records 13–22%, "more erratic" 15–19%). We now shuffle **whole years in 5-year blocks**: records 5–7% (two-sided limit 10%), "erratic" 4.5–7.5%, and turning points need a BIC gain > 10 (7.7% even in very persistent weather; real breaks still found 93% of the time). **Claims that didn't survive were removed**: Amazon "22% more erratic", Lincolnshire mean-temperature records, and haze record counts in London, Beijing and Delhi (record too short).
