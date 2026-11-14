@@ -15,6 +15,26 @@ Repo: https://github.com/romaaurora787/trend-detective (private until submission
 | **22:00–23:00** | AI variable finder (Claude API, picks **only** from `/api/variables`; dropdown fallback). Fix bugs. | Record the screen for the video; edit to **≤30 s** with subtitles. Take screenshots (verdict card, map, proof chart). | Draft README AI-use notes; final references list |
 | **23:00–23:30** | **Together:** paste the project page text, upload images, add the video link, make the GitHub repo **public**, test all links in a private window, tick both boxes, **SUBMIT**. | | |
 
+### Website priorities for Kanishk (updated)
+Build in this order; each item uses an endpoint documented in the README:
+1. **Case page:** place + variable → charts + **verdict card** with **Typical vs Detective** side by side (`/api/analyse`) and the **second-witness badge**.
+2. **Place report card:** Proven / Not proven yet / No trend (`/api/report-card`).
+3. **"Beyond the line" strip** on the case page: records ×chance, emergence year, season bars, turning point (`/api/beyond`).
+4. **Map** with a "Typical map / Detective map" toggle (`/api/map`, `significant_typical` vs `significant_fdr`).
+5. **Methods page:** proof chart (`docs/images/proof_it_works.png`), cross-checks, linked clues (`/api/links`).
+6. AI variable finder (last; dropdown fallback).
+
+**Rate-limit rule:** NASA POWER blocks bursts. Demo places must load from `backend/data/cache/` (committed). Don't fire many calls in parallel from the browser.
+
+### Hosting and the Space Apps Global Offers (assessed Sat 19:10)
+- **Backend hosting: Google Cloud Run (Global Offer) is preferred to Render's free tier.** Render's free tier sleeps and takes ~30–60 s to wake, and a judge clicking the link may give up. Cloud Run wakes in a few seconds and has a free tier. Package the backend with a Dockerfile (`uv sync` → `uvicorn trend_detective.api:app --host 0.0.0.0 --port $PORT`). The repo data files (cache, GPCP 41 MB, ESA 5 MB) are included in the image. Memory: 1 GB is safe (xarray + pandas).
+- **Frontend:** Vercel, as planned.
+- **GoDaddy free domain (optional, nice for the pitch):** e.g. a short `.space` or `.earth` name shown in the video. Only if set up **before 21:00**, since DNS can take hours to propagate; otherwise use the Vercel URL. Request the FortiGuard classification for whichever URL we submit.
+- **Skip:** Meteomatics (not NASA data, licensing unclear, adds nothing), Google Maps API (Leaflet/MapLibre is enough), Miro.
+- **Microsoft Planetary Computer:** hosts NASA/ESA datasets (MODIS, ESA CCI and more) without Earthdata login. Possible future data source; not needed tonight.
+- **GitHub Copilot:** fine to use, but **add it to the AI-use log** like Claude.
+- Some offers ask for a card for verification. The person signing up enters that themselves.
+
 ### Sunday (polish only, already submitted)
 FortiGuard classification request for the site · fix anything the night revealed · re-record the video if needed · resubmit by **22:00**, not 23:59.
 

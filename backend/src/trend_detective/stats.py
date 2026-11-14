@@ -161,10 +161,11 @@ def typical_vs_detective(naive_p: float, naive_slope_dec: float, verdict_label: 
     typical_sig = naive_p < ALPHA
     detective_sig = verdict_label in {"strong", "some"}
     direction = "rising" if naive_slope_dec > 0 else "falling"
+    p_txt = "p < 0.0001" if naive_p < 0.0001 else f"p = {naive_p:.2g}"
     if typical_sig:
-        typical = f"Real trend: {direction} about {abs(naive_slope_dec):.3g} {units} per decade (p = {naive_p:.2g})."
+        typical = f"Real trend: {direction} about {abs(naive_slope_dec):.3g} {units} per decade ({p_txt})."
     else:
-        typical = f"No significant trend (p = {naive_p:.2g})."
+        typical = f"No significant trend ({p_txt})."
     if typical_sig and not detective_sig:
         outcome, note = "fooled", (
             "A typical analysis would have fooled you. Once we allow for natural ups and downs "
@@ -289,6 +290,39 @@ def cell_tests(series: pd.Series, alpha: float = ALPHA) -> dict:
     return {"slope_per_decade": float(hr.slope * 120), "p": float(hr.p), "typical_p": float(naive.pvalue)}
 
 
+def shuffled_control(df: pd.DataFrame, n_perm: int = 20, seed: int = 0) -> dict:
+    """Pure-noise control for a map: shuffle whole YEARS (the same shuffle for every cell, so
+    neighbouring cells stay alike) and count how many cells the typical test still calls
+    'significant'. Any trend is destroyed by the shuffle, so every hit is a false alarm."""
+    ok = df.dropna(axis=1, thresh=int(0.9 * len(df)))
+    anom = ok.groupby(ok.index.month).transform(lambda x: x - x.mean())
+    anom = anom.dropna()
+    years = np.array(sorted(set(anom.index.year)))
+    full = [y for y in years if (anom.index.year == y).sum() == 12]
+    anom = anom[anom.index.year.isin(full)]
+    Y = anom.to_numpy()  # time x cells
+    n = Y.shape[0]
+    t = np.arange(n) / 12.0
+    tc = t - t.mean()
+    rng = np.random.default_rng(seed)
+    blocks = Y.reshape(len(full), 12, -1)
+    counts = []
+    for _ in range(n_perm):
+        Z = blocks[rng.permutation(len(full))].reshape(n, -1)
+        Zc = Z - Z.mean(axis=0)
+        b = tc @ Zc / (tc @ tc)
+        resid = Zc - np.outer(tc, b)
+        se = np.sqrt((resid ** 2).sum(axis=0) / (n - 2) / (tc @ tc))
+        p = 2 * sps.t.sf(np.abs(b / se), n - 2)
+        counts.append(int((p < ALPHA).sum()))
+    c = np.array(counts)
+    return {"n_cells": int(Y.shape[1]), "n_shuffles": n_perm, "typical_hits_median": float(np.median(c)),
+            "typical_hits_max": int(c.max()), "typical_hits_mean_pct": float(100 * c.mean() / max(Y.shape[1], 1)),
+            "headline": (f"Control: with the years shuffled (any real trend destroyed), a typical test still marks "
+                         f"about {np.median(c):.0f} of {Y.shape[1]} cells as changing (up to {c.max()} in {n_perm} tries). "
+                         "Those are pure false alarms: a typical map's pattern can be this.")}
+
+
 def map_story(n_cells: int, n_typical: int, n_fdr: int, n_up: int, n_down: int, var_name: str) -> str:
     """Feature A for maps: one plain sentence, numbers from code."""
     if n_typical == 0 and n_fdr == 0:
@@ -306,3 +340,43 @@ def map_story(n_cells: int, n_typical: int, n_fdr: int, n_up: int, n_down: int, 
         return (f"A typical map would show {n_typical} of {n_cells} places changing. "
                 f"{n_fdr} are real ({real}); the other {n_typical - n_fdr} could be chance.")
     return f"{n_fdr} of {n_cells} places show a real change ({real})."
+
+
+def robustness(series: pd.Series, units: str = "") -> dict:
+    """Does the verdict depend on where the record starts or ends?
+
+    Re-runs the full analysis on shifted windows: start +5 / +10 years, end -5
+    years. A verdict is "robust" if every window agrees on proven vs not proven
+    and on direction. Trend start and end points are a classic way to be fooled.
+    """
+    s = series.dropna().sort_index()
+    y0, y1 = s.index[0].year, s.index[-1].year
+    windows = [("full record", y0, y1), (f"start {y0 + 5}", y0 + 5, y1), (f"start {y0 + 10}", y0 + 10, y1),
+               (f"end {y1 - 5}", y0, y1 - 5)]
+    rows = []
+    for name, a, b in windows:
+        sub = s[(s.index.year >= a) & (s.index.year <= b)]
+        if len(sub) < 240:  # need 20 years
+            continue
+        r = analyse(sub, units)
+        rows.append({"window": name, "period": f"{a}–{b}", "label": r["verdict"]["label"],
+                     "slope_per_decade": r["sen_slope_per_decade"], "ci95": r["sen_ci95_per_decade"]})
+    if len(rows) < 2:
+        return {"robust": None, "windows": rows, "headline": "Record too short to test robustness."}
+    proven = [r["label"] in {"strong", "some"} for r in rows]
+    signs = {np.sign(r["slope_per_decade"]) for r in rows if r["label"] in {"strong", "some"}}
+    robust = (all(proven) and len(signs) == 1) or not any(proven)
+    full = rows[0]
+    if robust and all(proven):
+        lo = min(r["slope_per_decade"] for r in rows)
+        hi = max(r["slope_per_decade"] for r in rows)
+        msg = (f"Robust: the trend stays proven whichever years we start or end on "
+               f"({lo:+.3g} to {hi:+.3g} {units} per decade across {len(rows)} windows).")
+    elif robust:
+        msg = f"Robust: no window shows a proven trend, whichever years we start or end on ({len(rows)} windows)."
+    else:
+        flips = [r for r in rows[1:] if (r["label"] in {"strong", "some"}) != (full["label"] in {"strong", "some"})]
+        f = flips[0] if flips else rows[1]
+        msg = (f"Fragile: the verdict depends on the years chosen. The {full['period']} record says "
+               f"'{full['label'].replace('_', ' ')}', but {f['period']} says '{f['label'].replace('_', ' ')}'. Treat it with care.")
+    return {"robust": bool(robust), "windows": rows, "headline": msg}

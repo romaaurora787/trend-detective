@@ -84,6 +84,66 @@ CATALOGUE = [
         "tags": ["arctic", "farm"],
         "caveat": "Mostly zero in summer; trend uses regression instead of Sen's slope.",
     },
+    {
+        "id": "SNODP", "name": "Snow depth", "units": "cm", "source": "MERRA-2 (via POWER)",
+        "plain": "How deep the snow on the ground is, on average.",
+        "tags": ["arctic"], "caveat": "Model estimate; zero for most of the year in mild places.",
+    },
+    {
+        "id": "T2MDEW", "name": "Dew point (mugginess)", "units": "°C", "source": "MERRA-2 (via POWER)",
+        "plain": "The temperature at which the air would form dew. Higher means stickier, more humid air.",
+        "tags": ["city", "coast", "rainforest"], "caveat": "",
+    },
+    {
+        "id": "T2M_RANGE", "name": "Day–night temperature range", "units": "°C", "source": "MERRA-2 (via POWER)",
+        "plain": "How much warmer the day gets than the night, on average.",
+        "tags": ["desert", "city", "farm"], "caveat": "",
+    },
+    {
+        "id": "ALLSKY_SFC_LW_DWN", "name": "Heat radiation from the sky", "units": "MJ/m²/day", "source": "CERES / GEWEX SRB",
+        "plain": "Infrared heat sent down to the ground by the air, clouds and greenhouse gases.",
+        "tags": ["any"], "caveat": "Data source changes in 2001 (GEWEX SRB to CERES): check the instrument alibi.",
+    },
+    {
+        "id": "VPD", "name": "Thirst of the air (vapour pressure deficit)", "units": "kPa",
+        "source": "Computed from MERRA-2 temperature and dew point (via POWER)",
+        "plain": "How strongly the air pulls water out of plants and soil. Rising VPD stresses crops and forests and feeds wildfires.",
+        "tags": ["farm", "rainforest", "desert"],
+        "caveat": "Computed from monthly averages, so it slightly understates the daytime peak.",
+        "derived": True,
+    },
+    {
+        "id": "NDVI", "name": "Vegetation greenness (NDVI)", "units": "NDVI (0–1)",
+        "source": "NASA MODIS Terra MOD13Q1 v6.1 (250 m)",
+        "plain": "How green the plants are, seen from space: near 0 bare ground, 0.3 grass or crops, 0.8 dense forest.",
+        "tags": ["farm", "rainforest", "desert", "arctic"],
+        "caveat": "Satellite record starts in 2000 (shorter than the others). Cloudy, snowy and sea pixels are left out. "
+                  "First look at a new place takes a few minutes while the satellite images are read.",
+        "satellite": True, "period": "2000–2025",
+        "citation": "Didan, K. (2021). MOD13Q1 MODIS/Terra Vegetation Indices 16-Day L3 Global 250m SIN Grid V061. "
+                    "NASA EOSDIS LP DAAC. doi:10.5067/MODIS/MOD13Q1.061 (read via Microsoft Planetary Computer)",
+    },
+    {
+        "id": "LST_DAY", "name": "Ground heat by day (satellite)", "units": "°C",
+        "source": "NASA MODIS Terra MOD11A2 v6.1 (1 km)",
+        "plain": "How hot the land surface itself gets in the late morning, measured from space. Cities and bare ground run hottest.",
+        "tags": ["city", "desert", "farm"],
+        "caveat": "Satellite record starts in 2000. Only clear-sky days are seen, so it describes sunny days. "
+                  "First look at a new place takes a few minutes.",
+        "satellite": True, "period": "2000–2025",
+        "citation": "Wan, Z., Hook, S., Hulley, G. (2021). MOD11A2 MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 "
+                    "Global 1km SIN Grid V061. NASA EOSDIS LP DAAC. doi:10.5067/MODIS/MOD11A2.061 (via Microsoft Planetary Computer)",
+    },
+    {
+        "id": "LST_NIGHT", "name": "Ground heat at night (satellite)", "units": "°C",
+        "source": "NASA MODIS Terra MOD11A2 v6.1 (1 km)",
+        "plain": "How warm the land surface stays at night (about 10:30 pm). Cities hold heat at night: the urban heat island.",
+        "tags": ["city", "arctic", "farm"],
+        "caveat": "Satellite record starts in 2000. Only clear nights are seen. First look at a new place takes a few minutes.",
+        "satellite": True, "period": "2000–2025",
+        "citation": "Wan, Z., Hook, S., Hulley, G. (2021). MOD11A2 MODIS/Terra Land Surface Temperature/Emissivity 8-Day L3 "
+                    "Global 1km SIN Grid V061. NASA EOSDIS LP DAAC. doi:10.5067/MODIS/MOD11A2.061 (via Microsoft Planetary Computer)",
+    },
 ]
 
 BY_ID = {v["id"]: v for v in CATALOGUE}
