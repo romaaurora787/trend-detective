@@ -8,7 +8,9 @@
                Resources point to.
   MODIS        for greenness: the Planetary Computer collection + LP DAAC page
 
-Giovanni ids follow its {collection}_{version}_{variable} pattern; MERRA-2
+Giovanni ids follow its {collection}_{version}_{variable} pattern (checked against public
+Giovanni URLs), and every variable name was checked against NASA's own file description
+(OPeNDAP DMR) on 14 Nov 2026. MERRA-2
 cloud and sunshine are MERRA-2's own fields, not the CERES record POWER uses,
 so they are labelled "a different source".
 
@@ -37,7 +39,7 @@ GIO = {
     "WS2M": ("M2TMNXFLX_5_12_4_SPEED", "MERRA-2 surface wind speed (a related height, not exactly 2 m)"),
     "CLOUD_AMT": ("M2TMNXRAD_5_12_4_CLDTOT", "MERRA-2's own cloud: a different source from POWER's CERES record"),
     "ALLSKY_SFC_SW_DWN": ("M2TMNXRAD_5_12_4_SWGDN", "MERRA-2's own sunshine (W/m²): a different source from POWER's CERES record"),
-    "ALLSKY_SFC_LW_DWN": ("M2TMNXRAD_5_12_4_LWGAB", "MERRA-2's own sky heat radiation (W/m²): a different source from POWER's CERES record"),
+    "ALLSKY_SFC_LW_DWN": ("M2TMNXRAD_5_12_4_LWGAB", "MERRA-2's longwave absorbed at the surface (≈ heat radiation from the sky × surface emissivity, W/m²): a different source from POWER's CERES record"),
 }
 IMERG = "GPM_3IMERGM_07_precipitation"
 
