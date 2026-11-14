@@ -327,7 +327,7 @@ button.rrow:hover .rname { color: var(--fall); text-decoration: underline; text-
 .bignum { font-size: var(--text-lg); color: var(--ink-2); }
 .bignum .n { font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem); font-stretch: 112%; line-height: 1; display: block; letter-spacing: -0.03em; }
 .mapv .facts > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-.control { font-size: var(--text-sm); color: var(--ink-2); background: var(--rule-2); border-left: 3px solid var(--ink-3); padding: var(--space-xs) var(--space-sm); border-radius: 0 var(--radius) var(--radius) 0; }
+.control { font-size: var(--text-sm); color: var(--ink-2); background: var(--rule-2); border: 1px solid var(--rule); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius); }
 .key { display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-md); font-size: var(--text-xs); color: var(--ink-2); }
 .key span { display: inline-flex; align-items: center; gap: 6px; }
 .sw { width: 14px; height: 10px; display: inline-block; border-radius: 1px; }
