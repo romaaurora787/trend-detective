@@ -1,0 +1,28 @@
+366 candidate points
+  40/366 points, 2 on land
+  80/366 points, 14 on land
+  120/366 points, 25 on land
+  160/366 points, 41 on land
+  FETCH FAILED global 35.0 -120.0 CLOUD_AMT NASA POWER 429: {"header": "The POWER API failed to complete your request due to
+  FETCH FAILED global 25.0 120.0 EVLAND NASA POWER 429: {"header": "The POWER API failed to complete your request due to
+  200/366 points, 58 on land
+  240/366 points, 83 on land
+  280/366 points, 115 on land
+  320/366 points, 152 on land
+  360/366 points, 181 on land
+
+land points: global 111, uk 71
+warm_moist           global inside 48/51 (94%)      outside 16/60 (27%)      median r inside +0.67
+warm_moist           uk     inside 69/69 (100%)     outside 2/2 (100%)       median r inside +0.93
+soil_heat            global inside 44/85 (52%)      outside 1/25 (4%)        median r inside -0.37
+soil_heat            uk     inside 6/30 (20%)       outside 1/41 (2%)        median r inside -0.22
+wind_frost           global inside 1/13 (8%)        outside 2/51 (4%)        median r inside -0.00
+wind_frost           uk     inside 31/33 (94%)      outside 0/4 (0%)         median r inside -0.61
+haze_sun             global inside 91/110 (83%)     outside 0/0              median r inside -0.36
+haze_sun             uk     inside 55/71 (77%)      outside 0/0              median r inside -0.27
+rain_soil            global inside 110/111 (99%)    outside 0/0              median r inside +0.53
+rain_soil            uk     inside 71/71 (100%)     outside 0/0              median r inside +0.50
+soil_wind_via_heat   global inside 28/85 (33%)      outside 1/25 (4%)        median r inside -0.20
+soil_wind_via_heat   uk     inside 0/30 (0%)        outside 0/41 (0%)        median r inside +0.19
+placebo              global inside 0/111 (0%)       outside 0/0              median r inside +0.01
+placebo              uk     inside 0/71 (0%)        outside 0/0              median r inside +0.01
