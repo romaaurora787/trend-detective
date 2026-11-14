@@ -167,10 +167,10 @@ def fetch_area_series(param: str, lat_min, lat_max, lon_min, lon_max) -> tuple[p
     """
     if lat_max - lat_min > MAX_SPAN or lon_max - lon_min > MAX_SPAN:
         raise PowerError("Region too large: NASA POWER allows at most 10 x 10 degrees")
-    if param == "NDVI":  # satellite greenness, not a POWER parameter
-        from . import ndvi
+    from . import ndvi
+    if param in ndvi.PRODUCTS:  # MODIS satellite variables, not POWER parameters
         try:
-            s = ndvi.monthly([lat_min, lat_max, lon_min, lon_max])
+            s = ndvi.monthly([lat_min, lat_max, lon_min, lon_max], product=param)
         except Exception as e:
             raise PowerError(f"MODIS greenness unavailable: {e}") from e
         return s, ndvi.equivalent_cells([lat_min, lat_max, lon_min, lon_max])

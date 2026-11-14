@@ -13,13 +13,14 @@ from collections import OrderedDict
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import beyond, compare as cmp, context, crossexam, drought, reproduce, era5, events, globalref, guide, heat, places, stations, power, stats, witnesses
+from . import beyond, compare as cmp, context, crossexam, drought, models, reproduce, era5, events, globalref, guide, heat, places, stations, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -115,6 +116,7 @@ def analyse(
         result["vs_world"] = globalref.vs_world(var, result["sen_slope_per_decade"], result["start"], result["end"])
     except Exception:
         result["vs_world"] = None
+    result["coverage"] = _coverage(series)
     try:
         result["reproduce"] = reproduce.links(var, [lat_min, lat_max, lon_min, lon_max],
                                               int(result["start"][:4]), int(result["end"][:4]))
@@ -177,6 +179,23 @@ def _series(var, box, start=None, end=None):
     return series, n_cells
 
 
+def _coverage(series) -> dict:
+    """How complete is the record behind the verdict? Missing months stay missing (never filled)."""
+    full = pd.date_range(series.index[0], series.index[-1], freq="MS")
+    have = series.index.intersection(full)
+    miss = full.difference(have)
+    gap, run, prev = 0, 0, None
+    for m in miss:
+        run = run + 1 if prev is not None and (m.year * 12 + m.month) - (prev.year * 12 + prev.month) == 1 else 1
+        gap, prev = max(gap, run), m
+    pct = 100 * len(have) / len(full)
+    msg = (f"Complete record: all {len(full)} months present." if not len(miss) else
+           f"{len(have)} of {len(full)} months present ({pct:.0f}%); longest gap {gap} month{'s' if gap != 1 else ''}. "
+           "Missing months are left out, never filled in.")
+    return {"months_present": int(len(have)), "months_expected": int(len(full)), "percent": round(pct, 1),
+            "longest_gap_months": int(gap), "headline": msg}
+
+
 def _parse_box(txt: str) -> list[float]:
     try:
         b = [float(x) for x in txt.split(",")]
@@ -228,7 +247,8 @@ def all_witnesses(
                 "MODIS on NASA's Aqua satellite (since mid-2002)", "satellite",
                 "A second satellite with its own sensor and calibration, passing over in the afternoon instead of the morning: "
                 "independent of Terra's sensor drift, same kind of measurement",
-                series, ndvi.monthly(box, platform="aqua"), meta["units"]))
+                series, ndvi.monthly(box, platform="aqua", product=var), meta["units"],
+                "Aqua passes 3 hours later than Terra, so daytime surface temperatures run warmer; compare direction." if var == "LST_DAY" else ""))
         except Exception as ex:
             out.append({"available": False, "name": "MODIS Aqua", "note": f"Aqua record unavailable ({type(ex).__name__})."})
     try:
@@ -332,6 +352,25 @@ def natural_events(lat_min: float = Query(...), lat_max: float = Query(...),
         raise HTTPException(502, f"NASA EONET unavailable ({type(e).__name__})")
 
 
+@app.get("/api/models")
+@memo
+def climate_models(var: str, lat_min: float = Query(...), lat_max: float = Query(...),
+                   lon_min: float = Query(...), lon_max: float = Query(...),
+                   start: int | None = Query(None, ge=1981, le=2025), end: int | None = Query(None, ge=1981, le=2025)):
+    """Did climate models see it coming? Observed NASA trend vs 7 CMIP6 HighResMIP models, + 2026–2050."""
+    meta = _var(var)
+    box = [lat_min, lat_max, lon_min, lon_max]
+    series, _ = _series(var, box, start, end)
+    a = stats.analyse(series, units=meta["units"])
+    y0, y1 = int(a["start"][:4]), int(a["end"][:4])
+    try:
+        out = models.compare(var, (lat_min + lat_max) / 2, (lon_min + lon_max) / 2,
+                             a["sen_slope_per_decade"], y0, y1, meta["units"])
+    except Exception as e:
+        raise HTTPException(502, f"Climate models unavailable: {e}"[:300])
+    return _clean({"variable": meta, "box": box, "observed_label": a["verdict"]["label"], **out})
+
+
 @app.get("/api/drought")
 @memo
 def drought_months(lat_min: float = Query(...), lat_max: float = Query(...),
@@ -408,7 +447,7 @@ def report_card(
 
     # satellite greenness is slow the first time: include it only once it has been read for this box
     from . import ndvi
-    metas = [m for m in CATALOGUE if not m.get("satellite") or ndvi._cache_path(box).exists()]
+    metas = [m for m in CATALOGUE if not m.get("satellite") or ndvi._cache_path(box, product=m["id"]).exists()]
     with ThreadPoolExecutor(6) as ex:
         items = list(ex.map(one, metas))
     groups = []
@@ -424,6 +463,9 @@ def report_card(
         "box": box,
         "groups": groups,
         "errors": [i for i in items if "error" in i],
+        "not_yet_read": [{"id": m["id"], "name": m["name"],
+                          "note": "Satellite variable: open it once to read the images for this place (a few minutes)."}
+                         for m in CATALOGUE if m not in metas],
         "fooled_count": len(fooled),
         "fooled_variables": fooled,
         "summary": (f"{len(groups[0]['items'])} proven changes, {len(groups[1]['items'])} not proven yet, "

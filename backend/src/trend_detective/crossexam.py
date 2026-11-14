@@ -450,8 +450,25 @@ def all_windows(series: pd.Series, min_years: int = 15) -> dict:
                "Be careful which years you quote.")
     else:
         msg = f"Mostly consistent: {same} of {n} start/end choices ({same / n:.0%}) show it {word}."
+    # Replay: growing the record one year at a time from its first year, when did the evidence become strong?
+    first = int(yrs[0])
+    timeline = sorted((c for c in cells if c["start"] == first), key=lambda c: c["end"])
+    became = None
+    for k, c in enumerate(timeline):
+        if all(t["p"] < ALPHA and np.sign(t["slope_per_decade"]) == sign for t in timeline[k:]):
+            became = c["end"]
+            break
+    if became is not None:
+        when = (f" Replaying the record from {first}, the evidence became strong by {became} "
+                f"and has stayed strong every year since.")
+    elif timeline and timeline[-1]["p"] < ALPHA:
+        when = f" Replaying the record from {first}, the evidence has only just become strong (it came and went before)."
+    else:
+        when = ""
     return {"n_windows": n, "same_direction": int(same), "proven_same_direction": int(sig_same),
-            "proven_opposite": int(sig_opp), "min_years": min_years, "cells": cells, "headline": msg,
+            "proven_opposite": int(sig_opp), "min_years": min_years, "cells": cells, "headline": msg + when,
+            "timeline": [{"end": c["end"], "p": c["p"], "slope_per_decade": c["slope_per_decade"]} for c in timeline],
+            "became_proven": became,
             "method": "Yue–Wang modified Mann–Kendall on yearly means, every window of 15 years or more"}
 
 
@@ -527,9 +544,9 @@ def extremes(series: pd.Series, units: str) -> dict:
 # --------------------------------------------------------------------------- 8. resolution
 def resolution(n_cells: int, box: list[float], var: str = "") -> dict:
     km = 111 * (box[1] - box[0])
-    if var == "NDVI":
+    if var in ("NDVI", "LST_DAY", "LST_NIGHT"):
         return {"label": "resolved", "n_cells": n_cells, "box_km": round(km),
-                "headline": "Satellite pixels are 250 m across: thousands of them are averaged over this area."}
+                "headline": "Satellite pixels are 250 m to 1 km across: thousands of them are averaged over this area."}
     if n_cells >= 4:
         lab, msg = "resolved", f"{n_cells} NASA grid cells (~50 km each) inside this area: a regional picture."
     elif n_cells >= 2:

@@ -73,9 +73,31 @@ Rules were committed **before** testing, then tested on 111 global and 71 UK gri
 - **Rain fills next month's soil:** 99%.
 - **Rejected:** dry soil → wind, cloud → day–night range. The placebo held in **0 of 182** places.
 
+## 4b. New evidence (Sun early hours): satellites, seasons, climate modes, drought
+**Satellite greenness (MODIS NDVI, 2000–2025; Terra and Aqua agree everywhere below):**
+- **Delhi greening** +0.020 NDVI/decade (p ≈ 6e-9), **Beijing** +0.030 (p ≈ 0), **Spain** +0.016, **Sahel** +0.006 (the "re-greening"). Matches Chen et al. 2019 (China and India lead the world's greening).
+- **Amazon (Rondônia) browning** −0.0045/decade (Aqua −0.0067, p ≈ 4e-8): deforestation and drought.
+- **Lincolnshire:** not proven over the whole year (p = 0.09), but the **seasonal Kendall test is significant (p = 0.009), driven by autumn**: a longer growing season.
+
+**Delhi: nights hotter, days cooler at the ground** (MODIS land surface temperature): night +0.70 °C/decade, late morning −0.43 °C/decade, both proven. Same place: greener (NDVI up) and the air less "thirsty" (VPD −0.11 kPa/decade). Irrigation and greening cool the daytime surface; nights keep warming.
+
+**Amazon drying is real and growing:** rain −0.53 mm/day/decade, confirmed by NASA GPCP v3.3; **drought months (SPI-3 ≤ −1) 0.9 a year in the 1980s → 9.4 a year in the last 10 years**; driest 12 months ended Jan 2016 (the 2015–16 El Niño). VPD +0.08 kPa/decade (strong).
+
+**Climate modes:** Spain's winter rain follows the North Atlantic Oscillation (r = −0.65); Lincolnshire's winter temperature too (r = +0.53), and its warming survives removing the NAO (+0.36 °C/decade). East Africa rain follows the Indian Ocean Dipole and El Niño.
+
+**When did the evidence become strong?** Replaying each record from 1981: Lincolnshire warming proven by 1999 and every year since; Svalbard by 2005; Amazon drying by 2005; Delhi greening by 2015.
+
+**Change points:** Lincolnshire warming is gradual (a steady trend fits as well as a jump). East Africa cloud shows a sudden shift around 1998 (near the data-source change: see 2c).
+
+**A typical map lights up on pure noise:** shuffle the years (destroying any trend) and a typical test still marks ~60 of 137 England & Wales soil cells "changing" (up to 111).
+
+**Reproducible from scratch:** `notebooks/reproduce_lincolnshire.ipynb` downloads NASA POWER directly and gets the same +0.333 °C/decade.
+
 ## 5. Data
 - **NASA POWER:** no login; MERRA-2 and CERES; 1981–2025.
 - **NASA GPCP v3.3:** global, 1983–2025; downloaded on the team server.
 - **ESA CCI soil moisture v09.2:** 1978–2024; aggregated on the team server.
 - **Met Office HadCET.**
+- **NASA MODIS** MOD13Q1 (NDVI) and MOD11A2 (land surface temperature), Terra + Aqua, via Microsoft Planetary Computer (no login).
+- **NOAA climate indices:** ONI, NAO, Dipole Mode Index (IOD), PDO. **NASA GISTEMP v4.** **ERA5** via Open-Meteo. **NOAA GHCN** stations. **NASA EONET.**
 - **Caveat:** NASA POWER rate-limits bursts. Demo cases must come from the cache.
