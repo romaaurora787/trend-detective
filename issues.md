@@ -12,7 +12,7 @@ Written Sat 14 Nov 2026, ~22:30, by Claude on Kanishk's laptop, after merging `m
 | **2.4 "3 of 3 independent" counts ERA5** | ✖ **Still open** (checked live just now) |
 | 2.5 Hyphen-minus in backend sentences | ✖ Open, cosmetic |
 | Don't-say list | Add: Delhi wetting and East Africa wetting (IMERG doesn't confirm them) |
-| 3.1–3.2 Deploy | ✔ **Live: https://kaakserver.tail042e87.ts.net/trend-detective/** (Kanishk's server, Tailscale Funnel; backend in Docker, restarts on reboot). Kanishk redeploys with one script. Cloud Run copy still running as a backup. Vercel not used |
+| 3.1–3.2 Deploy | ✔ **Live: https://kaakserver.tail042e87.ts.net/trend-detective/** (Kanishk's server, Tailscale Funnel; backend in Docker, restarts on reboot). Kanishk redeploys with one script. The Cloud Run copy was deleted (Sun 00:30). Vercel not used |
 | 3.4 Slow satellite variables | ✔ `/api/variables?box` gives `ready`; the dropdown says "slow here: about 1–4 minutes" |
 | 3.5 `VITE_API_URL` | ✔ Same origin (`/trend-detective`) |
 | 4 Score rules written after the result | ✔ `score.checks` + `rule_note`; the website shows them under "How the 5 checks are scored" |
