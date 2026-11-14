@@ -15,6 +15,28 @@ All numbers come from code in `backend/` on NASA POWER monthly data, 1981–2025
 - **B. Place report card.** Lincolnshire: **10 proven, 1 not yet (wind, ~24 more years), 4 no trend.**
 - **C. Second witness.** Met Office, NASA GPCP (global rainfall) and ESA soil moisture each confirm or caution against a verdict.
 
+## 2b. The world report: 15 variables × 111 land points (`/api/world`, `backend/scripts/world_report.py`)
+Across **1,615 place-variable checks** worldwide, a typical analysis claims a trend in **1,166 (72%)**. The Detective proves **834 (52%)**. **332 of the typical claims (28%) can't be supported** once natural persistence is accounted for. The Detective never proved a trend the typical analysis missed (0 cases), so it isn't finding different trends, only refusing to over-claim.
+
+| Variable | Proven (↑ / ↓) | Typical claims | Unsupported |
+|---|---|---|---|
+| **Root-zone soil wetness** | 29 (20 / 9) of 109 | 86 | **57**, more than half the world's points |
+| **Topsoil wetness** | 35 (25 / 10) of 110 | 83 | **48** |
+| Evaporation from land | 43 (31 / 12) | 77 | 34 |
+| Air temperature | **80 (79 / 1)** of 111 | 96 | 16 |
+| **Night-time lows** | **88 (88 / 0)** | 93 | 5 |
+| **Frost days** | **35 (0 / 35)** of 64 frost places | 52 | 17 |
+| Humidity (water in the air) | 83 (81 / 2) | 100 | 17 |
+| **Wind speed** | 40 (**8 / 32**) | 52 | 12 |
+| Rainfall | 39 (26 / 13) | 50 | 11 |
+| Cloud cover | 88 (39 / 49) | 97 | 9 |
+
+**Takeaways:**
+- **Soil moisture is where typical analyses mislead most:** over half the world's apparent soil trends don't survive.
+- **Nights warming everywhere** (88 up, 0 down) and **frost retreating everywhere** it's proven (35 of 35).
+- **Winds mostly slowing** where a change is proven (32 of 40), consistent with the reported global "stilling" of surface winds.
+- "Unsupported" means *not proven once persistence is allowed for*, not proven false.
+
 ## 3. Beyond the trend line ([beyond_scan.md](docs/beyond_scan.md))
 The methods were re-checked for false alarms on synthetic weather where nothing is changing (`backend/scripts/validate_beyond.py`). Shuffling month by month gave too many false alarms (records 13–22%, "more erratic" 15–19%). We now shuffle **whole years in 5-year blocks**: records 5–7% (two-sided limit 10%), "erratic" 4.5–7.5%, and turning points need a BIC gain > 10 (7.7% even in very persistent weather; real breaks still found 93% of the time). **Claims that didn't survive were removed**: Amazon "22% more erratic", Lincolnshire mean-temperature records, and haze record counts in London, Beijing and Delhi (record too short).
 
