@@ -207,7 +207,9 @@ def analyse(series: pd.Series, units: str = "", alpha: float = ALPHA) -> dict:
         half = sps.t.ppf(1 - alpha / 2, ols["n_eff"] - 2) * ols["se"]
         sen, lo, hi = ols["slope"], ols["slope"] - half, ols["slope"] + half
     record_years = (len(y)) / 12.0
-    n_star = years_to_detect(sen, ols["resid_sd"], ols["r1"])
+    # Weatherhead et al. derive n* for a least-squares trend, so use the OLS
+    # slope here (Sen's median can be far smaller for skewed data like rain).
+    n_star = years_to_detect(ols["slope"], ols["resid_sd"], ols["r1"])
     v = _verdict(hr.p, ols["p"], sen * 10, lo * 10, hi * 10, n_star, record_years, units)
 
     return {
