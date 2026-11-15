@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { api, examples, type Analysis, type Box, type Cite, type Models, type Outlook } from "./api";
 import { Reveal } from "./Chart";
-import { CheckOurWork, CrossExamBlock, WitnessList, useCrossExam, useLive } from "./CrossExam";
+import { CheckOurWork, CrossExamBlock, Failed, WitnessList, useCrossExam, useLive } from "./CrossExam";
 import { LABELS, dirTone, focusSearch, luckText, pText, placeName, plain, sameBox, short, signed } from "./lib";
 import { StoryChart, StoryKey, type Stage } from "./Story";
 import { Impact } from "./Impact";
@@ -14,6 +14,7 @@ export function useAnalysis(varId: string, box: Box) {
   const [data, setData] = useState<Analysis | null>(isDefault ? examples.analyse : null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [n, setN] = useState(0); // bumped by retry()
   useEffect(() => {
     let live = true;
     setLoading(true);
@@ -24,9 +25,9 @@ export function useAnalysis(varId: string, box: Box) {
       .finally(() => live && setLoading(false));
     return () => { live = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [varId, box.join()]);
+  }, [varId, box.join(), n]);
   const stale = !!data && (data.variable.id !== varId || !sameBox(data.box, box));
-  return { data, loading, error, stale };
+  return { data, loading, error, stale, retry: () => setN((x) => x + 1) };
 }
 
 function YearsBar({ need, have }: { need: number | null; have: number }) {
@@ -117,7 +118,7 @@ function Cases({ cur }: { cur: string }) {
 }
 
 export function CaseView({ varId, box, onReport }: { varId: string; box: Box; onReport: () => void }) {
-  const { data, loading, error, stale } = useAnalysis(varId, box);
+  const { data, loading, error, stale, retry } = useAnalysis(varId, box);
   const x = useCrossExam(varId, box);
   const aw = x.data?.all_windows;
   const replay = aw?.timeline && aw.timeline.length > 1 ? { timeline: aw.timeline, proven: aw.became_proven ?? null } : null;
@@ -125,13 +126,14 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
   const steps = data ? buildSteps(data, replay ? aw?.headline ?? null : null) : [];
   const [stepsRef, active] = useActiveStep(steps.length);
 
-  if (!data) {
+  // A new place that failed must not leave the previous place's case on screen.
+  if (!data || (stale && error)) {
     return (
       <main className="sheet" aria-busy={loading}>
         <section className="frame hero hero-wait">
           <div className="bar-top"><span className="tag">[CASE] {placeName(box)}</span></div>
-          <p className="hero-line">Reading 45 years <span className="hl">of NASA data…</span></p>
-          <p className="lede" role="status">{error ?? "Fetching every month for this place. The first look at a new place takes a few seconds."}</p>
+          <p className="hero-line">{error ? <>NASA's server <span className="hl">is busy.</span></> : <>Reading 45 years <span className="hl">of NASA data…</span></>}</p>
+          {error ? <Failed msg={error} retry={retry} /> : <p className="lede" role="status">Fetching every month for this place. The first look at a new place takes a few seconds.</p>}
         </section>
       </main>
     );
@@ -148,7 +150,7 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
       <section className="frame hero">
         <div className="bar-top">
           <span className="tag">[CASE] {place} · {r.start.slice(0, 4)}–{r.end.slice(0, 4)}</span>
-          <span className="tag" role="status">{error ? <span className="error">{error}</span> : loading ? "[LIVE] checking NASA's record…" : `[${data.n_cells} NASA grid cell${data.n_cells === 1 ? "" : "s"}] ${v.source}`}</span>
+          <span className="tag" role="status">{error ? <><span className="error">{error}</span> <button className="linkish" onClick={retry}>Try again</button></> : loading ? "[LIVE] checking NASA's record…" : `[${data.n_cells} NASA grid cell${data.n_cells === 1 ? "" : "s"}] ${v.source}`}</span>
         </div>
         <h1 className="hero-line">{v.name} in {place}. <span className="hl">Really changing?</span></h1>
         <div className="hero-foot">
@@ -197,7 +199,7 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
       <Reveal className="frame sec">
         <h2 className="sec-title"><span className="tag">[{String(steps.length + 1).padStart(2, "0")}]</span>Cross-examination</h2>
         <p className="sec-lede">A sceptic's checks. Each one tries to explain the trend away.</p>
-        <CrossExamBlock x={x.data} error={x.error} varId={v.id} units={short(r.units)} />
+        <CrossExamBlock x={x.data} error={x.error} retry={x.retry} varId={v.id} units={short(r.units)} />
       </Reveal>
 
       <Reveal className="frame sec">
@@ -251,7 +253,7 @@ function By2050({ varId, box, r }: { varId: string; box: Box; r: Analysis["resul
   const m = useLive<Models | null>(() => api.models(varId, box), `${varId}|${box}`, null); // only for the "so far" verdict
   const [pick, setPick] = useState<string>("SSP2-4.5");
   const u = short(r.units);
-  if (!o.data) return <p className="note pad" role="status">{o.error ? <span className="error">{o.error}</span> : "Working out three what-ifs for 2050…"}</p>;
+  if (!o.data) return o.error ? <Failed msg={o.error} retry={o.retry} /> : <p className="note pad" role="status">Working out three what-ifs for 2050…</p>;
   const { trend: t, models: md, scenarios: sc, disclaimer } = o.data;
   const chosen = sc.available ? sc.scenarios.find((x) => x.id === pick) ?? sc.scenarios[1] : null;
   const spans = [t.available ? t : null, md.available ? md : null, ...(sc.available ? sc.scenarios : [])].filter(Boolean) as Spanish[];
@@ -308,10 +310,10 @@ const ital = (t: string) => t.split(/\*([^*]+)\*/).map((p, i) => (i % 2 ? <i key
 /** APA / Harvard / BibTeX for this case, from /api/cite (B6). */
 function CiteBox({ varId, name }: { varId: string; name: string }) {
   const url = location.href;
-  const { data, error } = useLive<Cite | null>(() => api.cite(varId, name, url), `${varId}|${name}|${url}`, null);
+  const { data, error, retry } = useLive<Cite | null>(() => api.cite(varId, name, url), `${varId}|${name}|${url}`, null);
   const [fmt, setFmt] = useState<(typeof FMT)[number][0]>("apa");
   const [copied, setCopied] = useState(false);
-  if (!data) return <p className="note pad" role="status">{error ? <span className="error">{error}</span> : "Writing the references…"}</p>;
+  if (!data) return error ? <Failed msg={error} retry={retry} /> : <p className="note pad" role="status">Writing the references…</p>;
   const text = data.items.map((it) => it[fmt].replace(/\*/g, "")).join(fmt === "bibtex" ? "\n\n" : "\n");
   const copy = () => navigator.clipboard?.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1600); });
   return (

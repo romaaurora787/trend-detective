@@ -129,6 +129,8 @@ async function get<T>(path: string): Promise<T> {
   }
   if (!r.ok) {
     const body = await r.json().catch(() => null);
+    // 5xx = an upstream source (NASA POWER, Open-Meteo…) failed or is rate-limited: say so plainly, the UI offers a retry.
+    if (r.status >= 500) throw new Error("NASA's data server is busy right now, so this part couldn't load. Try again in a minute.");
     throw new Error(body?.detail ?? `The server answered ${r.status}.`);
   }
   return r.json();

@@ -10,14 +10,26 @@ export const isHome = (varId: string, box: Box) => varId === "T2M" && sameBox(bo
 /** Live fetch with a saved example for the home case, so the demo never opens empty. */
 export function useLive<T>(load: () => Promise<T>, key: string, example: T | null) {
   const [s, set] = useState<{ key: string; data: T | null; error: string | null }>({ key, data: example, error: null });
+  const [n, setN] = useState(0); // bumped by retry()
   useEffect(() => {
     let live = true;
     set({ key, data: example, error: null });
     load().then((d) => live && set({ key, data: d, error: null })).catch((e: Error) => live && set((o) => ({ ...o, error: e.message })));
     return () => { live = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
-  return s.key === key ? s : { data: example, error: null };
+  }, [key, n]);
+  const retry = () => setN((x) => x + 1);
+  return s.key === key ? { ...s, retry } : { data: example, error: null, retry };
+}
+
+/** A part of the page that failed to load: plain message + retry. */
+export function Failed({ msg, retry }: { msg: string; retry: () => void }) {
+  return (
+    <p className="failed pad" role="alert">
+      <span className="error">{msg}</span>
+      <button className="btn ghost" onClick={retry}>Try again</button>
+    </p>
+  );
 }
 
 export const useCrossExam = (varId: string, box: Box) =>
@@ -42,10 +54,10 @@ function MonthBars({ months, varId }: { months: { month: string; slope_per_decad
 
 type Row = { name: string; sec: { headline?: string; error?: string; status?: string } | undefined; pass?: boolean; extra?: ReactNode };
 
-export function CrossExamBlock({ x, error, varId, units }: { x: CrossExam | null; error: string | null; varId: string; units: string }) {
+export function CrossExamBlock({ x, error, retry, varId, units }: { x: CrossExam | null; error: string | null; retry: () => void; varId: string; units: string }) {
   const [ref, seen] = useInView<HTMLDivElement>();
   const passed = useTween(seen && x?.score.proven ? x.score.passed ?? 0 : 0, 1200);
-  if (!x) return <p className="status pad" role="status">{error ? <span className="error">{error}</span> : "Putting this trend through the sceptic's checks…"}</p>;
+  if (!x) return error ? <Failed msg={error} retry={retry} /> : <p className="status pad" role="status">Putting this trend through the sceptic's checks…</p>;
 
   const scored = x.score.proven;
   // Same pass rules as backend crossexam.py score, so the marks add up to its "passed N of 5".
@@ -111,7 +123,8 @@ export function CrossExamBlock({ x, error, varId, units }: { x: CrossExam | null
 const BADGE = { confirmed: "Confirmed", consistent: "Consistent", caution: "Caution" };
 
 export function WitnessList({ varId, box, fallback }: { varId: string; box: Box; fallback: Witness }) {
-  const { data } = useLive<Witnesses | null>(() => api.witnesses(varId, box), `${varId}|${box}`, isHome(varId, box) ? examples.witnesses : null);
+  const { data, error, retry } = useLive<Witnesses | null>(() => api.witnesses(varId, box), `${varId}|${box}`, isHome(varId, box) ? examples.witnesses : null);
+  if (!data && error) return <Failed msg={error} retry={retry} />;
   const list = data?.witnesses.filter((w) => w.available) ?? [];
   if (!list.length) {
     const b = badgeOf(fallback);
