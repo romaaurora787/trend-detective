@@ -4,7 +4,7 @@ Usage (from the repo root):
     backend/.venv/bin/python docs/demo/make_slides.py --team "Your Team Name"
 
 The screenshots in docs/demo/img/ were taken from the live site on Sun 15 Nov 2026
-(browser at 1280x800). Every number on the slides comes from FINDINGS.md / the API;
+(browser at 1280x800); refreshed ~17:30 after the look-freeze. Every number on the slides comes from FINDINGS.md / the API;
 keep them in step with docs/SUBMISSION.md if anything changes.
 
 AI-use note: drafted with Claude (Anthropic) during the hackathon.
@@ -126,7 +126,7 @@ def build(team: str, out: Path) -> None:
         ax.text(0.45, 1.4, f"NASA Space Apps Challenge 2026: “{CHALLENGE}”", color=MUTED, fontsize=15,
                 va="top", **BODY)
         ax.text(0.45, 1.02, "Lincoln, UK  ·  15 November 2026", color=MUTED, fontsize=15, va="top", **BODY)
-        picture(fig, "hero.jpg", (6.35, 1.55, 6.55, 4.09))
+        picture(fig, "hero2.jpg", (6.35, 1.55, 6.55, 4.09))
         caption(ax, 6.35, 1.42, "The live site: pick a place and a NASA variable, scroll the evidence.", size=10)
         save(pdf, fig)
         plt.close(fig)
@@ -181,80 +181,68 @@ def build(team: str, out: Path) -> None:
             "A 7-step scroll story: raw record, seasons\nremoved, trend, “could it be chance?”",
             "Corrected tests (Mann–Kendall with\nHamed–Rao, least squares with n_eff).",
             "**A verdict in plain words: strong evidence,\nsome, not yet (“about N more years”), none.",
-        ], size=17, gap=0.48)
-        picture(fig, "chance.jpg", (6.0, 1.0, 6.88, 4.3))
+            "Cite this, a CSV, the NASA request, Giovanni,\nand a notebook that rebuilds the number.",
+        ], size=15, gap=0.43)
+        picture(fig, "chance2.jpg", (6.0, 1.15, 6.88, 4.3))
         caption(ax, 6.0, 5.95, "Lincolnshire air temperature: 540 months carry the evidence of", color=INK)
         caption(ax, 6.0, 5.67, "only ~326 independent ones. Still proven: +0.33 °C per decade.", color=INK)
+        caption(ax, 6.0, 0.98, "Data: NASA POWER (MERRA-2, CERES) · MODIS · GPM IMERG · GPCP · GISTEMP · GLDAS · GRACE ·", size=9)
+        caption(ax, 6.0, 0.8, "Blue Marble · partners: ESA CCI, Met Office, NOAA, ERA5, CMIP6", size=9)
         save(pdf, fig)
         plt.close(fig)
 
         # 4. The detective part
         fig, ax = new_slide(4, "The detective part", team)
-        title(ax, 6.55, "THEN WE CROSS-EXAMINE IT.", size=44)
-        ax.text(0.45, 5.75, "A sceptic's checks try to explain the trend away: a change of satellite? El Niño? "
-                "one lucky year? convenient dates?", color=INK, fontsize=16, va="top", **BODY)
-        ax.text(0.45, 5.4, "Then independent witnesses must agree: Met Office, weather stations, a second NASA "
-                "satellite, other rain records.", color=INK, fontsize=16, va="top", **BODY)
-        picture(fig, "crossexam.jpg", (0.45, 1.3, 7.3, 2.47), crop=(0, 230, 800, 500))
-        picture(fig, "witnesses.jpg", (8.05, 0.85, 4.85, 3.35), crop=(0, 225, 400, 500))
-        save(pdf, fig)
-        plt.close(fig)
-
-        # 5. We caught our own data
-        fig, ax = new_slide(5, "We caught our own data", team)
-        for i, (line, col) in enumerate([("89 CELLS LOOK", BLUE), ("LIKE CHANGE.", BLUE), ("0 SURVIVE.", RED)]):
-            ax.text(0.45, 6.55 - i * 0.64, line, color=col, fontsize=44, va="top", **DISPLAY)
-        y = 4.45
-        for line, col, f in [
-            ("Root-zone soil wetness, England & Wales,", INK, BODY),
-            ("137 grid cells. Top: a typical analysis.", INK, BODY),
-            ("Bottom: the Detective, after correcting for", INK, BODY),
-            ("sticky noise and for testing 137 places.", INK, BODY),
-            ("", INK, BODY),
-            ("Shuffle the years so no trend is left, and a", INK, BODY),
-            ("typical test still marks ~60 of 137 cells.", INK, BODY),
-            ("", INK, BODY),
-            ("We caught our own data too: at 42 of 88", RED, BODY_B),
-            ("places, cloud cover's “trend” is better", RED, BODY_B),
-            ("explained by NASA POWER's 2001 satellite", RED, BODY_B),
-            ("switch. The app now flags it.", RED, BODY_B),
-        ]:
-            ax.text(0.45, y, line, color=col, fontsize=16, va="top", **f)
-            y -= 0.3
-        picture(fig, "map_typical.jpg", (5.85, 3.6, 7.05, 2.38), crop=(0, 225, 800, 500), frame=RED)
-        picture(fig, "map_detective.jpg", (5.85, 0.85, 7.05, 2.38), crop=(0, 225, 800, 500))
-        save(pdf, fig)
-        plt.close(fig)
-
-        # 6. NASA data
-        fig, ax = new_slide(6, "NASA data behind it", team)
-        title(ax, 6.55, "BUILT ON NASA DATA.", "CHECKABLE BY ANYONE.", size=44)
+        title(ax, 6.55, "THEN WE TRY TO", "BREAK OUR OWN ANSWER.", size=44)
         bullets(ax, 0.45, 4.7, [
-            "NASA POWER: MERRA-2 and CERES, 1981–2025",
-            "MODIS Terra + Aqua: greenness, ground temperature",
-            "GPM IMERG and GPCP rainfall, GISTEMP, EONET",
-            "Partners: ESA CCI soil moisture, Met Office HadCET,\nNOAA indices and stations, ERA5",
-            "**Every case links to the exact NASA request, NASA Giovanni,\na CSV, and a notebook that rebuilds the number.",
+            "**Was it a change of satellite? Every documented\nswitch in NASA's sources is tested, worldwide.",
+            "We caught our own data: at 42 of 88 places,\ncloud cover's “trend” is better explained by\nNASA POWER's 2001 GEWEX → CERES switch.",
+            "El Niño, NAO, Indian Ocean Dipole and PDO\nremoved together. One year left out at a time.\nEvery start and end year. Sudden jump or trend?",
         ], size=16, gap=0.47)
-        picture(fig, "witnesses.jpg", (7.6, 1.0, 5.3, 4.6), crop=(400, 225, 800, 500))
-        caption(ax, 7.6, 5.92, "The notebook gets +0.333 °C per decade from", color=INK)
-        caption(ax, 7.6, 5.68, "NASA's public API alone, the same as the app.", color=INK)
+        picture(fig, "alibi_wisc.jpg", (6.35, 1.0, 6.55, 4.09))
+        caption(ax, 6.35, 5.42, "Central Wisconsin cloud cover: “could be the instrument”", color=BLUE, size=12)
         save(pdf, fig)
         plt.close(fig)
 
-        # 7. What it can do
-        fig, ax = new_slide(7, "What it can do", team)
-        title(ax, 6.55, "AN HONEST ANSWER,", "FOR ANYONE, ANYWHERE.", size=44)
+        # 5. Witnesses
+        fig, ax = new_slide(5, "Witnesses", team)
+        title(ax, 6.55, "INDEPENDENT RECORDS", "MUST AGREE.", size=44)
         bullets(ax, 0.45, 4.7, [
-            "**Lincolnshire: +0.33 °C per decade, proven by 1999,\n1.6× the global rate. 3 of 3 witnesses agree.",
-            "**Amazon (Rondônia): rain falling, confirmed by two\nNASA rain records (GPCP, IMERG). Drought months\n~1 a year in the 1980s → ~9 a year in the last decade.",
-            "Delhi: the land is greening (both MODIS satellites agree).",
+            "Lincolnshire: 4 of 4 other records agree,\n3 of them fully independent (+0.33 °C/decade).",
+            "**Delhi: NASA's model shows no proven warming.\nNASA's own station thermometers (GISTEMP)\nshow +0.22 °C per decade.",
+            "Rain there: 0 of 3 records back the model.",
+            "GRACE satellites, which weigh water, see the\nregion losing ~52 cm per decade (groundwater).",
+        ], size=16, gap=0.47)
+        picture(fig, "delhi_wit.jpg", (6.35, 1.0, 6.55, 4.09), crop=(0, 15, 400, 265))
+        caption(ax, 6.35, 5.42, "Each witness says how independent it is, and the headline counts them.", size=11)
+        save(pdf, fig)
+        plt.close(fig)
+
+        # 6. The world on trial
+        fig, ax = new_slide(6, "The world on trial", team)
+        title(ax, 6.55, "THE SAME TEST,", "4,498 LAND SQUARES.", size=44)
+        bullets(ax, 0.45, 4.7, [
+            "Air temperature, 1981–2025, every 2° land square.",
+            "A typical test calls 84% of squares “changing”.\nOur test proves 72%.",
+            "**The luck test: shuffle each square's years so no\ntrend can exist. A typical test still “finds” one in\n22% of squares. Ours: 7%.",
+            "England & Wales soil: 89 cells look like change\non a typical map. 0 survive our checks.",
+        ], size=16, gap=0.47)
+        picture(fig, "globe_luck.jpg", (6.35, 1.2, 6.55, 3.77), crop=(0, 40, 800, 500))
+        save(pdf, fig)
+        plt.close(fig)
+
+        # 7. Around 2050 + try it
+        fig, ax = new_slide(7, "Around 2050", team)
+        title(ax, 6.55, "WHAT IF IT KEEPS GOING?", "THREE WHAT-IFS, NOT A FORECAST.", size=40)
+        bullets(ax, 0.45, 4.8, [
+            "Today's proven trend drawn on (refused when the\nchange is one sudden jump).",
+            "7 CMIP6 high-resolution climate models.",
+            "**Three IPCC emission paths. Lincolnshire around\n2050: +0.7 °C with big cuts, +1.8 °C with very\nhigh emissions. The choice makes ~1.1 °C.",
         ], size=16, gap=0.47)
         ax.text(0.45, 1.65, "TRY IT", color=RED, fontsize=20, va="top", **DISPLAY)
-        ax.text(0.45, 1.3, SITE, color=BLUE, fontsize=17, va="top", **MONO_B)
+        ax.text(0.45, 1.3, SITE, color=BLUE, fontsize=13.5, va="top", **MONO_B)
         ax.text(0.45, 0.95, CODE, color=MUTED, fontsize=13, va="top", **MONO)
-        picture(fig, "amazon_verdict.jpg", (6.85, 1.1, 6.05, 3.78))
-        caption(ax, 6.85, 5.3, "Amazon rainfall: −0.53 mm/day per decade, strong evidence", color=BLUE, size=13)
+        picture(fig, "y2050.jpg", (6.35, 1.6, 6.55, 3.28), crop=(0, 20, 800, 420))
         save(pdf, fig)
         plt.close(fig)
 

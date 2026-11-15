@@ -60,21 +60,19 @@ MONO = lambda s: font("Courier New Bold.ttf", s)  # noqa: E731
 # (id, picture or card, focus_y, caption on screen, words spoken, minimum seconds)
 SCENES = [
     ("title", "card:title", 0, None,
-     "Is it really changing where you live, or does it just look that way?", 3.2),
-    ("hero", "hero_wide.jpg", 0.55, "Pick any place on Earth and a NASA variable.",
-     "Trend Detective tests NASA data the honest way.", 2.6),
-    ("chance", "chance.jpg", 0.55, "On pure noise, a typical test finds a “trend” 28% of the time. We correct for that.",
-     "On pure noise, a typical test finds a trend twenty-eight percent of the time. We correct for that.", 4.5),
-    ("crossexam", "crossexam.jpg", 0.76, "Cross-examination: a satellite switch? El Niño? One lucky year?",
-     "Then we cross-examine it. A satellite switch? El Niño? One lucky year?", 3.5),
-    ("witnesses", "witnesses.jpg", 0.66, "Independent records must agree: 3 of 3 do here.",
-     "And independent records must agree.", 2.2),
-    ("map_typical", "map_typical.jpg", 0.72, "England soil, typical map: 89 places “changing”.",
-     "A typical map: eighty-nine places changing.", 2.4),
-    ("map_detective", "map_detective.jpg", 0.72, "After our checks: 0.",
-     "After our checks: none.", 1.8),
-    ("verdict", "verdict_lincs.jpg", 0.42, "Lincolnshire: +0.33 °C per decade. Strong evidence.",
-     "Lincolnshire really is warming: a third of a degree a decade.", 3.0),
+     "Is it really changing where you live, or does it just look that way?", 3.0),
+    ("hero", "hero2.jpg", 0.45, "Pick any place on Earth and a NASA variable.",
+     "Trend Detective tests NASA data the honest way.", 2.4),
+    ("chance", "chance2.jpg", 0.55, "On pure noise, a typical test finds a “trend” 28% of the time. Ours: 6%.",
+     "On pure noise, a typical test finds a trend twenty-eight percent of the time. Ours: six.", 4.0),
+    ("alibi", "alibi_wisc.jpg", 0.5, "Cross-examination: was it a satellite switch? For cloud, 42 of 88 trends could be.",
+     "Then we cross-examine it. Was it just a satellite switch?", 3.0),
+    ("delhi", "delhi_wit_left.jpg", 0.4, "Delhi: NASA's own thermometers say warming. The model doesn't.",
+     "Independent witnesses must agree. In Delhi, they don't.", 3.0),
+    ("globe", "globe_luck.jpg", 0.5, "Shuffled records, no trend possible: a typical test is fooled 22%, ours 7%.",
+     "Worldwide, on pure luck, a typical test is fooled twenty-two percent of the time. Ours: seven.", 4.2),
+    ("y2050", "y2050.jpg", 0.5, "Around 2050: your trend, 7 climate models, 3 emission paths.",
+     "And around twenty fifty: your trend, climate models, and three emission paths.", 3.3),
     ("end", "card:end", 0, None, "Check any place yourself.", 2.4),
 ]
 
@@ -193,10 +191,12 @@ def card(kind: str, voiced: bool) -> Image.Image:
         d.text((52, 390), SITE, font=MONO(38), fill=BLUE)
         d.text((52, 470), f"Team {TEAM}  ·  {NAMES}", font=BODY_B(34), fill=INK)
         d.text((52, 520), f"NASA Space Apps 2026  ·  “{CHALLENGE}”", font=BODY(30), fill=MUTED)
-        credit = "Data: NASA POWER, MODIS, GPM IMERG, GPCP, GISTEMP; ESA CCI; Met Office; NOAA."
+        credit = ("Data: NASA POWER, MERRA-2, MODIS, GPM IMERG, GPCP, GISTEMP, GLDAS, GRACE, Blue Marble; "
+                  "ESA CCI; Met Office; NOAA; CMIP6.")
+        d.text((52, 625), credit, font=BODY(22), fill=MUTED)
         if voiced:
-            credit += "  Voice: AI text-to-speech (ElevenLabs)."
-        d.text((52, 640), credit, font=BODY(22), fill=MUTED)
+            d.text((52, 658), "Voice: AI text-to-speech (ElevenLabs). Pictures: screenshots of our own site.",
+                   font=BODY(22), fill=MUTED)
     return im
 
 
