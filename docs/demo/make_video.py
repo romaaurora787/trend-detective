@@ -4,7 +4,7 @@ Usage (from the repo root):
     backend/.venv/bin/python docs/demo/make_video.py           # captions only (silent)
     backend/.venv/bin/python docs/demo/make_video.py --voice   # + ElevenLabs voice-over
 
-The voice-over needs ELEVENLABS_API_KEY in backend/.env (git-ignored; never printed).
+The voice-over needs ELEVENLABS_API_KEY in the environment (on Akshita's Mac it comes from the Keychain via ~/.zshenv) or in backend/.env (git-ignored). It is never printed.
 Optional: ELEVENLABS_VOICE_ID to pick another voice. Generated clips are cached in
 docs/demo/audio/ so re-rendering costs nothing; delete them to regenerate.
 
@@ -116,9 +116,23 @@ def voice_clips(speed: float) -> None:
         prev = words
 
 
+TRIM = ("silenceremove=start_periods=1:start_threshold=-45dB,areverse,"
+        "silenceremove=start_periods=1:start_threshold=-45dB,areverse")
+
+
+def trimmed(sid: str) -> Path | None:
+    """The clip with ElevenLabs' leading/trailing silence removed (cached as .wav)."""
+    src, out = AUDIO / f"{sid}.mp3", AUDIO / f"{sid}.wav"
+    if not src.exists():
+        return None
+    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
+        subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(src), "-af", TRIM, str(out)], check=True)
+    return out
+
+
 def clip_seconds(sid: str) -> float | None:
-    p = AUDIO / f"{sid}.mp3"
-    if not p.exists():
+    p = trimmed(sid)
+    if p is None:
         return None
     out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(p)],
                          capture_output=True, text=True).stdout.strip()
@@ -129,7 +143,7 @@ def timings(use_voice: bool) -> list[float]:
     d = []
     for sid, *_, minimum in SCENES:
         c = clip_seconds(sid) if use_voice else None
-        d.append(max(minimum, c + 0.25) if c else minimum)
+        d.append(max(minimum, c + 0.22) if c else minimum)
     total = sum(d)
     if total > MAX_LEN:
         raise SystemExit(f"Scenes add up to {total:.1f} s (> {MAX_LEN}); rerun with a faster --speed.")
@@ -209,11 +223,11 @@ def render(durations: list[float], use_voice: bool) -> None:
     starts = np.cumsum([0] + durations[:-1])
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
            "-r", str(FPS), "-i", "-"]
-    clips = [(AUDIO / f"{s[0]}.mp3", st) for s, st in zip(SCENES, starts)] if use_voice else []
+    clips = [(trimmed(s[0]), st) for s, st in zip(SCENES, starts)] if use_voice else []
     for p, _ in clips:
         cmd += ["-i", str(p)]
     if clips:
-        parts = [f"[{k + 1}:a]adelay={int((st + 0.12) * 1000)}|{int((st + 0.12) * 1000)}[a{k}]"
+        parts = [f"[{k + 1}:a]adelay={int((st + 0.08) * 1000)}|{int((st + 0.08) * 1000)}[a{k}]"
                  for k, (_, st) in enumerate(clips)]
         mix = "".join(f"[a{k}]" for k in range(len(clips)))
         cmd += ["-filter_complex", ";".join(parts) + f";{mix}amix=inputs={len(clips)}:normalize=0[aout]",
