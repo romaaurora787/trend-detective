@@ -1,0 +1,4843 @@
+{
+ "T2M": {
+  "n": 111,
+  "top_years": [
+   [
+    1998,
+    15
+   ],
+   [
+    1988,
+    8
+   ],
+   [
+    1997,
+    8
+   ],
+   [
+    2020,
+    7
+   ],
+   [
+    2015,
+    7
+   ]
+  ],
+  "in_1997_99": 24,
+  "expected_if_random": 9.5,
+  "in_1997_99_and_step_beats_trend": 12,
+  "step_beats_trend_any_year": 50,
+  "places": [
+   {
+    "lat": -45.0,
+    "lon": -75.0,
+    "year": 1988,
+    "jump_sd": -0.701682819525103,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -35.0,
+    "lon": -60.0,
+    "year": 2020,
+    "jump_sd": 1.3456816827598228,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": 135.0,
+    "year": 2007,
+    "jump_sd": 1.4020684728713095,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": 150.0,
+    "year": 1997,
+    "jump_sd": 1.3338753824628957,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": -60.0,
+    "year": 2020,
+    "jump_sd": 1.1802926414483872,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 15.0,
+    "year": 1986,
+    "jump_sd": 0.9908550743923621,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 30.0,
+    "year": 2001,
+    "jump_sd": 1.1176454662232742,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 45.0,
+    "year": 2016,
+    "jump_sd": 1.387534367862159,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 120.0,
+    "year": 2019,
+    "jump_sd": 1.5454095251002677,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 135.0,
+    "year": 2013,
+    "jump_sd": 0.8442122984437854,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 150.0,
+    "year": 2016,
+    "jump_sd": 1.3335841265844537,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -75.0,
+    "year": 2012,
+    "jump_sd": 1.2501109682212435,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": -60.0,
+    "year": 2015,
+    "jump_sd": 1.6623702450403197,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -45.0,
+    "year": 2012,
+    "jump_sd": 1.3840357678525603,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 15.0,
+    "year": 2015,
+    "jump_sd": 1.2090769592938062,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": 30.0,
+    "year": 1987,
+    "jump_sd": 1.3561543665487903,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 135.0,
+    "year": 2016,
+    "jump_sd": 1.5336491615470997,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -75.0,
+    "year": 2020,
+    "jump_sd": 1.8098403858422552,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -60.0,
+    "year": 2015,
+    "jump_sd": 1.4051846606419014,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": -45.0,
+    "year": 2012,
+    "jump_sd": 1.3942955364873926,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 15.0,
+    "year": 1997,
+    "jump_sd": 1.534895874813657,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 30.0,
+    "year": 1991,
+    "jump_sd": 1.3825934041316927,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 105.0,
+    "year": 1987,
+    "jump_sd": 1.5159336667575873,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": 120.0,
+    "year": 2002,
+    "jump_sd": 1.199247858920977,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": 150.0,
+    "year": 2008,
+    "jump_sd": 1.453872369946388,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": -75.0,
+    "year": 2001,
+    "jump_sd": 1.57914423543618,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": -60.0,
+    "year": 2018,
+    "jump_sd": 1.2664908713175707,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 0.0,
+    "year": 2003,
+    "jump_sd": 1.5033813952594843,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 15.0,
+    "year": 1998,
+    "jump_sd": 1.3627829034119538,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 30.0,
+    "year": 1998,
+    "jump_sd": 1.4823995366542928,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 45.0,
+    "year": 1989,
+    "jump_sd": -0.7018678117506874,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 120.0,
+    "year": 2014,
+    "jump_sd": 1.779768994672102,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": -90.0,
+    "year": 1999,
+    "jump_sd": -0.8535951835313703,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": -15.0,
+    "year": 1997,
+    "jump_sd": 0.86996002579405,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 0.0,
+    "year": 1987,
+    "jump_sd": 1.173210059645208,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 15.0,
+    "year": 1990,
+    "jump_sd": 1.3626524834130225,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 30.0,
+    "year": 1990,
+    "jump_sd": 1.5476576528174064,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 45.0,
+    "year": 1997,
+    "jump_sd": 1.4627418649545956,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": 75.0,
+    "year": 2001,
+    "jump_sd": 0.6889241005258215,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": 105.0,
+    "year": 2002,
+    "jump_sd": 0.5453928746778043,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": 120.0,
+    "year": 2013,
+    "jump_sd": 1.5535032479825033,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": -105.0,
+    "year": 2011,
+    "jump_sd": 1.5451225884445896,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": -15.0,
+    "year": 2011,
+    "jump_sd": -0.40309097571682595,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 0.0,
+    "year": 1998,
+    "jump_sd": 1.4177710206803333,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 15.0,
+    "year": 2001,
+    "jump_sd": 1.406574081699139,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 30.0,
+    "year": 1998,
+    "jump_sd": 1.5315510164956192,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 45.0,
+    "year": 1998,
+    "jump_sd": 1.5252125872533113,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 60.0,
+    "year": 2015,
+    "jump_sd": 1.510430957047136,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 75.0,
+    "year": 2011,
+    "jump_sd": -0.9539348064200944,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 90.0,
+    "year": 1997,
+    "jump_sd": -1.6277258862778874,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 105.0,
+    "year": 2012,
+    "jump_sd": 1.2269876838419356,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": -120.0,
+    "year": 2012,
+    "jump_sd": 1.2880656588727821,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": -105.0,
+    "year": 2000,
+    "jump_sd": 1.4312069215174963,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": -90.0,
+    "year": 1998,
+    "jump_sd": 1.072015384737623,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 0.0,
+    "year": 2020,
+    "jump_sd": 2.3031171077316057,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 45.0,
+    "year": 1998,
+    "jump_sd": 1.3537220815193107,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 60.0,
+    "year": 1997,
+    "jump_sd": 0.9567151745593734,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 75.0,
+    "year": 1998,
+    "jump_sd": 0.7840238403915983,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 90.0,
+    "year": 1987,
+    "jump_sd": 1.4183571205969583,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 105.0,
+    "year": 1992,
+    "jump_sd": 1.2688423465095133,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 120.0,
+    "year": 2016,
+    "jump_sd": 1.7409979615416133,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 135.0,
+    "year": 1998,
+    "jump_sd": 1.347165870788283,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -120.0,
+    "year": 1986,
+    "jump_sd": 1.8908826871745366,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -105.0,
+    "year": 1998,
+    "jump_sd": 0.73337847137845,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -90.0,
+    "year": 1998,
+    "jump_sd": 0.9648016167577583,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -75.0,
+    "year": 1998,
+    "jump_sd": 1.4476778622592814,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 0.0,
+    "year": 2014,
+    "jump_sd": 1.466835062039035,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 15.0,
+    "year": 2011,
+    "jump_sd": 1.4781933279076984,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 30.0,
+    "year": 2007,
+    "jump_sd": 1.541029256655148,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 45.0,
+    "year": 1998,
+    "jump_sd": 1.5153995711885635,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 60.0,
+    "year": 1997,
+    "jump_sd": 0.6710228757064501,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 75.0,
+    "year": 2020,
+    "jump_sd": 1.408650056917086,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 90.0,
+    "year": 1997,
+    "jump_sd": 1.364276111474209,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 105.0,
+    "year": 2017,
+    "jump_sd": 1.2563282221541372,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 120.0,
+    "year": 1988,
+    "jump_sd": 1.4219081796586892,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 135.0,
+    "year": 1988,
+    "jump_sd": 1.4335750446701963,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -165.0,
+    "year": 2014,
+    "jump_sd": 1.3659979437910712,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -120.0,
+    "year": 1986,
+    "jump_sd": 1.009886858854266,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -105.0,
+    "year": 2007,
+    "jump_sd": -0.30935810303911526,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -90.0,
+    "year": 1998,
+    "jump_sd": 0.7930837177342357,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -75.0,
+    "year": 1998,
+    "jump_sd": 1.1730129076764992,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -60.0,
+    "year": 1995,
+    "jump_sd": 1.176552260050866,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 15.0,
+    "year": 2014,
+    "jump_sd": 1.4657573627641003,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 30.0,
+    "year": 2014,
+    "jump_sd": 1.2928146853422897,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 45.0,
+    "year": 2007,
+    "jump_sd": 0.9896050067621188,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 60.0,
+    "year": 2020,
+    "jump_sd": 0.8622166635971578,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 75.0,
+    "year": 2020,
+    "jump_sd": 0.8364848110135071,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 90.0,
+    "year": 1988,
+    "jump_sd": 1.1245441015442665,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 105.0,
+    "year": 1989,
+    "jump_sd": 1.1667769012300457,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 120.0,
+    "year": 1988,
+    "jump_sd": 0.6428645676443311,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 135.0,
+    "year": 1988,
+    "jump_sd": 1.263721305701985,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 165.0,
+    "year": 2003,
+    "jump_sd": 1.1994858678638605,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -165.0,
+    "year": 2014,
+    "jump_sd": 1.2750560121652719,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -150.0,
+    "year": 2000,
+    "jump_sd": 1.1691901916660972,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -135.0,
+    "year": 2014,
+    "jump_sd": 0.8166325243720628,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -120.0,
+    "year": 1993,
+    "jump_sd": 0.8827001895540801,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -105.0,
+    "year": 1993,
+    "jump_sd": 0.8996922619293972,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -90.0,
+    "year": 1994,
+    "jump_sd": 0.9320170091843857,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -75.0,
+    "year": 1994,
+    "jump_sd": 0.850568051341104,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -15.0,
+    "year": 2001,
+    "jump_sd": 1.0614731461070255,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 15.0,
+    "year": 1988,
+    "jump_sd": 1.3576347290874866,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 30.0,
+    "year": 2000,
+    "jump_sd": 1.2805866877445,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 45.0,
+    "year": 2015,
+    "jump_sd": 1.143796006420238,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 60.0,
+    "year": 2016,
+    "jump_sd": 0.9729602616226644,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 75.0,
+    "year": 2011,
+    "jump_sd": 0.939437597223366,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 90.0,
+    "year": 2011,
+    "jump_sd": 1.092022365665308,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 105.0,
+    "year": 2015,
+    "jump_sd": 1.029567421128462,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 120.0,
+    "year": 2015,
+    "jump_sd": 1.1859527283495084,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 135.0,
+    "year": 1988,
+    "jump_sd": 1.0589687883002652,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 150.0,
+    "year": 2005,
+    "jump_sd": 0.9583653752531566,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 165.0,
+    "year": 2016,
+    "jump_sd": 0.8827386100412695,
+    "step_beats_trend": true
+   }
+  ]
+ },
+ "QV2M": {
+  "n": 111,
+  "top_years": [
+   [
+    1998,
+    11
+   ],
+   [
+    2016,
+    9
+   ],
+   [
+    2014,
+    7
+   ],
+   [
+    2018,
+    7
+   ],
+   [
+    1995,
+    6
+   ]
+  ],
+  "in_1997_99": 19,
+  "expected_if_random": 9.5,
+  "in_1997_99_and_step_beats_trend": 5,
+  "step_beats_trend_any_year": 45,
+  "places": [
+   {
+    "lat": -45.0,
+    "lon": -75.0,
+    "year": 2003,
+    "jump_sd": 0.5506351549225196,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -35.0,
+    "lon": -60.0,
+    "year": 1995,
+    "jump_sd": -0.6872528092938086,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -35.0,
+    "lon": 135.0,
+    "year": 1997,
+    "jump_sd": 1.401557953224599,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -35.0,
+    "lon": 150.0,
+    "year": 2010,
+    "jump_sd": 1.0744771720100963,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": -60.0,
+    "year": 2014,
+    "jump_sd": 0.6133566167919814,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 15.0,
+    "year": 1988,
+    "jump_sd": 1.440556602569279,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 30.0,
+    "year": 2004,
+    "jump_sd": 0.49985090402524507,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 45.0,
+    "year": 1996,
+    "jump_sd": 0.688737555943961,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 120.0,
+    "year": 1995,
+    "jump_sd": 1.1520140987444065,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 135.0,
+    "year": 1997,
+    "jump_sd": 0.5764326202047341,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 150.0,
+    "year": 2010,
+    "jump_sd": 0.8943129268282684,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -75.0,
+    "year": 1997,
+    "jump_sd": 0.6341210186274084,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -60.0,
+    "year": 1993,
+    "jump_sd": -1.124428970515321,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -45.0,
+    "year": 2012,
+    "jump_sd": -0.872557263124481,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 15.0,
+    "year": 2007,
+    "jump_sd": 0.4547156883480355,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 30.0,
+    "year": 2017,
+    "jump_sd": 1.2549471818799272,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": 135.0,
+    "year": 1998,
+    "jump_sd": 0.67011790685001,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -75.0,
+    "year": 1995,
+    "jump_sd": 1.4549391218252488,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -60.0,
+    "year": 2002,
+    "jump_sd": 0.7718475419740605,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": -45.0,
+    "year": 2012,
+    "jump_sd": -0.9131903854976213,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 15.0,
+    "year": 2009,
+    "jump_sd": 1.2326940474865262,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": 30.0,
+    "year": 2018,
+    "jump_sd": 1.8579699029600933,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 105.0,
+    "year": 2020,
+    "jump_sd": 1.4893334570609214,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": 120.0,
+    "year": 1995,
+    "jump_sd": 1.2851035827545156,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": 150.0,
+    "year": 1998,
+    "jump_sd": 1.4274860762840162,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": -75.0,
+    "year": 2011,
+    "jump_sd": 1.126919568565191,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": -60.0,
+    "year": 1993,
+    "jump_sd": 1.457162310769361,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 0.0,
+    "year": 1998,
+    "jump_sd": 1.7252952081618558,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 15.0,
+    "year": 2009,
+    "jump_sd": 1.013456641191232,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 30.0,
+    "year": 1999,
+    "jump_sd": -1.1214846698945544,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 45.0,
+    "year": 2006,
+    "jump_sd": 1.1833418646865639,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 120.0,
+    "year": 1994,
+    "jump_sd": 1.7140563374323008,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": -90.0,
+    "year": 2001,
+    "jump_sd": 1.5236418811393406,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": -15.0,
+    "year": 2008,
+    "jump_sd": 1.4017239250610734,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": 0.0,
+    "year": 2009,
+    "jump_sd": 1.4538040863632389,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 15.0,
+    "year": 2018,
+    "jump_sd": 1.6207720450515672,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 30.0,
+    "year": 2016,
+    "jump_sd": 1.2201415391778445,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 45.0,
+    "year": 2019,
+    "jump_sd": 0.7564381782356695,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": 75.0,
+    "year": 2020,
+    "jump_sd": 1.8855056033170603,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": 105.0,
+    "year": 2016,
+    "jump_sd": 1.6249384043751964,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": 120.0,
+    "year": 1998,
+    "jump_sd": 1.532455622273713,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": -105.0,
+    "year": 1994,
+    "jump_sd": -0.677654023049044,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": -15.0,
+    "year": 1987,
+    "jump_sd": 1.3359037786491286,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 0.0,
+    "year": 1989,
+    "jump_sd": 1.2185353484605996,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 15.0,
+    "year": 1990,
+    "jump_sd": 1.512923054107851,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 30.0,
+    "year": 2014,
+    "jump_sd": 1.8401375695836202,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 45.0,
+    "year": 2018,
+    "jump_sd": 1.422995370804787,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 60.0,
+    "year": 1993,
+    "jump_sd": 1.5190166827079554,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 75.0,
+    "year": 2010,
+    "jump_sd": 1.5253506484023789,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 90.0,
+    "year": 1998,
+    "jump_sd": 1.8172386797331186,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 105.0,
+    "year": 2014,
+    "jump_sd": 1.9433622442174714,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": -120.0,
+    "year": 1992,
+    "jump_sd": 1.2482854928289513,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": -105.0,
+    "year": 2014,
+    "jump_sd": 0.7658015215837218,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": -90.0,
+    "year": 2015,
+    "jump_sd": 1.503614264542293,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 0.0,
+    "year": 2003,
+    "jump_sd": 0.6681954441794586,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 45.0,
+    "year": 2013,
+    "jump_sd": 1.2295830632435905,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 60.0,
+    "year": 2015,
+    "jump_sd": 0.7643008752602254,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 75.0,
+    "year": 2013,
+    "jump_sd": 1.637284411781274,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 90.0,
+    "year": 1998,
+    "jump_sd": 1.5886176144094621,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 105.0,
+    "year": 2012,
+    "jump_sd": 1.797356233669624,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 120.0,
+    "year": 2016,
+    "jump_sd": 1.7362333252370465,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 135.0,
+    "year": 1998,
+    "jump_sd": 1.441258186606454,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -120.0,
+    "year": 1995,
+    "jump_sd": 0.8620239748811802,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -105.0,
+    "year": 2013,
+    "jump_sd": 1.3945434125320717,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -90.0,
+    "year": 2010,
+    "jump_sd": 1.271268454445273,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -75.0,
+    "year": 1998,
+    "jump_sd": 1.3517504740734945,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 0.0,
+    "year": 2013,
+    "jump_sd": 1.0400928826418614,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 15.0,
+    "year": 2014,
+    "jump_sd": 1.5011442979733793,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 30.0,
+    "year": 2005,
+    "jump_sd": 1.5135268665893313,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 45.0,
+    "year": 1995,
+    "jump_sd": 1.4020857752592353,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 60.0,
+    "year": 1997,
+    "jump_sd": 0.9574811942168064,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 75.0,
+    "year": 2002,
+    "jump_sd": 1.123958929631182,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 90.0,
+    "year": 1998,
+    "jump_sd": 1.2780030504103688,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 105.0,
+    "year": 2016,
+    "jump_sd": 1.563676697255549,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 120.0,
+    "year": 2018,
+    "jump_sd": 1.9268313245394308,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 135.0,
+    "year": 2019,
+    "jump_sd": 2.019133027241605,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -165.0,
+    "year": 2014,
+    "jump_sd": 1.3715986115919399,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -120.0,
+    "year": 2013,
+    "jump_sd": 1.3357167673619885,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -105.0,
+    "year": 2005,
+    "jump_sd": 1.16004860794914,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -90.0,
+    "year": 2005,
+    "jump_sd": 0.7788112107935962,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -75.0,
+    "year": 1998,
+    "jump_sd": 1.2587137966483621,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -60.0,
+    "year": 1998,
+    "jump_sd": 1.2692011279518376,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 15.0,
+    "year": 1999,
+    "jump_sd": 1.4267985083521253,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 30.0,
+    "year": 2018,
+    "jump_sd": 1.563660266441724,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 45.0,
+    "year": 2004,
+    "jump_sd": 1.0442604886077675,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 60.0,
+    "year": 1999,
+    "jump_sd": 0.8608989424596925,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 75.0,
+    "year": 2020,
+    "jump_sd": 1.8542966279682684,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 90.0,
+    "year": 2001,
+    "jump_sd": 1.4963833985837784,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 105.0,
+    "year": 2018,
+    "jump_sd": 1.5259958908168003,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 120.0,
+    "year": 2007,
+    "jump_sd": 0.948348620370622,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 135.0,
+    "year": 2005,
+    "jump_sd": 1.0391359708780166,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 165.0,
+    "year": 2003,
+    "jump_sd": 1.330181729555173,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -165.0,
+    "year": 2014,
+    "jump_sd": 1.311190985487321,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -150.0,
+    "year": 2016,
+    "jump_sd": 1.609299038826051,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -135.0,
+    "year": 2016,
+    "jump_sd": 1.1095223039403317,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -120.0,
+    "year": 2020,
+    "jump_sd": 1.1480581507806027,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -105.0,
+    "year": 2020,
+    "jump_sd": 1.050427456282025,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -90.0,
+    "year": 1993,
+    "jump_sd": 0.9621979482099913,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -75.0,
+    "year": 1993,
+    "jump_sd": 1.1431228788172891,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -15.0,
+    "year": 2002,
+    "jump_sd": 1.1448200521113083,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 15.0,
+    "year": 1997,
+    "jump_sd": 1.1528992828566067,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 30.0,
+    "year": 2000,
+    "jump_sd": 1.3640642096375357,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 45.0,
+    "year": 2016,
+    "jump_sd": 1.2786794076625936,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 60.0,
+    "year": 2016,
+    "jump_sd": 0.9277441361055745,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 75.0,
+    "year": 2016,
+    "jump_sd": 1.1512958448114674,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 90.0,
+    "year": 2011,
+    "jump_sd": 1.2398122781888152,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 105.0,
+    "year": 2001,
+    "jump_sd": 1.1349131928496576,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 120.0,
+    "year": 2018,
+    "jump_sd": 0.972784956796236,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 135.0,
+    "year": 2005,
+    "jump_sd": 1.162834973955623,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 150.0,
+    "year": 2000,
+    "jump_sd": 1.1964297377897668,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 165.0,
+    "year": 2002,
+    "jump_sd": 0.7757004028981015,
+    "step_beats_trend": false
+   }
+  ]
+ },
+ "PRECTOTCORR": {
+  "n": 111,
+  "top_years": [
+   [
+    2019,
+    16
+   ],
+   [
+    2020,
+    8
+   ],
+   [
+    2016,
+    6
+   ],
+   [
+    2013,
+    6
+   ],
+   [
+    2018,
+    6
+   ]
+  ],
+  "in_1997_99": 8,
+  "expected_if_random": 9.5,
+  "in_1997_99_and_step_beats_trend": 4,
+  "step_beats_trend_any_year": 62,
+  "places": [
+   {
+    "lat": -45.0,
+    "lon": -75.0,
+    "year": 2004,
+    "jump_sd": -1.3555628283519092,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": -60.0,
+    "year": 2019,
+    "jump_sd": -0.9362624612805168,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -35.0,
+    "lon": 135.0,
+    "year": 2014,
+    "jump_sd": -1.279581691869956,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": 150.0,
+    "year": 2020,
+    "jump_sd": 1.0314144063612,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": -60.0,
+    "year": 1993,
+    "jump_sd": -1.0637811090529659,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 15.0,
+    "year": 2006,
+    "jump_sd": 1.1504599120089847,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 30.0,
+    "year": 1988,
+    "jump_sd": -0.894397073682794,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 45.0,
+    "year": 2016,
+    "jump_sd": -1.1689619197360894,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 120.0,
+    "year": 1995,
+    "jump_sd": 0.886515229842524,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 135.0,
+    "year": 1997,
+    "jump_sd": 0.39987118805266825,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 150.0,
+    "year": 2019,
+    "jump_sd": -0.8665271868082316,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": -75.0,
+    "year": 1997,
+    "jump_sd": 1.1202656862599438,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": -60.0,
+    "year": 2012,
+    "jump_sd": -1.5661856300140464,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -45.0,
+    "year": 1993,
+    "jump_sd": -1.0225058953206145,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 15.0,
+    "year": 2013,
+    "jump_sd": -0.6666081537106171,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 30.0,
+    "year": 1990,
+    "jump_sd": -1.171218080304826,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": 135.0,
+    "year": 2016,
+    "jump_sd": -1.2734897488379455,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -75.0,
+    "year": 2020,
+    "jump_sd": -1.626947395354538,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -60.0,
+    "year": 1987,
+    "jump_sd": -1.4438717095870386,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": -45.0,
+    "year": 2012,
+    "jump_sd": -1.172265666868243,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 15.0,
+    "year": 1991,
+    "jump_sd": -1.2401502428852307,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 30.0,
+    "year": 2018,
+    "jump_sd": 1.0733800505193116,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 105.0,
+    "year": 1987,
+    "jump_sd": -0.9855525229775115,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 120.0,
+    "year": 1995,
+    "jump_sd": 0.5474475873987877,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": 150.0,
+    "year": 1987,
+    "jump_sd": -1.4885136333832323,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": -75.0,
+    "year": 2001,
+    "jump_sd": -1.4329871165805952,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": -60.0,
+    "year": 2018,
+    "jump_sd": -0.6551680276104634,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 0.0,
+    "year": 2019,
+    "jump_sd": 1.191167876125994,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 15.0,
+    "year": 1989,
+    "jump_sd": -0.8444566715151356,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 30.0,
+    "year": 1998,
+    "jump_sd": -1.1471178502613542,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 45.0,
+    "year": 1989,
+    "jump_sd": 1.259975061244783,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 120.0,
+    "year": 2014,
+    "jump_sd": -0.8853663250657196,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": -90.0,
+    "year": 1998,
+    "jump_sd": 1.3607768568447378,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": -15.0,
+    "year": 2020,
+    "jump_sd": 1.6002550256985812,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 0.0,
+    "year": 2012,
+    "jump_sd": 1.5553021704709096,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 15.0,
+    "year": 2019,
+    "jump_sd": 1.8618653666392793,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 30.0,
+    "year": 2020,
+    "jump_sd": 1.597394225640808,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 45.0,
+    "year": 1990,
+    "jump_sd": -1.0800464486414572,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 75.0,
+    "year": 2019,
+    "jump_sd": 1.6984142855753341,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 105.0,
+    "year": 2016,
+    "jump_sd": 1.6510163324034903,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 120.0,
+    "year": 1999,
+    "jump_sd": 0.8769786244402656,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": -105.0,
+    "year": 1992,
+    "jump_sd": -1.0321000601425592,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": -15.0,
+    "year": 2020,
+    "jump_sd": 1.5222447761585531,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 0.0,
+    "year": 1992,
+    "jump_sd": -1.3110409006617914,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 15.0,
+    "year": 2018,
+    "jump_sd": 1.0993909630088157,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 30.0,
+    "year": 1987,
+    "jump_sd": -1.4359263386811512,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 45.0,
+    "year": 1987,
+    "jump_sd": -1.6757757554208914,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 60.0,
+    "year": 2019,
+    "jump_sd": 1.3330221234792357,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 75.0,
+    "year": 2010,
+    "jump_sd": 1.4036065053020514,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 90.0,
+    "year": 2016,
+    "jump_sd": 1.8747439894099467,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 105.0,
+    "year": 2014,
+    "jump_sd": 0.9187793648462254,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": -120.0,
+    "year": 2002,
+    "jump_sd": -0.3613412432317316,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": -105.0,
+    "year": 2000,
+    "jump_sd": -0.7458691517036927,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": -90.0,
+    "year": 2018,
+    "jump_sd": 0.8152532271570794,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 0.0,
+    "year": 2019,
+    "jump_sd": -1.450643347258894,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 45.0,
+    "year": 1988,
+    "jump_sd": 1.2408388407914752,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 60.0,
+    "year": 2019,
+    "jump_sd": 0.5762238915672586,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 75.0,
+    "year": 2015,
+    "jump_sd": 1.2559417864979256,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 90.0,
+    "year": 1999,
+    "jump_sd": 1.3861149100209147,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 105.0,
+    "year": 2017,
+    "jump_sd": 1.4193153347642427,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 120.0,
+    "year": 2020,
+    "jump_sd": 2.054418342487523,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 135.0,
+    "year": 2010,
+    "jump_sd": 0.805000181138945,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -120.0,
+    "year": 1986,
+    "jump_sd": -0.8707906976668446,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -105.0,
+    "year": 2013,
+    "jump_sd": 0.7781983408289336,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -90.0,
+    "year": 2013,
+    "jump_sd": 0.9448245062455002,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -75.0,
+    "year": 2020,
+    "jump_sd": -1.8147426356132368,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 0.0,
+    "year": 2001,
+    "jump_sd": -0.7596110682024877,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 15.0,
+    "year": 1996,
+    "jump_sd": 1.1319136493759152,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 30.0,
+    "year": 1989,
+    "jump_sd": -0.891065296658335,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 45.0,
+    "year": 2013,
+    "jump_sd": -0.5875434299997351,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 60.0,
+    "year": 2015,
+    "jump_sd": 0.7521822789685279,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 75.0,
+    "year": 1998,
+    "jump_sd": 0.9671720841950797,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 90.0,
+    "year": 2002,
+    "jump_sd": 0.9098712903568974,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 105.0,
+    "year": 2015,
+    "jump_sd": 0.835275934243669,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 120.0,
+    "year": 2012,
+    "jump_sd": 1.193329942113464,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 135.0,
+    "year": 2018,
+    "jump_sd": 1.5550860923814656,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -165.0,
+    "year": 2020,
+    "jump_sd": 1.123853686781828,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -120.0,
+    "year": 2011,
+    "jump_sd": 0.5697023993585493,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -105.0,
+    "year": 2004,
+    "jump_sd": 1.0267615530330596,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -90.0,
+    "year": 1988,
+    "jump_sd": -1.3711399244623852,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -75.0,
+    "year": 1994,
+    "jump_sd": -0.42483044490451455,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -60.0,
+    "year": 1999,
+    "jump_sd": 0.7414829549679168,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 15.0,
+    "year": 2013,
+    "jump_sd": -0.49389509064706916,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 30.0,
+    "year": 2016,
+    "jump_sd": 0.8159156245864331,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 45.0,
+    "year": 1989,
+    "jump_sd": 0.745196318571274,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 60.0,
+    "year": 2019,
+    "jump_sd": 0.6071736173609308,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 75.0,
+    "year": 2013,
+    "jump_sd": 0.9666515459855985,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 90.0,
+    "year": 2004,
+    "jump_sd": 1.4208566003449592,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 105.0,
+    "year": 2004,
+    "jump_sd": 0.546827683750279,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 120.0,
+    "year": 1986,
+    "jump_sd": -0.8428575026585686,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 135.0,
+    "year": 2016,
+    "jump_sd": 1.100894988819727,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 165.0,
+    "year": 2017,
+    "jump_sd": 1.1460678586442086,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -165.0,
+    "year": 2019,
+    "jump_sd": 1.5975347201820747,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -150.0,
+    "year": 2018,
+    "jump_sd": 1.7219876376124283,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -135.0,
+    "year": 2015,
+    "jump_sd": 1.031586123149345,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -120.0,
+    "year": 1993,
+    "jump_sd": -0.3111815732042208,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -105.0,
+    "year": 2019,
+    "jump_sd": 0.9246312820199357,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -90.0,
+    "year": 2019,
+    "jump_sd": 0.7144550374637565,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -75.0,
+    "year": 1993,
+    "jump_sd": 0.8078574951893832,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -15.0,
+    "year": 1989,
+    "jump_sd": 0.7809094187142412,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 15.0,
+    "year": 2019,
+    "jump_sd": 0.6254937287401506,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 30.0,
+    "year": 2019,
+    "jump_sd": 1.4238433396225296,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 45.0,
+    "year": 2019,
+    "jump_sd": 0.8530809515089754,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 60.0,
+    "year": 2019,
+    "jump_sd": 0.993184953092542,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 75.0,
+    "year": 2017,
+    "jump_sd": 1.155731590487999,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 90.0,
+    "year": 2017,
+    "jump_sd": 0.608939440835129,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 105.0,
+    "year": 2012,
+    "jump_sd": -0.6478342889578751,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 120.0,
+    "year": 2009,
+    "jump_sd": -0.8679951657338777,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 135.0,
+    "year": 2004,
+    "jump_sd": 0.8685864686491911,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 150.0,
+    "year": 1988,
+    "jump_sd": -0.7991350401670004,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 165.0,
+    "year": 2017,
+    "jump_sd": 0.5009074328424198,
+    "step_beats_trend": false
+   }
+  ]
+ },
+ "EVLAND": {
+  "n": 111,
+  "top_years": [
+   [
+    2020,
+    9
+   ],
+   [
+    2015,
+    8
+   ],
+   [
+    2019,
+    6
+   ],
+   [
+    1987,
+    6
+   ],
+   [
+    2016,
+    5
+   ]
+  ],
+  "in_1997_99": 12,
+  "expected_if_random": 9.5,
+  "in_1997_99_and_step_beats_trend": 5,
+  "step_beats_trend_any_year": 69,
+  "places": [
+   {
+    "lat": -45.0,
+    "lon": -75.0,
+    "year": 2016,
+    "jump_sd": -1.875521152530131,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -35.0,
+    "lon": -60.0,
+    "year": 2020,
+    "jump_sd": -1.325546380088972,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": 135.0,
+    "year": 2015,
+    "jump_sd": -1.6813736316854435,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": 150.0,
+    "year": 2020,
+    "jump_sd": 1.0398989659967224,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": -60.0,
+    "year": 1995,
+    "jump_sd": -0.9832392027240388,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 15.0,
+    "year": 2006,
+    "jump_sd": 1.2020095623095284,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 30.0,
+    "year": 1988,
+    "jump_sd": -0.9856091900429024,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 45.0,
+    "year": 2016,
+    "jump_sd": -1.3161653432759404,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 120.0,
+    "year": 1995,
+    "jump_sd": 0.908370948735475,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 135.0,
+    "year": 1997,
+    "jump_sd": 0.41726918724433515,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 150.0,
+    "year": 2019,
+    "jump_sd": -0.9679528412210403,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": -75.0,
+    "year": 1997,
+    "jump_sd": 1.1602521271928528,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": -60.0,
+    "year": 2010,
+    "jump_sd": -1.575398395626077,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -45.0,
+    "year": 1994,
+    "jump_sd": -1.3168236171366188,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 15.0,
+    "year": 2015,
+    "jump_sd": -0.8976992574603926,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": 30.0,
+    "year": 1990,
+    "jump_sd": -1.105584792127453,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": 135.0,
+    "year": 2016,
+    "jump_sd": -1.408090735425515,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -75.0,
+    "year": 2020,
+    "jump_sd": -1.9572992498804775,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -60.0,
+    "year": 2005,
+    "jump_sd": -1.6553206023037856,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -45.0,
+    "year": 2012,
+    "jump_sd": -1.3563261664642545,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 15.0,
+    "year": 1998,
+    "jump_sd": -0.9896530102168686,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 30.0,
+    "year": 1990,
+    "jump_sd": -1.1348593890404386,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 105.0,
+    "year": 1987,
+    "jump_sd": -1.1521704356137494,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 120.0,
+    "year": 2016,
+    "jump_sd": 0.8582339052993171,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 150.0,
+    "year": 1988,
+    "jump_sd": -1.8863149462176667,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": -75.0,
+    "year": 2001,
+    "jump_sd": -1.1870212218468403,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": -60.0,
+    "year": 2004,
+    "jump_sd": 0.5355410568334221,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 0.0,
+    "year": 2019,
+    "jump_sd": 1.6677334138943298,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 15.0,
+    "year": 2001,
+    "jump_sd": -0.8283843683678216,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 30.0,
+    "year": 1998,
+    "jump_sd": -1.2943786409569396,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 45.0,
+    "year": 1987,
+    "jump_sd": 1.6691578949777426,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 120.0,
+    "year": 1987,
+    "jump_sd": -1.0374046559685874,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": -90.0,
+    "year": 1999,
+    "jump_sd": 1.476190882034093,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": -15.0,
+    "year": 2020,
+    "jump_sd": 1.6171013335954256,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 0.0,
+    "year": 2012,
+    "jump_sd": 1.5015877932021637,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 15.0,
+    "year": 2019,
+    "jump_sd": 1.9084509160093752,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 30.0,
+    "year": 2020,
+    "jump_sd": 1.3710288578976342,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 45.0,
+    "year": 1990,
+    "jump_sd": -1.0904356005135556,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 75.0,
+    "year": 2020,
+    "jump_sd": 1.7594682613723391,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 105.0,
+    "year": 2017,
+    "jump_sd": 0.9632505051672456,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 120.0,
+    "year": 1999,
+    "jump_sd": 1.2060819240988205,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": -105.0,
+    "year": 1994,
+    "jump_sd": -1.0755635756781297,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": -15.0,
+    "year": 2015,
+    "jump_sd": 0.8437018317685976,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 0.0,
+    "year": 1998,
+    "jump_sd": -1.153267832302154,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 15.0,
+    "year": 2011,
+    "jump_sd": 0.9312946309510857,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 30.0,
+    "year": 1988,
+    "jump_sd": -1.624888809517098,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 45.0,
+    "year": 1987,
+    "jump_sd": -1.7749535472493956,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 60.0,
+    "year": 2019,
+    "jump_sd": 1.599461965262392,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 75.0,
+    "year": 2011,
+    "jump_sd": 1.5176025015487193,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 90.0,
+    "year": 1998,
+    "jump_sd": 1.7070971871549065,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 105.0,
+    "year": 2015,
+    "jump_sd": 0.8081019830373517,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": -120.0,
+    "year": 2012,
+    "jump_sd": -0.4653218313744671,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": -105.0,
+    "year": 2000,
+    "jump_sd": -0.846267170440314,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": -90.0,
+    "year": 2017,
+    "jump_sd": 0.8036964514391901,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 0.0,
+    "year": 2020,
+    "jump_sd": -1.7739927912503046,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 45.0,
+    "year": 1992,
+    "jump_sd": 1.0236169177630832,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 60.0,
+    "year": 2019,
+    "jump_sd": 0.52009103460852,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 75.0,
+    "year": 2010,
+    "jump_sd": 1.0954186769724061,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 90.0,
+    "year": 1999,
+    "jump_sd": 1.501830960968184,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 105.0,
+    "year": 2018,
+    "jump_sd": 1.7920856326240397,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 120.0,
+    "year": 2020,
+    "jump_sd": 2.1829134024147296,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 135.0,
+    "year": 1997,
+    "jump_sd": 1.165284352299108,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -120.0,
+    "year": 2000,
+    "jump_sd": -0.6800821079936861,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -105.0,
+    "year": 2013,
+    "jump_sd": 0.8955529875988645,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": -90.0,
+    "year": 2015,
+    "jump_sd": 1.1912149719578664,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -75.0,
+    "year": 2020,
+    "jump_sd": -2.207279511333463,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 0.0,
+    "year": 2002,
+    "jump_sd": -0.6611686489834466,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 15.0,
+    "year": 1997,
+    "jump_sd": 1.2183824493351532,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 30.0,
+    "year": 1989,
+    "jump_sd": -0.6157776380456716,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 45.0,
+    "year": 2013,
+    "jump_sd": -0.9488270807955722,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 60.0,
+    "year": 2015,
+    "jump_sd": 0.7683583615440949,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 75.0,
+    "year": 1999,
+    "jump_sd": 1.0161113815452116,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 90.0,
+    "year": 2002,
+    "jump_sd": 0.9347069466593337,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 105.0,
+    "year": 2015,
+    "jump_sd": 0.915807322599715,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 120.0,
+    "year": 2012,
+    "jump_sd": 1.339174085813354,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 135.0,
+    "year": 2019,
+    "jump_sd": 1.782331734435199,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -165.0,
+    "year": 2007,
+    "jump_sd": -0.8408749919593107,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -120.0,
+    "year": 2013,
+    "jump_sd": 0.6230806573347212,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -105.0,
+    "year": 2005,
+    "jump_sd": 1.1011355586920764,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -90.0,
+    "year": 1992,
+    "jump_sd": -1.3181003037838914,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -75.0,
+    "year": 2011,
+    "jump_sd": -0.44701728925592,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -60.0,
+    "year": 1986,
+    "jump_sd": 1.1325913668950034,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 15.0,
+    "year": 1995,
+    "jump_sd": 0.8883210298225426,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 30.0,
+    "year": 2018,
+    "jump_sd": 1.45191622272863,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 45.0,
+    "year": 2000,
+    "jump_sd": 0.6523892812072832,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 60.0,
+    "year": 1995,
+    "jump_sd": -0.3350553738326493,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 75.0,
+    "year": 2015,
+    "jump_sd": 0.9541071321530908,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 90.0,
+    "year": 2004,
+    "jump_sd": 1.5481466378439035,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 105.0,
+    "year": 2004,
+    "jump_sd": 0.6662359222158842,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 120.0,
+    "year": 2009,
+    "jump_sd": 0.7389144131571648,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 135.0,
+    "year": 1996,
+    "jump_sd": 1.140255224478676,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 165.0,
+    "year": 2004,
+    "jump_sd": 1.1632096430635728,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -165.0,
+    "year": 2014,
+    "jump_sd": 0.999801499923703,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -150.0,
+    "year": 2016,
+    "jump_sd": 1.6264914314708925,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -135.0,
+    "year": 1987,
+    "jump_sd": 0.7929136093949515,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -120.0,
+    "year": 1986,
+    "jump_sd": 0.7682220028764383,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -105.0,
+    "year": 2002,
+    "jump_sd": -0.7592103259501812,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -90.0,
+    "year": 2002,
+    "jump_sd": -0.6178636437146352,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -75.0,
+    "year": 2018,
+    "jump_sd": -0.8174880574179268,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -15.0,
+    "year": 2009,
+    "jump_sd": -0.583001866106238,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 15.0,
+    "year": 2018,
+    "jump_sd": 1.1908793210541264,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 30.0,
+    "year": 2005,
+    "jump_sd": 1.21926674043613,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 45.0,
+    "year": 2011,
+    "jump_sd": 0.8524526482381442,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 60.0,
+    "year": 1987,
+    "jump_sd": 0.7051549117835189,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 75.0,
+    "year": 1988,
+    "jump_sd": 0.6985178824710384,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 90.0,
+    "year": 2012,
+    "jump_sd": 0.37542685635199236,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 105.0,
+    "year": 2011,
+    "jump_sd": 0.5773935436579318,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 120.0,
+    "year": 2009,
+    "jump_sd": -1.1192755595638857,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 135.0,
+    "year": 2005,
+    "jump_sd": 0.9361858451266102,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 150.0,
+    "year": 2005,
+    "jump_sd": 0.9918622215444253,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 165.0,
+    "year": 1992,
+    "jump_sd": -0.6565379544789927,
+    "step_beats_trend": false
+   }
+  ]
+ },
+ "GWETTOP": {
+  "n": 110,
+  "top_years": [
+   [
+    2020,
+    9
+   ],
+   [
+    2019,
+    8
+   ],
+   [
+    2012,
+    8
+   ],
+   [
+    2015,
+    7
+   ],
+   [
+    2018,
+    6
+   ]
+  ],
+  "in_1997_99": 10,
+  "expected_if_random": 9.4,
+  "in_1997_99_and_step_beats_trend": 6,
+  "step_beats_trend_any_year": 73,
+  "places": [
+   {
+    "lat": -45.0,
+    "lon": -75.0,
+    "year": 2016,
+    "jump_sd": -1.7195377266417227,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": -60.0,
+    "year": 2020,
+    "jump_sd": -1.0872734353139786,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": 150.0,
+    "year": 1993,
+    "jump_sd": -0.6729805452594286,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": -60.0,
+    "year": 1993,
+    "jump_sd": -0.8993093364399971,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 15.0,
+    "year": 2005,
+    "jump_sd": 1.2159491492950267,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 30.0,
+    "year": 1990,
+    "jump_sd": -1.0038659350683996,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 45.0,
+    "year": 2016,
+    "jump_sd": -1.0694388668186467,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 120.0,
+    "year": 2019,
+    "jump_sd": -1.1962851470744205,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 135.0,
+    "year": 2015,
+    "jump_sd": -0.5153991713458637,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 150.0,
+    "year": 2018,
+    "jump_sd": -0.8453356859388732,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -75.0,
+    "year": 1997,
+    "jump_sd": 1.2577115891338388,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": -60.0,
+    "year": 2015,
+    "jump_sd": -1.5477964695608182,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -45.0,
+    "year": 1994,
+    "jump_sd": -1.3703792469075156,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 15.0,
+    "year": 2015,
+    "jump_sd": -0.7600780440365233,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 30.0,
+    "year": 1990,
+    "jump_sd": -1.0286740262172764,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": 135.0,
+    "year": 2016,
+    "jump_sd": -1.210441448432192,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -75.0,
+    "year": 2020,
+    "jump_sd": -1.4742196067781232,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -60.0,
+    "year": 2005,
+    "jump_sd": -0.956323144896095,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": -45.0,
+    "year": 2012,
+    "jump_sd": -1.2934197057436128,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 15.0,
+    "year": 1992,
+    "jump_sd": -1.3183682894656459,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 30.0,
+    "year": 1990,
+    "jump_sd": -1.1638106848495422,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 105.0,
+    "year": 2010,
+    "jump_sd": 0.699343858867327,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": 120.0,
+    "year": 1995,
+    "jump_sd": 0.8131824270509687,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": 150.0,
+    "year": 1987,
+    "jump_sd": -0.6014013249083175,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": -75.0,
+    "year": 2001,
+    "jump_sd": -1.470797839185882,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": -60.0,
+    "year": 2018,
+    "jump_sd": -0.6968616629641258,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 0.0,
+    "year": 2002,
+    "jump_sd": 1.329599334254448,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 15.0,
+    "year": 1990,
+    "jump_sd": -1.3654133785537084,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 30.0,
+    "year": 1998,
+    "jump_sd": -1.3688333369669412,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 45.0,
+    "year": 1987,
+    "jump_sd": 1.7277854090986318,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 120.0,
+    "year": 1999,
+    "jump_sd": 0.6242247193291286,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": -90.0,
+    "year": 1991,
+    "jump_sd": 1.70347213002432,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": -15.0,
+    "year": 2020,
+    "jump_sd": 1.8543119798929013,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 0.0,
+    "year": 2012,
+    "jump_sd": 1.5523231389879342,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 15.0,
+    "year": 2019,
+    "jump_sd": 1.9434212717643722,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 30.0,
+    "year": 2020,
+    "jump_sd": 1.4244982177222816,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 45.0,
+    "year": 2020,
+    "jump_sd": 1.2825231700210586,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 75.0,
+    "year": 2020,
+    "jump_sd": 1.7667896963487364,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 105.0,
+    "year": 2016,
+    "jump_sd": 1.1038138233933028,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 120.0,
+    "year": 1999,
+    "jump_sd": 1.278577760183918,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": -105.0,
+    "year": 1994,
+    "jump_sd": -1.3192671335049655,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": -15.0,
+    "year": 2015,
+    "jump_sd": 0.5887052669748374,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 0.0,
+    "year": 2019,
+    "jump_sd": -1.7808897921592481,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 15.0,
+    "year": 2011,
+    "jump_sd": 0.474814764991738,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 30.0,
+    "year": 1988,
+    "jump_sd": -1.6328690474364633,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 45.0,
+    "year": 1987,
+    "jump_sd": -1.7544210098128885,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 60.0,
+    "year": 2019,
+    "jump_sd": 1.7302432618014492,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 75.0,
+    "year": 2011,
+    "jump_sd": 1.6037739264732411,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 90.0,
+    "year": 1998,
+    "jump_sd": 1.846048884205089,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 105.0,
+    "year": 2014,
+    "jump_sd": 0.8604547462110614,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": -120.0,
+    "year": 2012,
+    "jump_sd": -0.5576555178928736,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": -105.0,
+    "year": 2000,
+    "jump_sd": -0.9630672304927416,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": -90.0,
+    "year": 1998,
+    "jump_sd": -0.4955069335107326,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 0.0,
+    "year": 2020,
+    "jump_sd": -2.0118362571926953,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 45.0,
+    "year": 2004,
+    "jump_sd": 0.486013460422432,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 60.0,
+    "year": 1986,
+    "jump_sd": -0.6221653145173398,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 75.0,
+    "year": 2015,
+    "jump_sd": 1.3187259896704877,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 90.0,
+    "year": 1999,
+    "jump_sd": 1.4978530014558666,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 105.0,
+    "year": 2018,
+    "jump_sd": 1.7171125541542143,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 120.0,
+    "year": 2003,
+    "jump_sd": 1.4079224653217932,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 135.0,
+    "year": 1989,
+    "jump_sd": 1.1527705944287303,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -120.0,
+    "year": 1987,
+    "jump_sd": -1.3330442774616889,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -105.0,
+    "year": 2013,
+    "jump_sd": 0.8244368661338749,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -90.0,
+    "year": 2014,
+    "jump_sd": 1.070739782641431,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -75.0,
+    "year": 2012,
+    "jump_sd": -1.6030661024679773,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 0.0,
+    "year": 2002,
+    "jump_sd": -0.8435623947247524,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 15.0,
+    "year": 1996,
+    "jump_sd": 0.8559455946970537,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 30.0,
+    "year": 1989,
+    "jump_sd": -0.9189745738155323,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 45.0,
+    "year": 2012,
+    "jump_sd": -1.022269745014544,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 60.0,
+    "year": 1986,
+    "jump_sd": -0.9278724092838884,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 75.0,
+    "year": 1999,
+    "jump_sd": 0.9586879713351035,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 90.0,
+    "year": 2010,
+    "jump_sd": 0.9101015629088922,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 45.0,
+    "lon": 105.0,
+    "year": 2015,
+    "jump_sd": 0.7119846092845226,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 120.0,
+    "year": 2012,
+    "jump_sd": 1.1378057131972217,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 135.0,
+    "year": 2019,
+    "jump_sd": 1.8599474687559239,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -165.0,
+    "year": 1998,
+    "jump_sd": 0.7838017455321947,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -120.0,
+    "year": 2014,
+    "jump_sd": 0.6417990104821449,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -105.0,
+    "year": 2004,
+    "jump_sd": 1.4244683403504308,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -90.0,
+    "year": 1992,
+    "jump_sd": -1.3677858036356636,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -75.0,
+    "year": 1996,
+    "jump_sd": -0.6226208999260175,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -60.0,
+    "year": 2020,
+    "jump_sd": -1.2766636521883041,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 15.0,
+    "year": 2013,
+    "jump_sd": -1.0784709757972486,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 30.0,
+    "year": 1992,
+    "jump_sd": -0.8472375744168756,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 45.0,
+    "year": 2010,
+    "jump_sd": -0.4844074325067073,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 60.0,
+    "year": 2004,
+    "jump_sd": -0.4753092754524528,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 75.0,
+    "year": 2013,
+    "jump_sd": 0.9131757815968976,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 90.0,
+    "year": 2009,
+    "jump_sd": 1.5763309724791015,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 105.0,
+    "year": 1990,
+    "jump_sd": -1.1874004718961362,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 120.0,
+    "year": 1986,
+    "jump_sd": -1.2257437794104646,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 135.0,
+    "year": 2016,
+    "jump_sd": 1.174197494720674,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 165.0,
+    "year": 1986,
+    "jump_sd": -0.8958347919818941,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -165.0,
+    "year": 2019,
+    "jump_sd": 1.808000322329246,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -150.0,
+    "year": 2018,
+    "jump_sd": 1.9357031915199696,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -135.0,
+    "year": 2015,
+    "jump_sd": 1.2152795593919001,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -120.0,
+    "year": 2018,
+    "jump_sd": 1.319529034378954,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -105.0,
+    "year": 2019,
+    "jump_sd": 1.1900234509502625,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -90.0,
+    "year": 2020,
+    "jump_sd": 1.0229174291903027,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -75.0,
+    "year": 2012,
+    "jump_sd": 1.2882044690046532,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -15.0,
+    "year": 1997,
+    "jump_sd": 1.2558139090885108,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 15.0,
+    "year": 2019,
+    "jump_sd": 0.8827659600490648,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 30.0,
+    "year": 2001,
+    "jump_sd": -0.7471655140553622,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 45.0,
+    "year": 1993,
+    "jump_sd": 0.7011168719400934,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 60.0,
+    "year": 1991,
+    "jump_sd": 1.0472464774021701,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 75.0,
+    "year": 2018,
+    "jump_sd": 1.259365187245359,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 90.0,
+    "year": 1996,
+    "jump_sd": 1.1923626837614403,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 105.0,
+    "year": 2011,
+    "jump_sd": -0.8704274450465986,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 120.0,
+    "year": 2010,
+    "jump_sd": -1.1458542133538108,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 135.0,
+    "year": 2004,
+    "jump_sd": 0.9004709513325514,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 150.0,
+    "year": 2017,
+    "jump_sd": 0.7248426510915599,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 165.0,
+    "year": 2012,
+    "jump_sd": 0.5909980877140475,
+    "step_beats_trend": false
+   }
+  ]
+ },
+ "GWETROOT": {
+  "n": 111,
+  "top_years": [
+   [
+    2020,
+    12
+   ],
+   [
+    2018,
+    8
+   ],
+   [
+    2016,
+    7
+   ],
+   [
+    1988,
+    6
+   ],
+   [
+    2012,
+    6
+   ]
+  ],
+  "in_1997_99": 6,
+  "expected_if_random": 9.5,
+  "in_1997_99_and_step_beats_trend": 5,
+  "step_beats_trend_any_year": 81,
+  "places": [
+   {
+    "lat": -45.0,
+    "lon": -75.0,
+    "year": 2016,
+    "jump_sd": -1.6845335606481397,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": -60.0,
+    "year": 2020,
+    "jump_sd": -0.8809515723996473,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -35.0,
+    "lon": 135.0,
+    "year": 2015,
+    "jump_sd": -1.735589656039715,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -35.0,
+    "lon": 150.0,
+    "year": 1992,
+    "jump_sd": -0.7394180769733909,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": -60.0,
+    "year": 1993,
+    "jump_sd": -0.8125791681081861,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 15.0,
+    "year": 2006,
+    "jump_sd": 0.8582635074647827,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 30.0,
+    "year": 1988,
+    "jump_sd": -1.0267542749014384,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 45.0,
+    "year": 2016,
+    "jump_sd": -0.8974485046109933,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 120.0,
+    "year": 2018,
+    "jump_sd": -1.152265362963186,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -25.0,
+    "lon": 135.0,
+    "year": 2016,
+    "jump_sd": -0.5738616385868582,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -25.0,
+    "lon": 150.0,
+    "year": 2018,
+    "jump_sd": -0.8015669992927893,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -75.0,
+    "year": 1997,
+    "jump_sd": 1.0618074529860704,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": -60.0,
+    "year": 1993,
+    "jump_sd": -1.3837027473777685,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": -45.0,
+    "year": 1994,
+    "jump_sd": -1.4233657906183328,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 15.0,
+    "year": 2007,
+    "jump_sd": 0.5146490440267807,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -15.0,
+    "lon": 30.0,
+    "year": 1991,
+    "jump_sd": -0.9376526090954175,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -15.0,
+    "lon": 135.0,
+    "year": 2016,
+    "jump_sd": -1.2057896142758933,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -75.0,
+    "year": 2020,
+    "jump_sd": -1.311387363510489,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": -60.0,
+    "year": 1988,
+    "jump_sd": -1.325045411758499,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": -45.0,
+    "year": 2012,
+    "jump_sd": -1.2111369826400005,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 15.0,
+    "year": 1992,
+    "jump_sd": -1.3900956260476718,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 30.0,
+    "year": 2018,
+    "jump_sd": 1.2601420114225306,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 105.0,
+    "year": 2013,
+    "jump_sd": 0.7641682584111432,
+    "step_beats_trend": true
+   },
+   {
+    "lat": -5.0,
+    "lon": 120.0,
+    "year": 1995,
+    "jump_sd": 0.9226105412434394,
+    "step_beats_trend": false
+   },
+   {
+    "lat": -5.0,
+    "lon": 150.0,
+    "year": 1987,
+    "jump_sd": -0.6350090523758228,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": -75.0,
+    "year": 2001,
+    "jump_sd": -1.5081842158225285,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": -60.0,
+    "year": 2018,
+    "jump_sd": -0.6605027821587405,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 0.0,
+    "year": 2002,
+    "jump_sd": 1.2776647361476707,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 15.0,
+    "year": 1989,
+    "jump_sd": -1.685721731617025,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 30.0,
+    "year": 1998,
+    "jump_sd": -1.3367723111200054,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 5.0,
+    "lon": 45.0,
+    "year": 2010,
+    "jump_sd": 1.085951854057362,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 5.0,
+    "lon": 120.0,
+    "year": 1999,
+    "jump_sd": 0.6371588430800291,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": -90.0,
+    "year": 1991,
+    "jump_sd": 1.6038710436651167,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 15.0,
+    "lon": -15.0,
+    "year": 2020,
+    "jump_sd": 1.9266145895782802,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 0.0,
+    "year": 2015,
+    "jump_sd": 1.7903711541974063,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 15.0,
+    "year": 2019,
+    "jump_sd": 1.969327203738342,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 30.0,
+    "year": 2020,
+    "jump_sd": 1.8121792090001596,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 45.0,
+    "year": 1988,
+    "jump_sd": -1.1981109092992182,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 75.0,
+    "year": 2019,
+    "jump_sd": 1.6749106603506432,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 105.0,
+    "year": 2016,
+    "jump_sd": 1.26487311966555,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 15.0,
+    "lon": 120.0,
+    "year": 1999,
+    "jump_sd": 1.1867153459940545,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": -105.0,
+    "year": 1994,
+    "jump_sd": -1.2883103102887372,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": -15.0,
+    "year": 2020,
+    "jump_sd": 1.3438297132549222,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 0.0,
+    "year": 2019,
+    "jump_sd": -1.6806462790915566,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 25.0,
+    "lon": 15.0,
+    "year": 2020,
+    "jump_sd": 1.60368444593501,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 30.0,
+    "year": 1988,
+    "jump_sd": -1.3516921110148847,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 45.0,
+    "year": 1987,
+    "jump_sd": -1.54551029360239,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 60.0,
+    "year": 2020,
+    "jump_sd": 1.075947641508104,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 75.0,
+    "year": 2010,
+    "jump_sd": 1.5114397754146716,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 90.0,
+    "year": 1998,
+    "jump_sd": 1.8274579184237234,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 25.0,
+    "lon": 105.0,
+    "year": 2014,
+    "jump_sd": 0.9422847688754257,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": -120.0,
+    "year": 2012,
+    "jump_sd": -0.3814232746005346,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": -105.0,
+    "year": 2000,
+    "jump_sd": -0.8991879304136063,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": -90.0,
+    "year": 1998,
+    "jump_sd": -0.46981518073792367,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 0.0,
+    "year": 2020,
+    "jump_sd": -1.7776939921908192,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 45.0,
+    "year": 1989,
+    "jump_sd": 1.219562333054592,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 60.0,
+    "year": 1987,
+    "jump_sd": -0.7371830342517273,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 75.0,
+    "year": 2015,
+    "jump_sd": 1.4553329137799633,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 90.0,
+    "year": 2002,
+    "jump_sd": 1.4667726252679378,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 105.0,
+    "year": 2018,
+    "jump_sd": 1.7543614293867902,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 35.0,
+    "lon": 120.0,
+    "year": 2003,
+    "jump_sd": 1.3960520905540237,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 35.0,
+    "lon": 135.0,
+    "year": 1989,
+    "jump_sd": 1.2046456128842795,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -120.0,
+    "year": 1986,
+    "jump_sd": -1.428336517033684,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -105.0,
+    "year": 2013,
+    "jump_sd": 0.8497593395231854,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -90.0,
+    "year": 2014,
+    "jump_sd": 1.0801006202138044,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": -75.0,
+    "year": 2012,
+    "jump_sd": -1.6032672811855675,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 0.0,
+    "year": 2002,
+    "jump_sd": -0.9193601239722798,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 15.0,
+    "year": 1996,
+    "jump_sd": 0.9073004472124937,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 30.0,
+    "year": 1989,
+    "jump_sd": -1.0122052194838624,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 45.0,
+    "year": 2012,
+    "jump_sd": -0.9538560548313328,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 60.0,
+    "year": 1988,
+    "jump_sd": -0.8762681250746318,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 75.0,
+    "year": 2001,
+    "jump_sd": 1.043939404276088,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 90.0,
+    "year": 2010,
+    "jump_sd": 1.2907764751784048,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 105.0,
+    "year": 2016,
+    "jump_sd": 1.2027604424239582,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 120.0,
+    "year": 2020,
+    "jump_sd": 1.5699726400512932,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 45.0,
+    "lon": 135.0,
+    "year": 2020,
+    "jump_sd": 2.105467044618434,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -165.0,
+    "year": 2020,
+    "jump_sd": 1.0809546244552202,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -120.0,
+    "year": 2014,
+    "jump_sd": 0.706827497658162,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -105.0,
+    "year": 2004,
+    "jump_sd": 1.433293875304927,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -90.0,
+    "year": 1992,
+    "jump_sd": -1.3580294688485577,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": -75.0,
+    "year": 1996,
+    "jump_sd": -0.6118525891253757,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": -60.0,
+    "year": 2020,
+    "jump_sd": -1.2603347721012723,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 15.0,
+    "year": 2013,
+    "jump_sd": -1.1087242619126303,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 30.0,
+    "year": 1992,
+    "jump_sd": -0.8486645759949156,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 45.0,
+    "year": 1986,
+    "jump_sd": -0.7129837318912058,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 60.0,
+    "year": 1988,
+    "jump_sd": -0.6249882838953735,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 55.0,
+    "lon": 75.0,
+    "year": 2014,
+    "jump_sd": 0.904459969556189,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 90.0,
+    "year": 2010,
+    "jump_sd": 1.6254417887948205,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 105.0,
+    "year": 1990,
+    "jump_sd": -1.1793468586671514,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 120.0,
+    "year": 1986,
+    "jump_sd": -1.318091325349523,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 135.0,
+    "year": 2016,
+    "jump_sd": 1.0286961173795373,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 55.0,
+    "lon": 165.0,
+    "year": 2015,
+    "jump_sd": 0.5762121131569538,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": -165.0,
+    "year": 2019,
+    "jump_sd": 1.7408112730466692,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -150.0,
+    "year": 2018,
+    "jump_sd": 2.008682669129666,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -135.0,
+    "year": 2015,
+    "jump_sd": 1.2838195203124436,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -120.0,
+    "year": 2018,
+    "jump_sd": 1.3514376227133886,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -105.0,
+    "year": 2019,
+    "jump_sd": 1.244559301789833,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -90.0,
+    "year": 2005,
+    "jump_sd": 0.6671935348807679,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -75.0,
+    "year": 2012,
+    "jump_sd": 1.2672381580502934,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": -15.0,
+    "year": 1996,
+    "jump_sd": 1.2217079904946107,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 15.0,
+    "year": 2019,
+    "jump_sd": 0.8895200133485249,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 30.0,
+    "year": 2001,
+    "jump_sd": -0.742865021982499,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 45.0,
+    "year": 1993,
+    "jump_sd": 0.7232134522322604,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 60.0,
+    "year": 1991,
+    "jump_sd": 0.9719650196900071,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 75.0,
+    "year": 2018,
+    "jump_sd": 1.2548287440574084,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 90.0,
+    "year": 1995,
+    "jump_sd": 1.2138986918849297,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 105.0,
+    "year": 2011,
+    "jump_sd": -0.8773817173094761,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 120.0,
+    "year": 2010,
+    "jump_sd": -1.1193147613901064,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 135.0,
+    "year": 2004,
+    "jump_sd": 0.9326615094346246,
+    "step_beats_trend": true
+   },
+   {
+    "lat": 65.0,
+    "lon": 150.0,
+    "year": 2017,
+    "jump_sd": 0.7674355544127262,
+    "step_beats_trend": false
+   },
+   {
+    "lat": 65.0,
+    "lon": 165.0,
+    "year": 2012,
+    "jump_sd": 0.5972456289409873,
+    "step_beats_trend": false
+   }
+  ]
+ }
+}
