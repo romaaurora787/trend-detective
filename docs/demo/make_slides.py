@@ -4,8 +4,7 @@ Usage (from the repo root):
     backend/.venv/bin/python docs/demo/make_slides.py --team "Your Team Name"
 
 The screenshots in docs/demo/img/ were taken from the live site on Sun 15 Nov 2026
-(browser at 1280x800); refreshed ~17:30 after the look-freeze. Every number on the slides comes from FINDINGS.md / the API;
-keep them in step with docs/SUBMISSION.md if anything changes.
+(browser at 1280x800); refreshed ~17:30 after the look-freeze. Every number on the slides comes from FINDINGS.md / the API.
 
 AI-use note: drafted with Claude (Anthropic) during the hackathon.
 """

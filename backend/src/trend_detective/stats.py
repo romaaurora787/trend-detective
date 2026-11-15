@@ -39,7 +39,7 @@ WEATHERHEAD_MAX_YEARS = 100  # beyond this we call it "no trend detected"
 # Hamed-Rao uses only autocorrelation lags up to 12 months. With all lags
 # (the pymannkendall default) spurious significant lags made the variance
 # unstable (occasionally negative) and 95% CIs covered only ~86-90% in our
-# synthetic tests; with 12 lags coverage was ~92-95% (scripts/diag.py).
+# synthetic tests; with 12 lags coverage was ~92-95% (scripts/check_coverage.py).
 HR_LAG = 12
 YW_LAG = 1
 
