@@ -82,9 +82,9 @@ function useActiveStep(n: number) {
 const CASES = [
   { img: "lincolnshire", tag: "Real change", tone: "rise", title: "Lincolnshire air temperature", text: "Warming, proven by both corrected tests and backed by independent records.", href: "#/case?var=T2M&box=52.6,53.7,-1,0.4" },
   { img: "world", tag: "The whole world", tone: "ink", title: "The world on trial", text: "Every 2° land square for temperature and rain, plus 111 places for 19 variables. Watch the typical test get fooled by luck.", href: "#/world" },
-  { img: "england-wales", tag: "Fooled the typical test", tone: "warn", title: "England & Wales soil", text: "A typical map flags 89 cells as drying. After the corrections, none hold up.", href: "#/map?var=GWETROOT&box=50,55.5,-6,2" },
+  { img: "england-wales", tag: "Fooled the typical test", tone: "warn", title: "England & Wales soil", text: "A typical map shows 89 of 137 places changing. After the corrections, none hold up: that's what chance alone draws.", href: "#/map?var=GWETROOT&box=50,55.5,-6,2" },
   { img: "wisconsin", tag: "Could be the satellite", tone: "warn", title: "Central Wisconsin cloud cover", text: "A cloud trend that one jump at the 2001 satellite switch explains better.", href: "#/case?var=CLOUD_AMT&box=44,46,-91,-89&name=Central%20Wisconsin" },
-  { img: "delhi", tag: "Thermometers disagree", tone: "warn", title: "Delhi air temperature", text: "NASA's model finds no warming; NASA's own station thermometers find +0.22 °C a decade. Rain: 0 of 3 records agree. Water: GRACE sees the ground losing 52 cm a decade.", href: "#/case?var=T2M&box=28,29.5,76.5,78&name=Delhi" },
+  { img: "delhi", tag: "Thermometers disagree", tone: "warn", title: "Delhi air temperature", text: "NASA's model finds no proven warming; NASA's own station thermometers find +0.21 °C a decade. Rain: 0 of 3 records agree. Water: GRACE sees the ground losing 52 cm a decade.", href: "#/case?var=T2M&box=28,29.5,76.5,78&name=Delhi" },
   { img: "luzon", tag: "A jump, not a trend", tone: "warn", title: "Luzon rainfall", text: "The tests say rising, but the cross-examination finds one jump in 1999: a real Pacific shift that NASA GPCP sees too, not a steady trend.", href: "#/case?var=PRECTOTCORR&box=14,16,119,121&name=Luzon" },
 ];
 

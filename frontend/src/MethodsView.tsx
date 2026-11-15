@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api, examples, type Validation } from "./api";
 import { Panel, Reveal } from "./Chart";
 import { Trust } from "./Trust";
+import { Apart } from "./Apart";
 
 const pct = (xs: number[]) => xs.map((x) => x * 100);
 
@@ -18,8 +19,10 @@ export function MethodsView() {
         <p className="lede">Is this variable really changing here, or is it natural ups and downs? If it is changing, how fast, and how sure are we? If we can't tell yet, how long until we could?</p>
       </section>
 
+      <Apart v={v} />
+
       <Reveal className="frame sec">
-        <h2 className="sec-title"><span className="tag">[00]</span>Why trust the Detective</h2>
+        <h2 className="sec-title"><span className="tag">[01]</span>Why trust the Detective</h2>
         <Trust />
       </Reveal>
 

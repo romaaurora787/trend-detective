@@ -21,9 +21,9 @@ export function Trust({ variables }: { variables?: V[] }) {
     [cloud ? `${cloud.alibi.could_be_instrument ?? 0}/${cloud.n_proven}` : "—", "We check the satellite didn't change.", "Proven cloud trends that one jump at the 2001 satellite switch explains better.", "#/world"],
     ["4", "We remove four ocean cycles, not just El Niño.", "El Niño, NAO, Indian Ocean Dipole and PDO, in the cross-examination.", "#/case"],
     [`${Math.round(fa.false_alarm_rate.ours_verdict[i5] * 100)}%`, `False alarms, not ${Math.round(fa.false_alarm_rate.naive_ols_anomalies[i5] * 100)}%.`, "Our verdict on realistic sticky noise, against a typical test.", "#/methods"],
-    ["3", "Independent witnesses, counted honestly.", "Other records (for rain: GPCP, IMERG, ERA5) must agree, and we say which don't.", "#/case"],
+    ["3", "Other records as witnesses, counted honestly.", "For rain: GPCP, IMERG and ERA5. We say which agree, which don't, and which are truly independent.", "#/case"],
     [t ? `${Math.round((f / t) * 100)}%` : "—", "Of typical trend claims don't hold.", t ? `${f.toLocaleString("en-GB")} of ${t.toLocaleString("en-GB")} across 111 places and 19 variables.` : "Loading the world report…", "#/world"],
-    ["4", "Ways to check every number yourself.", "The NASA request, Giovanni, the CSV and a notebook.", "#/case"],
+    ["4", "Ways to check the numbers yourself.", "The NASA request, Giovanni, the CSV and a notebook.", "#/case"],
   ];
   const sticky = yv?.false_alarms.sticky_noise;
   return (

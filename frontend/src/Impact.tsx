@@ -18,7 +18,7 @@ export function Impact() {
     ["The problem", `A typical trend test calls ${n(typ)} of ${n(all)} NASA trends real.`,
       `${n(fool)} of them (${Math.round((fool / typ) * 100)}%) don't hold up. The test treats every month as independent, and weather is sticky: one warm month is often followed by another, so luck looks like a trend.`],
     ["What we do", `${n(proven)} survive our checks.`,
-      "Two corrected tests must agree. Then a cross-examination (the 2001 satellite switch, four ocean cycles, one odd year) and other records as witnesses. Every number links back to NASA's own data."],
+      "Two corrected tests must agree. Then a cross-examination (the 2001 satellite switch, four ocean cycles, one odd year) and other records as witnesses. Every number links back to its source data."],
     ["Why it matters", "Real change, or noise someone will act on?",
       "Farmers, planners and reporters read trend maps. A false \"drying\" claim sends money and attention the wrong way; a missed one leaves people unready. We say which changes are real, how sure we are, and what 2050 could bring."],
   ];
@@ -34,7 +34,7 @@ export function Impact() {
       {cl && cl.n_proven > cl.n_proven_after_alibi && (
         <p className="impact-lead" style={{ "--n": 3 } as CSSProperties}>
           <span className="tag">[OUR LEAD]</span>
-          We check every known change in NASA's data sources (sunlight, cloud and heat radiation in 2001; aerosols in 2014; deep soil; rain in 1987) at every place we test.{" "}
+          We check the documented changes in NASA's data sources (sunlight, cloud and heat radiation in 2001; aerosols in 2014; deep soil; rain in 1987) at every place we test.{" "}
           <b>{n(cl.n_proven - cl.n_proven_after_alibi)} of {n(cl.n_proven)} proven cloud trends could be the instrument, not the sky.</b>
         </p>
       )}

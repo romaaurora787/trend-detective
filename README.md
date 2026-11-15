@@ -10,7 +10,7 @@ Pick any place on Earth and a NASA variable (temperature, rain, soil moisture, h
 
 It has what the strongest projects in this challenge have: any place, tests corrected for "sticky" noise, a false-discovery check on maps, a world globe, a second NASA record, a sudden-jump test, El Niño removed, two places compared, plain and detailed wording, and citations. On top of that, it puts six things together in one tool:
 
-1. **An instrument check for every known change in NASA's data sources** (2001 sunlight, cloud and heat radiation; 2014 aerosols; deep soil; 1987 rain), re-tested on single-source years. Worldwide, **42 of 88 proven cloud-cover trends could be the instrument, not the sky.**
+1. **An instrument check for the documented changes in NASA's data sources** (2001 sunlight, cloud and heat radiation; 2014 aerosols; deep soil; 1987 rain), re-tested on single-source years. Worldwide, **42 of 88 proven cloud-cover trends could be the instrument, not the sky.**
 2. **False alarms measured on monthly data:** 6% on pure noise vs 28–55% for a typical test, with 99.7% of real 0.3-per-decade trends still caught.
 3. **Witnesses counted for independence:** station thermometers, rain gauges, GPCP, IMERG, ESA CCI, GLDAS, GRACE and ERA5, each labelled for how independent it is.
 4. **Four ocean cycles removed together** (El Niño, NAO, Indian Ocean Dipole, PDO), with a careful "hidden change" flag.

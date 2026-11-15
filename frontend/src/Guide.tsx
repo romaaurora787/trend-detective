@@ -18,7 +18,7 @@ export function Guide({ onClose }: { onClose: () => void }) {
       text: "Type a town in Search, pick a demo case, or draw a box on a map. The same checks run on whatever you choose.",
       act: "Search a place", run: focusSearch },
     { tag: "Zoom out", title: "The whole planet on trial",
-      text: "Every land square tested. See where change is proven, where a typical test is fooled, and where it could go by 2050.",
+      text: "Every 2° land square tested for temperature and rain, plus 111 places for 19 variables. See where change is proven, where a typical test is fooled, and where it could go by 2050.",
       act: "Open the world", href: "#/world" },
   ];
   return (
@@ -40,6 +40,7 @@ export function Guide({ onClose }: { onClose: () => void }) {
             </li>
           ))}
         </ol>
+        <p className="guide-apart"><a className="linkish" href="#/methods" onClick={close}><span className="tag">[JUDGING?]</span> What sets it apart, in six points →</a></p>
         <p className="note guide-foot">Words too technical, or not enough? Use <b>Detail</b> in the header: Plain keeps it in everyday words, Detailed shows every test and p-value. Reopen this guide any time with <b>Guide</b>.</p>
       </Reveal>
     </div>
