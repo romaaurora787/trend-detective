@@ -23,6 +23,8 @@ import time
 from pathlib import Path
 
 import httpx
+import math
+
 import numpy as np
 import pandas as pd
 
@@ -148,6 +150,13 @@ MIN_SPAN = 2.0  # POWER regional endpoint needs >= 2 degrees each way
 
 
 def _widen(lo: float, hi: float, lim: float) -> tuple[float, float]:
+    """Widen a short side to 2 degrees (POWER's regional minimum).
+
+    POWER checks max - min >= 2 on the 2-decimal numbers it receives (fetch_region rounds). A plain
+    2.0 widening can arrive as e.g. -2.3 .. -0.3, which is 1.9999999 in floating point and gets a
+    422, so when the ROUNDED span falls short we move each side out by 0.01. Boxes that already
+    worked keep exactly the same request (and so their cache).
+    """
     if hi - lo >= MIN_SPAN:
         return lo, hi
     mid = (lo + hi) / 2
@@ -156,6 +165,8 @@ def _widen(lo: float, hi: float, lim: float) -> tuple[float, float]:
         lo, hi = -lim, -lim + MIN_SPAN
     if hi > lim:
         lo, hi = lim - MIN_SPAN, lim
+    if round(hi, 2) - round(lo, 2) < MIN_SPAN:  # what POWER will actually see
+        lo, hi = max(math.floor(lo * 100) / 100 - 0.01, -lim), min(math.ceil(hi * 100) / 100 + 0.01, lim)
     return lo, hi
 
 

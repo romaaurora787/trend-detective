@@ -93,3 +93,12 @@ def test_outlook_trend_and_scenarios_are_honest():
     assert abs(outlook.trend_whatif(a, None, "°C")["change_by_2050"] - 0.9) < 1e-9
     noise = pd.Series(rng.normal(0, 1, len(MONTHS)), index=MONTHS)
     assert outlook.scenarios(noise, "mm/day")["available"] is False  # no proven link, no scenarios
+
+
+def test_small_boxes_never_fall_under_powers_2_degree_minimum():
+    from trend_detective import power
+    # -2.3 .. -0.3 is 1.9999999 in floating point: POWER answered 422 for Nairobi on Sunday
+    for lo, hi in [(-1.8, -0.8), (-2.03, -0.53), (28.0, 29.5), (51.2, 51.8), (-0.6, 0.4), (88.5, 89.5), (-89.9, -89.0)]:
+        a, b = power._widen(lo, hi, 90)
+        assert round(b, 2) - round(a, 2) >= 2.0 and a <= lo and b >= hi and -90 <= a and b <= 90
+    assert tuple(round(x, 2) for x in power._widen(52.6, 53.7, 90)) == (52.15, 54.15)  # boxes that already worked keep their request (and cache)
