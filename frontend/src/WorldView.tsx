@@ -307,8 +307,8 @@ function placesIn(world: World, name: string, where: string[]) {
   return { idx: [best], km: Math.round((bd * 6371) / 10) * 10 };
 }
 
-// The record ends in 2025: 2.5 decades to 2050.
-const TO_2050 = 2.5;
+// Same baseline as /api/outlook: the 2016–2025 average (centred 2020) to around 2050 = 3 decades.
+const TO_2050 = 3;
 
 /** One variable at a set of places: how many proven, the average proven trend, how many fooled the typical test. */
 function sum(v: WorldVar, idx: number[]) {
@@ -363,7 +363,7 @@ function CountryTable({ world, grids, cols, where, varId, onVar, onDrop }: { wor
                       <td key={c.name}>
                         <span className={`cval t-${dirTone(v.id, r.slope)}`}><b>{signed(r.slope)}</b> {u}/decade</span>
                         <span className="tag">proven at {r.p} of {r.n}{g ? " grid squares" : ""}{r.sat ? ` · ${r.sat} could be the satellite` : ""}</span>
-                        <span className="c2050">If it keeps going, by 2050: {signed(r.slope * TO_2050)} {u} on today</span>
+                        <span className="c2050">If it keeps going, around 2050: {signed(r.slope * TO_2050)} {u} vs the last 10 years</span>
                       </td>
                     );
                   })}
@@ -525,7 +525,7 @@ export default function WorldView() {
               <p className="cline">
                 {fs.slope == null
                   ? <>{v.name}: <b>no proven change</b>{fs.fooled ? `, though a typical test says there is at ${fs.fooled} of ${fs.n}` : ""}.</>
-                  : <>{v.name}: <b className={`t-${dirTone(v.id, fs.slope)}`}>{signed(fs.slope)} {u}</b> per decade{grid ? " on average" : ""}, proven at {fs.p} of {fs.n}{grid ? " squares" : ""}. If it keeps going, by 2050: <b>{signed(fs.slope * TO_2050)} {u}</b> on today.</>}
+                  : <>{v.name}: <b className={`t-${dirTone(v.id, fs.slope)}`}>{signed(fs.slope)} {u}</b> per decade{grid ? " on average" : ""}, proven at {fs.p} of {fs.n}{grid ? " squares" : ""}. If it keeps going, around 2050: <b>{signed(fs.slope * TO_2050)} {u}</b> vs the last 10 years.</>}
               </p>
               <div className="cbtns">
                 <button className="btn" onClick={() => document.getElementById("country")?.scrollIntoView({ behavior: "smooth" })}>Every variable here ↓</button>

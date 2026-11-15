@@ -97,6 +97,15 @@ export interface Models {
   models?: { model: string; slope_observed_period: number; slope_2026_2050: number }[];
   observed_slope?: number; model_range?: [number, number]; units_note?: string; caveat?: string; credit?: string;
 }
+type Off = { available: false; reason?: string };
+type Span = { change_by_2050: number; range: [number, number]; units: string };
+export interface Outlook {
+  disclaimer: string;
+  trend: Off | (Span & { available: true; note?: string });
+  models: Off | (Span & { available: true; n_models: number; agree_on_direction: number; units_note?: string; credit?: string });
+  scenarios: Off | { available: true; units: string; headline: string; choice_matters: string; note: string; source: string; caution?: string;
+    scenarios: (Span & { id: string; name: string; global_warming_2050: number })[] };
+}
 export interface Cite { items: { key: string; apa: string; harvard: string; bibtex: string; acknowledgement?: string }[] }
 export type Spot = { name: string; slope_per_decade: number; units: string; case: string };
 export interface Opposites { n_land_cells: number; n_rising: number; n_falling: number; headline: string; rising: Spot[]; falling: Spot[] }
@@ -131,6 +140,7 @@ export const api = {
   cite: (v: string, name: string, url: string) => get<Cite>(`/api/cite?var=${v}&name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}`),
   opposites: (v: string) => get<Opposites>(`/api/opposites?var=${v}&n=4`),
   models: (v: string, b: Box) => get<Models>(`/api/models?var=${v}&${q(b)}`),
+  outlook: (v: string, b: Box) => get<Outlook>(`/api/outlook?var=${v}&${q(b)}`),
   evidenceUrl: (v: string, b: Box) => `${API}/api/evidence.csv?var=${v}&${q(b)}`,
 };
 

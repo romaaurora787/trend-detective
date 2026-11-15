@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { api, examples, type Analysis, type Box, type Cite, type Models } from "./api";
+import { api, examples, type Analysis, type Box, type Cite, type Models, type Outlook } from "./api";
 import { Reveal } from "./Chart";
 import { CheckOurWork, CrossExamBlock, WitnessList, useCrossExam, useLive } from "./CrossExam";
 import { LABELS, dirTone, pText, placeName, plain, sameBox, short, signed } from "./lib";
@@ -192,7 +192,7 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
 
       <Reveal className="frame sec">
         <h2 className="sec-title"><span className="tag">[{String(steps.length + 2).padStart(2, "0")}]</span>By 2050</h2>
-        <p className="sec-lede">Two ways to look ahead: our own trend drawn on as a straight line, and what seven climate models project for this spot.</p>
+        <p className="sec-lede">Three ways to look ahead: our own trend drawn on, what climate models expect for this spot, and what changes if the world's emissions go differently.</p>
         <By2050 varId={v.id} box={data.box} r={r} />
       </Reveal>
 
@@ -226,66 +226,68 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
   );
 }
 
-const TO = 2050;
 const VERDICT_2050 = {
-  inside: "For 1981–2025 our measured trend sits inside the models' range, so they got it about right here.",
+  inside: "For 1981–2025 the measured trend sits inside the models' range: they got it about right here.",
   above: "So far it has changed faster than every model ran it here.",
   below: "So far it has changed more slowly than every model ran it here.",
 };
+const SCEN = [["SSP1-2.6", "Big cuts"], ["SSP2-4.5", "Middle"], ["SSP5-8.5", "Very high"]] as const;
+type Spanish = { range: [number, number]; change_by_2050: number };
 
-/** By 2050: today's proven trend extended, next to 7 CMIP6 HighResMIP models (/api/models). A what-if, never a forecast. */
+/** By 2050: three what-ifs from /api/outlook (B9): trend drawn on, 7 CMIP6 models, IPCC AR6 emission scenarios.
+ *  All compare around 2050 with the 2016–2025 average; the backend refuses unproven trends and sudden jumps. */
 function By2050({ varId, box, r }: { varId: string; box: Box; r: Analysis["result"] }) {
-  const m = useLive<Models | null>(() => api.models(varId, box), `${varId}|${box}`, null);
-  const u = short(r.units), dec = (TO - +r.end.slice(0, 4)) / 10;
-  const proven = r.verdict.label === "strong" || r.verdict.label === "some";
-  const line = proven ? { mid: r.sen_slope_per_decade * dec, lo: r.sen_ci95_per_decade[0] * dec, hi: r.sen_ci95_per_decade[1] * dec } : null;
-  const ms = m.data?.available && m.data.models?.length ? m.data.models.map((x) => x.slope_2026_2050 * dec).sort((a, b) => a - b) : null;
-  const mod = ms && { lo: ms[0], hi: ms[ms.length - 1], mid: ms[Math.floor(ms.length / 2)] };
-  const agree = ms && mod ? ms.filter((x) => Math.sign(x) === Math.sign(mod.mid)).length : 0;
-  // One shared scale so the two ranges can be compared by eye.
-  const span = Math.max(...[line, mod].flatMap((o) => (o ? [Math.abs(o.lo), Math.abs(o.hi)] : [])), 1e-9) * 1.1;
+  const o = useLive<Outlook | null>(() => api.outlook(varId, box), `${varId}|${box}`, null);
+  const m = useLive<Models | null>(() => api.models(varId, box), `${varId}|${box}`, null); // only for the "so far" verdict
+  const [pick, setPick] = useState<string>("SSP2-4.5");
+  const u = short(r.units);
+  if (!o.data) return <p className="note pad" role="status">{o.error ? <span className="error">{o.error}</span> : "Working out three what-ifs for 2050…"}</p>;
+  const { trend: t, models: md, scenarios: sc, disclaimer } = o.data;
+  const chosen = sc.available ? sc.scenarios.find((x) => x.id === pick) ?? sc.scenarios[1] : null;
+  const spans = [t.available ? t : null, md.available ? md : null, ...(sc.available ? sc.scenarios : [])].filter(Boolean) as Spanish[];
+  // One shared scale so all ranges can be compared by eye.
+  const span = Math.max(...spans.flatMap((x) => [Math.abs(x.range[0]), Math.abs(x.range[1])]), 1e-9) * 1.05;
   const X = (x: number) => 50 + (x / span) * 50;
-  const bar = (o: { lo: number; mid: number; hi: number }) => (
+  const bar = (x: Spanish) => (
     <svg className="interval" viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden>
       <line className="iv-zero" x1="50" x2="50" y1="0" y2="12" />
-      <rect className={`iv-range t-${dirTone(varId, o.mid)}`} x={X(o.lo)} width={Math.max(X(o.hi) - X(o.lo), 0.6)} y="4" height="4" />
-      <rect className={`iv-mid t-${dirTone(varId, o.mid)}`} x={X(o.mid) - 0.6} width="1.2" y="1" height="10" />
+      <rect className={`iv-range t-${dirTone(varId, x.change_by_2050)}`} x={X(x.range[0])} width={Math.max(X(x.range[1]) - X(x.range[0]), 0.6)} y="4" height="4" />
+      <rect className={`iv-mid t-${dirTone(varId, x.change_by_2050)}`} x={X(x.change_by_2050) - 0.6} width="1.2" y="1" height="10" />
     </svg>
   );
+  const big = (x: Spanish) => <b className={`t-${dirTone(varId, x.change_by_2050)}`}>{signed(x.change_by_2050)} {u}</b>;
+  const off = (reason?: string) => <><b>—</b><p>{reason ?? "Not available here."}</p></>;
   return (
     <div className="y2050">
+      <p className="y-note y-top">{disclaimer} Every number compares around 2050 with the 2016–2025 average.</p>
       <div className="y-card">
-        <p className="tag">[IF TODAY'S TREND KEEPS GOING]</p>
-        {line ? (
-          <>
-            <b className={`t-${dirTone(varId, line.mid)}`}>{signed(line.mid)} {u}</b>
-            {bar(line)}
-            <p>Change from {r.end.slice(0, 4)} to {TO}. Likely range {signed(line.lo)} to {signed(line.hi)} {u}. This is the 1981–{r.end.slice(0, 4)} line drawn on for another {Math.round(dec * 10)} years.</p>
-          </>
-        ) : (
-          <>
-            <b>—</b>
-            <p>No proven trend here, so we don't draw a line into the future.</p>
-          </>
-        )}
+        <p className="tag">[1 · IF TODAY'S TREND KEEPS GOING]</p>
+        {t.available ? <>{big(t)}{bar(t)}<p>Likely range {signed(t.range[0])} to {signed(t.range[1])} {u}. {t.note}</p></> : off(t.reason)}
       </div>
       <div className="y-card">
-        <p className="tag">[WHAT 7 CLIMATE MODELS PROJECT]</p>
-        {mod ? (
-          <>
-            <b className={`t-${dirTone(varId, mod.mid)}`}>{signed(mod.mid)} {u}</b>
-            {bar(mod)}
-            <p>Middle of 7 CMIP6 high-resolution models, {signed(mod.lo)} to {signed(mod.hi)} {u} across them; {agree} of 7 agree on the direction.{m.data?.verdict ? ` ${VERDICT_2050[m.data.verdict]}` : ""}</p>
-            {m.data?.units_note && <p className="note">{m.data.units_note}</p>}
+        <p className="tag">[2 · WHAT CLIMATE MODELS EXPECT]</p>
+        {md.available ? (
+          <>{big(md)}{bar(md)}
+            <p>Middle of {md.n_models} CMIP6 high-resolution models on a high-emissions path, {signed(md.range[0])} to {signed(md.range[1])} {u} across them; {md.agree_on_direction} of {md.n_models} agree on the direction.{m.data?.verdict ? ` ${VERDICT_2050[m.data.verdict]}` : ""}</p>
+            {md.units_note && <p className="note">{md.units_note}</p>}
           </>
-        ) : (
-          <>
-            <b>—</b>
-            <p>{m.error ? "The climate models are busy right now (a free service with an hourly limit). Try again in a few minutes." : m.data ? m.data.headline : "Asking the climate models…"}</p>
-          </>
-        )}
+        ) : off(md.reason)}
       </div>
-      <p className="note y-note">{m.data?.caveat ?? "A what-if, not a forecast for any single year."} {m.data?.credit ? `Models: ${m.data.credit}.` : ""}</p>
+      <div className="y-card y-wide">
+        <p className="tag">[3 · IF THE WORLD'S EMISSIONS GO DIFFERENTLY]</p>
+        {sc.available && chosen ? (
+          <>
+            <div className="cite-tabs" role="group" aria-label="Emissions path">
+              {SCEN.map(([id, label]) => <button key={id} aria-pressed={chosen.id === id} onClick={() => setPick(id)}>{label}</button>)}
+            </div>
+            {big(chosen)}{bar(chosen)}
+            <p><strong>{chosen.name}</strong>: the world about {chosen.global_warming_2050} °C warmer than pre-industrial. Range {signed(chosen.range[0])} to {signed(chosen.range[1])} {u}.</p>
+            <p><strong>{sc.choice_matters}</strong></p>
+            {sc.caution && <p className="y-caution">{sc.caution}</p>}
+            <p className="note">{sc.note} Source: {sc.source}.</p>
+          </>
+        ) : off(sc.available ? undefined : sc.reason)}
+      </div>
     </div>
   );
 }

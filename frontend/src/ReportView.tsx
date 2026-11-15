@@ -63,7 +63,7 @@ export function ReportView({ box, onOpen }: { box: Box; onOpen: (varId: string) 
                     <span className={`chip c-${dirTone(c.id, c.slope_per_decade)}`}>{c.direction}</span>
                     <b>{c.name}</b>
                     <span className="gtext"><strong>{c.clarity.toFixed(1)}×</strong> the normal year-to-year swing · {signed(c.slope_per_decade)}{c.units === "unitless" ? "" : ` ${short(c.units)}`}/decade{c.emerged_year ? ` · clear since ${c.emerged_year}` : ""}</span>
-                    <span className="gtext">If it keeps going: <strong>{signed(c.slope_per_decade * 2.5)}{c.units === "unitless" ? "" : ` ${short(c.units)}`}</strong> by 2050</span>
+                    <span className="gtext">If it keeps going: <strong>{signed(c.slope_per_decade * 3)}{c.units === "unitless" ? "" : ` ${short(c.units)}`}</strong> around 2050 vs the last 10 years</span>
                     <span className="tag">Open the case →</span>
                   </button>
                 ))}
