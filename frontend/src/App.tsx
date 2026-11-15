@@ -64,7 +64,15 @@ function PlaceSearch({ onPick }: { onPick: (h: PlaceHit) => void }) {
   );
 }
 
+type Detail = "plain" | "full";
+function useDetail() {
+  const [d, setD] = useState<Detail>(() => { try { return localStorage.getItem("td-detail") === "full" ? "full" : "plain"; } catch { return "plain"; } });
+  useEffect(() => { document.documentElement.dataset.detail = d; try { localStorage.setItem("td-detail", d); } catch { /* private mode */ } }, [d]);
+  return [d, setD] as const;
+}
+
 export default function App() {
+  const [detail, setDetail] = useDetail();
   const [s, setS] = useState(readHash);
   const [vars, setVars] = useState<Variable[]>(examples.variables);
   const [picking, setPicking] = useState(false);
@@ -108,6 +116,13 @@ export default function App() {
               {PLACES.map((p, i) => <option key={p.name} value={i}>{p.name}</option>)}
             </select>
           </label>
+          <div className="detail-switch" role="group" aria-label="How much detail">
+            <span>Detail</span>
+            <div>
+              <button aria-pressed={detail === "plain"} onClick={() => setDetail("plain")}>Plain</button>
+              <button aria-pressed={detail === "full"} onClick={() => setDetail("full")}>Detailed</button>
+            </div>
+          </div>
           <button className="btn ghost" aria-expanded={picking} onClick={() => setPicking(!picking)}>{picking ? "Close map" : "Pick on a map"}</button>
           {s.route !== "report" && s.route !== "world" && s.route !== "compare" && (
             <label className="grow">

@@ -634,3 +634,14 @@ button.rrow:hover .go { opacity: 1; transform: translateX(4px); }
 .gap-line { fill: none; stroke: var(--ink); stroke-width: 0.35; vector-effect: non-scaling-stroke; stroke-width: 1; opacity: 0.8; }
 .pad-x { margin: 0 var(--cell) var(--space-3); }
 @media (max-width: 979px) { .impact { grid-template-columns: minmax(0, 1fr); } }
+
+/* Plain / Detailed switch: one attribute on <html>. Plain is the default. */
+:root:not([data-detail="full"]) .tech { display: none !important; }
+:root[data-detail="full"] .plain-only { display: none !important; }
+.detail-switch { display: grid; gap: var(--space-1); }
+.detail-switch > span { font: 500 0.7rem/1 var(--font-data); text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); }
+.detail-switch > div { display: flex; border: 1px solid var(--ink); }
+.detail-switch button { font: 600 0.72rem/1 var(--font-data); text-transform: uppercase; letter-spacing: 0.04em; padding: 0.6rem 0.75rem; background: none; color: var(--ink); border: 0; cursor: pointer; white-space: nowrap; }
+.detail-switch button + button { border-left: 1px solid var(--ink); }
+.detail-switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.detail-switch button:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }

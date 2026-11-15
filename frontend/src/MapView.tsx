@@ -3,7 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { api, examples, type Box, type MapCell, type TrendMap } from "./api";
 import { useTween } from "./Chart";
-import { boxText, pText, placeName, risingIsBlue, sameBox, short, signed } from "./lib";
+import { boxText, luckText, pText, placeName, risingIsBlue, sameBox, short, signed } from "./lib";
 
 const TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}";
 const ATTR = "Tiles &copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors";
@@ -191,7 +191,8 @@ export default function MapView({ varId, box }: { varId: string; box: Box }) {
                 {cell && (
                   <dl className="stats">
                     <div><dt>Trend</dt><dd><b>{signed(cell.slope_per_decade)}</b> {u} per decade</dd></div>
-                    <div><dt>Corrected test</dt><dd>{pText(cell.p)}</dd></div>
+                    <div className="tech"><dt>Corrected test</dt><dd>{pText(cell.p)}</dd></div>
+                    <div className="plain-only"><dt>Luck alone</dt><dd>{luckText(cell.p)}</dd></div>
                     <div><dt>Typical says</dt><dd>{cell.significant_typical ? "real change" : "no trend"}</dd></div>
                     <div><dt>Detective says</dt><dd>{cell.significant_fdr ? "proven change" : "not proven"}</dd></div>
                   </dl>

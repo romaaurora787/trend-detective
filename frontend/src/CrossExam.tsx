@@ -76,7 +76,7 @@ export function CrossExamBlock({ x, error, varId, units }: { x: CrossExam | null
           <p className="tag">[SCORE] {scored ? "checks passed" : "not scored: nothing proven to test"}</p>
           <p className="big-line">{x.score.headline}</p>
           {x.score.checks && (
-            <details className="details">
+            <details className="details tech">
               <summary>How the {x.score.of} checks are scored</summary>
               <ol>{x.score.checks.map((c) => <li key={c}>{c}</li>)}</ol>
               {x.score.rule_note && <p className="note">{x.score.rule_note}</p>}

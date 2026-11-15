@@ -121,7 +121,7 @@ export function CompareView({ vars }: { vars: Variable[] }) {
                 <Gap c={c} />
                 {c.note && <p className="note">{c.note}</p>}
               </div>
-              <p className="note y-note">{c.method}. Monthly correlation between the two places: {c.correlation.toFixed(2)}.{c.boxes_overlap ? " The two boxes overlap, so they share some data." : ""}</p>
+              <p className="note y-note tech">{c.method}. Monthly correlation between the two places: {c.correlation.toFixed(2)}.{c.boxes_overlap ? " The two boxes overlap, so they share some data." : ""}</p>
             </div>
           </Reveal>
         </>

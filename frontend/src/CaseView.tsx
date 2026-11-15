@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { api, examples, type Analysis, type Box, type Cite, type Models, type Outlook } from "./api";
 import { Reveal } from "./Chart";
 import { CheckOurWork, CrossExamBlock, WitnessList, useCrossExam, useLive } from "./CrossExam";
-import { LABELS, dirTone, pText, placeName, plain, sameBox, short, signed } from "./lib";
+import { LABELS, dirTone, luckText, pText, placeName, plain, sameBox, short, signed } from "./lib";
 import { StoryChart, StoryKey, type Stage } from "./Story";
 import { Impact } from "./Impact";
 
@@ -58,7 +58,8 @@ function Dots({ n, k }: { n: number; k: number }) {
   );
 }
 
-type Step = { stage: Stage; kicker: string; title: string; text: ReactNode; stats?: [string, ReactNode][]; extra?: ReactNode };
+// A stat row may be "tech" (Detailed only) or "plain" (Plain only); untagged rows show in both.
+type Step = { stage: Stage; kicker: string; title: string; text: ReactNode; stats?: [string, ReactNode, ("tech" | "plain-only")?][]; extra?: ReactNode };
 
 /** Which step's card is crossing the middle of the screen. */
 function useActiveStep(n: number) {
@@ -176,7 +177,7 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
                 <div className="card-text">{s.text}</div>
                 {s.stats && (
                   <dl className="stats">
-                    {s.stats.map(([k, val], j) => <div key={k} style={{ "--n": j } as CSSProperties}><dt>{k}</dt><dd>{val}</dd></div>)}
+                    {s.stats.map(([k, val, only], j) => <div key={k} className={only} style={{ "--n": j } as CSSProperties}><dt>{k}</dt><dd>{val}</dd></div>)}
                   </dl>
                 )}
                 {s.extra}
@@ -206,7 +207,7 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
         <Reveal className="frame sec">
           <h2 className="sec-title"><span className="tag">[{String(steps.length + 4).padStart(2, "0")}]</span>Check our work</h2>
           <CheckOurWork links={r.reproduce ?? []} csv={api.evidenceUrl(v.id, data.box)} />
-          <details className="details pad">
+          <details className="details pad tech">
             <summary>The numbers behind it</summary>
             <dl className="stats">
               <div><dt>Mann-Kendall, Hamed-Rao</dt><dd>{pText(r.mk_hamed_rao.p)}</dd></div>
@@ -286,7 +287,7 @@ function By2050({ varId, box, r }: { varId: string; box: Box; r: Analysis["resul
             <p><strong>{chosen.name}</strong>: the world about {chosen.global_warming_2050} °C warmer than pre-industrial. Range {signed(chosen.range[0])} to {signed(chosen.range[1])} {u}.</p>
             <p><strong>{sc.choice_matters}</strong></p>
             {sc.caution && <p className="y-caution">{sc.caution}</p>}
-            <p className="note">{sc.note} Source: {sc.source}.</p>
+            <p className="note tech">{sc.note} Source: {sc.source}.</p>
           </>
         ) : off(sc.available ? undefined : sc.reason)}
       </div>
@@ -344,11 +345,11 @@ function buildSteps(data: Analysis, replayHeadline: string | null): Step[] {
     {
       stage: "anom", kicker: "Remove the seasons", title: "Take the seasons away",
       text: <p>Each month minus its usual value for that time of year. What is left, the <b>anomaly</b>, is where a trend would hide. Above zero: higher than usual.</p>,
-      stats: [["Stickiness (lag-1)", r.ols_neff.lag1_autocorr.toFixed(2)], ["What that means", r.ols_neff.lag1_autocorr > 0.2 ? "an unusual month tends to be followed by another" : "months are close to independent"]],
+      stats: [["Stickiness (lag-1)", r.ols_neff.lag1_autocorr.toFixed(2), "tech"], ["What that means", r.ols_neff.lag1_autocorr > 0.2 ? "an unusual month tends to be followed by another" : "months are close to independent"]],
     },
     {
       stage: "trend", kicker: "Fit the trend", title: "Draw the line",
-      text: <p>Sen's slope: the middle of every pair-wise slope, so a single odd year can't drag it. The shaded fan is the 95% range of the rate.</p>,
+      text: <p><span className="tech">Sen's slope: the middle of every pair-wise slope, so a single odd year can't drag it. The shaded fan is the 95% range of the rate.</span><span className="plain-only">The straight line that fits best, drawn so that one odd year can't drag it. The shaded fan shows how sure we are about the rate.</span></p>,
       stats: [
         ["Rate", <strong className={`num t-${tone}`}>{signed(r.sen_slope_per_decade)} {u}<small>/decade</small></strong>],
         ["95% range", `${signed(r.sen_ci95_per_decade[0])} to ${signed(r.sen_ci95_per_decade[1])}`],
@@ -366,10 +367,11 @@ function buildSteps(data: Analysis, replayHeadline: string | null): Step[] {
     },
     {
       stage: "chance", kicker: "Could it be luck?", title: "Could it be chance?",
-      text: <p>Natural ups and downs can draw a line too. Because neighbouring months stick together, {c.dates.length} months carry the evidence of only about <b>{neff}</b> independent ones. Both of our tests are corrected for that.</p>,
+      text: <p>Natural ups and downs can draw a line too. Because neighbouring months stick together, {c.dates.length} months carry the evidence of only about <b>{neff}</b> independent ones. <span className="tech">Both of our tests are corrected for that.</span><span className="plain-only">We count it that way, so luck doesn't get mistaken for change.</span></p>,
       stats: [
-        ["Mann-Kendall (corrected)", pText(r.mk_hamed_rao.p)],
-        ["Least squares (corrected)", pText(r.ols_neff.p)],
+        ["Mann-Kendall (corrected)", pText(r.mk_hamed_rao.p), "tech"],
+        ["Least squares (corrected)", pText(r.ols_neff.p), "tech"],
+        ["How often luck alone draws this line", luckText(Math.max(r.mk_hamed_rao.p, r.ols_neff.p)), "plain-only"],
         ["A typical analysis says", <span className={tv.outcome === "fooled" ? "warn" : undefined}>{tv.typical_says}</span>],
       ],
       extra: <><Dots n={c.dates.length} k={neff} /><p className="note">Each square is one month; the {neff} filled ones are what the record is really worth. {tv.note}</p></>,

@@ -58,6 +58,15 @@ export function pText(p: number | null | undefined): string {
   return `p = ${p < 0.01 ? p.toPrecision(1) : p.toFixed(2)}`;
 }
 
+/** A p-value in words: how often luck alone would give a trend at least this strong. */
+export function luckText(p: number | null | undefined): string {
+  if (p == null || !Number.isFinite(p)) return "—";
+  if (p < 0.001) return "less than 1 in 1,000";
+  if (p < 0.01) return "less than 1 in 100";
+  if (p < 0.05) return "less than 1 in 20";
+  return `about 1 in ${Math.max(1, Math.round(1 / p))}: could easily be luck`;
+}
+
 export const LABELS: Record<Label, string> = {
   strong: "Strong evidence",
   some: "Some evidence",
