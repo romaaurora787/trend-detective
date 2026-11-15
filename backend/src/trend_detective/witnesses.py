@@ -6,6 +6,7 @@ witness agrees.
 
 Witnesses available:
 - Met Office HadCET (thermometers): air temperature, Central England.
+- NASA GISTEMP v4 (station thermometers, 250 km grid): air temperature on land anywhere else.
 - NASA GPCP v3.3 (satellite + gauges): rainfall, global (when the global file
   is present), else the Lincoln box only.
 - ESA CCI Soil Moisture COMBINED v09.2 (satellite microwave): soil wetness,
@@ -73,9 +74,10 @@ def _inside(box, region) -> bool:
 # ------------------------------------------------------------- witnesses
 def _hadcet_witness(box):
     # HadCET represents the Lancashire-London-Bristol triangle; use it only for
-    # boxes in central/southern England.
+    # boxes in central/southern England. Elsewhere: NASA GISTEMP station thermometers.
     if not _inside(box, (50.5, 54.5, -4.0, 1.8)):
-        return None
+        from . import gistemp
+        return (gistemp.NAME, "thermometers", gistemp.INDEPENDENCE, gistemp.monthly(list(box)))
     return ("Met Office Central England Temperature (HadCET)", "thermometers", "independent", _hadcet())
 
 
@@ -132,7 +134,8 @@ def second_witness(var: str, box, nasa: pd.Series, units: str) -> dict:
     if not found:
         return {"available": False, "note": "No independent second witness for this variable and place yet."}
     name, kind, independence, other = found
-    note = "" if var in ("T2M", "PRECTOTCORR") else "ESA reports m³/m³; NASA a 0–1 wetness fraction, so compare direction, not size."
+    note = ("GISTEMP gives anomalies from 1951–1980, so compare direction and slope, not the level."
+            if name.startswith("NASA GISTEMP") else "") if var in ("T2M", "PRECTOTCORR") else "ESA reports m³/m³; NASA a 0–1 wetness fraction, so compare direction, not size."
     return compare_witness(name, kind, independence, nasa, other, units, note)
 
 

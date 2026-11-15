@@ -20,7 +20,7 @@ from fastapi.responses import Response
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import beyond, cite, compare as cmp, context, crossexam, drought, models, reproduce, era5, events, globalref, guide, heat, places, stations, power, stats, witnesses
+from . import beyond, cite, compare as cmp, context, crossexam, drought, models, reproduce, era5, events, gistemp, gldas, globalref, guide, heat, places, stations, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -282,6 +282,24 @@ def all_witnesses(
             out.append(w)
         except Exception as ex:
             out.append({"available": False, "name": "NASA GPM IMERG", "note": f"IMERG unavailable ({str(ex)[:120]})."})
+    if var == "T2M" and not any(x.get("name") == gistemp.NAME for x in out):
+        try:
+            w = witnesses.compare_witness(gistemp.NAME, "thermometers", gistemp.INDEPENDENCE, series,
+                                          gistemp.monthly(box), meta["units"],
+                                          "GISTEMP gives anomalies from 1951–1980, so compare direction and slope, not the level.")
+            w["credit"] = gistemp.CREDIT
+            out.append(w)
+        except Exception as ex:
+            out.append({"available": False, "name": "NASA GISTEMP", "note": f"GISTEMP unavailable ({type(ex).__name__})."})
+    if var in gldas.FIELDS:
+        try:
+            w = witnesses.compare_witness(gldas.NAME, "land model", gldas.INDEPENDENCE, series,
+                                          gldas.monthly(var, box), meta["units"],
+                                          gldas.UNITS_NOTE + " GLDAS-2.1 starts in 2000, so its verdict covers a shorter period.")
+            w["credit"] = gldas.CREDIT
+            out.append(w)
+        except Exception as ex:
+            out.append({"available": False, "name": "NASA GLDAS", "note": f"GLDAS unavailable ({str(ex)[:120]})."})
     try:
         e = era5.monthly(var, (lat_min + lat_max) / 2, (lon_min + lon_max) / 2) if var in era5.MAP else None
         if e is not None:

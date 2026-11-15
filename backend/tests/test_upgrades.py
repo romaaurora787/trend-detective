@@ -33,3 +33,23 @@ def test_clarity_noise_is_the_year_to_year_swing():
     assert 0.07 < noise < 0.18
     total = 0.5 * 4.5  # 45 years at 0.5 per decade
     assert total / noise > 10  # a strong, clean trend is many times the normal swing
+
+
+def test_gistemp_cells_wrap_across_greenwich():
+    from trend_detective import gistemp
+    j0, j1, lons = gistemp._ranges([52.6, 53.6, -0.6, 0.4])  # Lincolnshire crosses 0°
+    assert len(lons) == 2 and lons[0][1] == 179 and lons[1][0] == 0
+    assert 89 - 2 * j0 >= 53.6 and 89 - 2 * j1 <= 52.6  # rows cover the box
+    _, _, one = gistemp._ranges([28.4, 28.9, 76.9, 77.4])  # Delhi: cell centred at 77°E
+    assert one == [(38, 38)]
+
+
+def test_gldas_reads_both_layers_and_skips_sea():
+    from trend_detective import gldas
+    i0, i1, j0, j1 = gldas._indices([52.6, 53.6, -0.6, 0.4])
+    assert (i1 - i0 + 1, j1 - j0 + 1) == (5, 5)  # a 1° box off the 0.25° lines touches 5 cells each way
+    text = ("Dataset: x\n/lat, 52.625, 52.875\n"
+            "/RootMoist_inst[0][0], 300, -9999\n/RootMoist_inst[0][1], 310, 320\n"
+            "/SoilMoi0_10cm_inst[0][0], 30, -9999\n/SoilMoi0_10cm_inst[0][1], 31, 32\n")
+    lat, arrs = gldas._parse(text)
+    assert arrs["RootMoist_inst"].shape == (2, 2) and list(lat) == [52.625, 52.875]
