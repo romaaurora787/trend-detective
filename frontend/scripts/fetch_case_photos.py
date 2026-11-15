@@ -1,5 +1,5 @@
 """Fetch a NASA GIBS image per case place, outline the tested box, save as a card photo.
-Usage (from backend/, which has httpx + Pillow): uv run python ../frontend/scripts/fetch_case_photos.py ../frontend/public/cases
+Usage (from backend/, which has httpx + Pillow): uv run python ../frontend/scripts/fetch_case_photos.py ../frontend/public/cases [layer] [date]"""
 import io, math, sys
 import httpx
 from PIL import Image, ImageDraw
