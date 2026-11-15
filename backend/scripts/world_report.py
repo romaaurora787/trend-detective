@@ -59,7 +59,8 @@ for v in CATALOGUE:
              "median_slope_proven": float(np.median([r["slope"] for r in proven])) if proven else None,
              "alibi": dict(Counter(r.get("alibi", "no_known_change") for r in proven)),
              "n_proven_after_alibi": sum(r.get("alibi") != "could_be_instrument" for r in proven),
-             "cells": [None if r is None else {"label": r["label"], "slope": r["slope"], "alibi": r.get("alibi")}
+             "cells": [None if r is None else {"label": r["label"], "slope": r["slope"], "alibi": r.get("alibi"),
+                                                 "typical": bool(r["typical_p"] < 0.05)}
                        for r in res]}
     out["variables"].append(entry)
     print(f"{v['name']:34s} points {n:3d} | proven {len(proven):3d} ({rise} up, {fall} down) | typical claims {len(typical):3d} | fooled {len(fooled):3d} | alibi {entry['alibi']}", flush=True)
