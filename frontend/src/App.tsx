@@ -5,6 +5,7 @@ import { PLACES, nameBox, placeName, sameBox } from "./lib";
 import { ReportView } from "./ReportView";
 import { MethodsView } from "./MethodsView";
 import { CompareView } from "./CompareView";
+import { Guide, guideSeen } from "./Guide";
 
 const MapView = lazy(() => import("./MapView"));
 const WorldView = lazy(() => import("./WorldView"));
@@ -76,6 +77,7 @@ export default function App() {
   const [s, setS] = useState(readHash);
   const [vars, setVars] = useState<Variable[]>(examples.variables);
   const [picking, setPicking] = useState(false);
+  const [guide, setGuide] = useState(() => !guideSeen());
 
   useEffect(() => {
     const on = () => setS(readHash());
@@ -106,6 +108,7 @@ export default function App() {
               <a key={r.id} href={`#/${r.id}?var=${s.varId}&box=${s.box.join(",")}${s.name ? `&name=${encodeURIComponent(s.name)}` : ""}`} aria-current={s.route === r.id ? "page" : undefined}>{r.label}</a>
             ))}
           </nav>
+          <button className="btn ghost guide-open" aria-expanded={guide} onClick={() => setGuide(!guide)}>Guide</button>
         </div>
         <div className="shell-row controls">
           <PlaceSearch onPick={(h) => go({ box: h.box, name: h.label })} />
@@ -140,6 +143,7 @@ export default function App() {
         )}
       </header>
       <div id="content">
+        {guide && <Guide onClose={() => setGuide(false)} />}
         {s.route === "case" && <CaseView varId={s.varId} box={s.box} onReport={() => go({ route: "report" })} />}
         {s.route === "report" && <ReportView box={s.box} onOpen={(varId) => go({ route: "case", varId })} />}
         {s.route === "map" && <Suspense fallback={<main className="sheet"><p className="status pad">Loading the map…</p></main>}><MapView varId={s.varId} box={s.box} /></Suspense>}
