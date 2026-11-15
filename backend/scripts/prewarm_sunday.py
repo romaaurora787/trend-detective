@@ -42,7 +42,7 @@ PLACES = {
     "Spain (Iberia)": (37.0, 42.0, -7.0, -1.0),
     "Wisconsin": (42.5, 47.0, -92.9, -86.8), "Mediterranean Sea": (37.0, 40.0, 4.0, 8.0),
 }
-CASES = [  # (var, box, name): the G2 cards and other links in docs/SITE_UPGRADES.md
+CASES = [  # (var, box, name): the case cards and other links on the site
     ("T2M", (52.6, 53.7, -1.0, 0.4), "Lincolnshire"),
     ("GWETROOT", (50.0, 55.5, -6.0, 2.0), "England & Wales"),
     ("CLOUD_AMT", (44.0, 46.0, -91.0, -89.0), "Central Wisconsin"),

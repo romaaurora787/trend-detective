@@ -21,7 +21,6 @@ Every number is computed from the data, never written by AI. Each case links to 
 
 ---
 
-*For developers (and the Claude agents helping us): start with [docs/FULL_REPORT.md](docs/FULL_REPORT.md) for status, every endpoint and demo numbers.*
 
 ## Run the backend
 
@@ -46,7 +45,7 @@ Vite + React + TypeScript, no UI or chart library (charts are hand-drawn SVG; Le
 
 **Deploy to Vercel:** import the repo, set Root Directory to `frontend`, and add the env var `VITE_API_URL` = your Render backend URL (no trailing slash).
 
-## API for the frontend (Kanishk)
+## API for the frontend
 
 Base URL locally: `http://localhost:8000`. GET only, CORS open. Real example responses are in [`docs/examples/`](docs/examples/).
 
@@ -116,7 +115,7 @@ All `GET` unless marked. Boxes are `lat_min,lat_max,lon_min,lon_max`. `/api/anal
 
 **C. Second witness.** `/api/analyse` and each report-card item have `second_witness`: `available`, `name` (e.g. Met Office HadCET, NASA GPCP, ESA CCI soil moisture), `badge` (`confirmed` → ✔ "Confirmed": a fully independent record proves the same trend; `consistent` → "Consistent": both find no proven trend, or the witness shares input data with MERRA-2, as GPCP, IMERG and ERA5 do; `caution` → ⚠ "Caution": they disagree), `agrees` (kept for compatibility: true for confirmed or consistent), `independence`, `note`, `monthly_correlation`, `period`. If `available` is false, show nothing or "no second witness yet".
 
-### NEW: any place + the case file (see [FRONTEND_TASKS.md](FRONTEND_TASKS.md) for how to show them)
+### Any place + the case file
 - `GET /api/places?q=delhi`: search 34,215 world cities and towns (GeoNames, offline). Each result has a ready `box`.
 - `GET /api/context?var=..&lat_min=..&lat_max=..&lon_min=..&lon_max=..`: the case file around a verdict. `nearby` (local or regional? every surrounding cell tested with FDR), `impact` (change as % of normal; how often recent years beat old 1-in-10 extremes), `linked` (tested links re-checked at this place, with a story) and `beyond` (records, emergence, seasons, variability, turning point). Each section can independently be `{"error": ...}`.
 

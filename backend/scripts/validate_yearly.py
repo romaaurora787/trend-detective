@@ -1,6 +1,6 @@
 """Proof part 3 (B4): our monthly test vs the "yearly averages" shortcut.
 
-Several rival tools (and many papers) average each year first, then run Mann-Kendall on
+Several tools (and many papers) average each year first, then run Mann-Kendall on
 ~45 yearly values. That keeps false alarms near 5% too, so the fair question is POWER:
 at the SAME false-alarm rate, which method catches more real trends?
 

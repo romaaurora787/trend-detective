@@ -4,7 +4,7 @@ Usage (from the repo root):
     backend/.venv/bin/python docs/demo/make_video.py           # captions only (silent)
     backend/.venv/bin/python docs/demo/make_video.py --voice   # + ElevenLabs voice-over
 
-The voice-over needs ELEVENLABS_API_KEY in the environment (on Akshita's Mac it comes from the Keychain via ~/.zshenv) or in backend/.env (git-ignored). It is never printed.
+The voice-over needs ELEVENLABS_API_KEY in the environment or in backend/.env (git-ignored). It is never printed.
 Optional: ELEVENLABS_VOICE_ID to pick another voice. Generated clips are cached in
 docs/demo/audio/ so re-rendering costs nothing; delete them to regenerate.
 

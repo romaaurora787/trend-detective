@@ -501,7 +501,7 @@ def report_card(
             "typical_outcome": r["typical_vs_detective"]["outcome"],
             "typical_note": r["typical_vs_detective"]["note"],
         }
-        # Clarity (rivals rank "suspects" the same way): change so far ÷ normal year-to-year swing.
+        # Clarity: change so far ÷ normal year-to-year swing.
         try:
             em = beyond.emergence(series)
             noise = em.get("noise_sd_annual")
@@ -509,7 +509,7 @@ def report_card(
             item["emerged_year"] = em.get("year")
         except Exception:
             item["clarity"] = None
-        # Instrument check (Kanishk's issue 2.1): a documented data-source change could fake a trend.
+        # Instrument check : a documented data-source change could fake a trend.
         lat_c = (box[0] + box[1]) / 2
         if meta["id"] in crossexam.SOURCE_CHANGES or (meta["id"] == "PRECTOTCORR" and abs(lat_c) >= 42.5):
             try:

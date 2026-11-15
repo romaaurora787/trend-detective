@@ -48,7 +48,7 @@ NASA POWER sunshine and cloud come from **GEWEX SRB (1984–2000)** and then **C
 
 **Lincolnshire passes:** sunshine rises about +0.15 per decade under *both* instruments, and is significant on CERES alone (p = 0.015).
 
-Details and the other documented source changes (haze 2014, soil streams 1991/2001/2011, rain by latitude) are in [docs/research_competition.md](docs/research_competition.md).
+Details and the other documented source changes (haze 2014, soil streams 1991/2001/2011, rain by latitude) are in [docs/methods.md](docs/methods.md) and `backend/src/trend_detective/api.py` (instrument check).
 
 ## 3. Beyond the trend line ([beyond_scan.md](docs/beyond_scan.md))
 The methods were re-checked for false alarms on synthetic weather where nothing is changing (`backend/scripts/validate_beyond.py`). Shuffling month by month gave too many false alarms (records 13–22%, "more erratic" 15–19%). We now shuffle **whole years in 5-year blocks**: records 5–7% (two-sided limit 10%), "erratic" 4.5–7.5%, and turning points need a BIC gain > 10 (7.7% even in very persistent weather; real breaks still found 93% of the time). **Claims that didn't survive were removed**: Amazon "22% more erratic", Lincolnshire mean-temperature records, and haze record counts in London, Beijing and Delhi (record too short).

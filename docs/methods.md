@@ -1,4 +1,4 @@
-# Methods: how the Detective decides (DRAFT, for Akshita to edit and own)
+# Methods: how the Detective decides
 
 ## The question
 Is this variable really changing here, or is it just natural ups and downs? If it is changing, how fast, and how sure are we? If we can't tell yet, how long until we could?
