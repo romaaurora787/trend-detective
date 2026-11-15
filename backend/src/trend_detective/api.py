@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import functools
 import json
+from functools import lru_cache
 import math
 import threading
 from collections import OrderedDict
@@ -766,8 +767,55 @@ def linked_clues():
 @app.get("/api/validation")
 def validation():
     res = {}
-    for name in ["validation", "validation_power"]:
+    for name in ["validation", "validation_power", "validation_yearly"]:
         p = DATA / f"{name}.json"
         if p.exists():
             res[name] = json.loads(p.read_text())
+    if "validation_yearly" in res:
+        res["yearly_vs_monthly"] = _yearly_summary(res["validation_yearly"])
     return res
+
+
+@lru_cache(maxsize=8)
+def _globe_file(var: str) -> dict | None:
+    p = DATA / f"globe_{var}.json"
+    return json.loads(p.read_text()) if p.exists() else None
+
+
+@app.get("/api/globe")
+def globe(var: str = "T2M", land_only: bool = False):
+    """Every ~2° cell on Earth (MERRA-2 monthly, 1981-2025) with the typical test, our verdict, the FDR check and
+    a shuffled-years 'luck' control. Built offline by scripts/globe_grid.py; rows are [lat, lon, slope, flags]."""
+    d = _globe_file(var)
+    if d is None:
+        avail = sorted(p.stem[6:] for p in DATA.glob("globe_*.json"))
+        raise HTTPException(404, f"No globe file for {var}. Available: {', '.join(avail) or 'none yet'}")
+    if land_only:
+        d = {**d, "cells": [c for c in d["cells"] if "L" in c[3]]}
+    return d
+
+
+def _yearly_summary(v: dict) -> dict:
+    """Plain-words result of scripts/validate_yearly.py (our monthly test vs averaging to years first)."""
+    r = v["results"]
+    lo, hi = r[str(v["phis"][0])], r[str(v["phis"][-1])]
+    fa = lambda d, m: round(100 * d["false_alarm_at_0.05"][m])  # noqa: E731
+    i = v["trends_per_decade"].index(0.2) if 0.2 in v["trends_per_decade"] else -2
+    pw = lambda d, m: round(100 * d["detection_size_adjusted"][m][i])  # noqa: E731
+    return {
+        "headline": (f"Averaging to yearly values first (a common shortcut) is a fair test too, but it raises false alarms "
+                     f"when the noise is sticky: {fa(hi, 'yearly_mk')}% vs our {fa(hi, 'ours_verdict')}%. "
+                     f"At equal false alarms, ours catches as many real trends as the plain yearly test "
+                     f"({pw(hi, 'ours_verdict')}% vs {pw(hi, 'yearly_mk')}%) and more than yearly + Hamed-Rao "
+                     f"({pw(hi, 'yearly_mk_hr')}%), whose correction can also fail outright on only 45 yearly values."),
+        "false_alarms": {"mild_noise": {"yearly_shortcut": fa(lo, "yearly_mk"), "yearly_hamed_rao": fa(lo, "yearly_mk_hr"),
+                                        "ours": fa(lo, "ours_verdict")},
+                         "sticky_noise": {"yearly_shortcut": fa(hi, "yearly_mk"), "yearly_hamed_rao": fa(hi, "yearly_mk_hr"),
+                                          "ours": fa(hi, "ours_verdict")}},
+        "power_at_equal_false_alarms": {"trend_per_decade": v["trends_per_decade"][i],
+                                        "mild_noise": {"yearly_shortcut": pw(lo, "yearly_mk"), "yearly_hamed_rao": pw(lo, "yearly_mk_hr"),
+                                                       "ours": pw(lo, "ours_verdict")},
+                                        "sticky_noise": {"yearly_shortcut": pw(hi, "yearly_mk"), "yearly_hamed_rao": pw(hi, "yearly_mk_hr"),
+                                                         "ours": pw(hi, "ours_verdict")}},
+        "phis": v["phis"], "n_sims": v["n_sims"],
+    }

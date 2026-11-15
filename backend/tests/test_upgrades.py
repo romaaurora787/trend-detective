@@ -35,13 +35,12 @@ def test_clarity_noise_is_the_year_to_year_swing():
     assert total / noise > 10  # a strong, clean trend is many times the normal swing
 
 
-def test_gistemp_cells_wrap_across_greenwich():
+def test_gistemp_cells_overlap_and_wrap():
+    import numpy as np
     from trend_detective import gistemp
-    j0, j1, lons = gistemp._ranges([52.6, 53.6, -0.6, 0.4])  # Lincolnshire crosses 0°
-    assert len(lons) == 2 and lons[0][1] == 179 and lons[1][0] == 0
-    assert 89 - 2 * j0 >= 53.6 and 89 - 2 * j1 <= 52.6  # rows cover the box
-    _, _, one = gistemp._ranges([28.4, 28.9, 76.9, 77.4])  # Delhi: cell centred at 77°E
-    assert one == [(38, 38)]
+    c = np.array([-179.0, -1.0, 1.0, 77.0, 79.0, 179.0])
+    assert list(gistemp._overlap(c, -0.6, 0.4)) == [False, True, True, False, False, False]  # Lincolnshire: both sides of 0°
+    assert list(gistemp._overlap(c, 76.9, 77.4)) == [False, False, False, True, False, False]  # small box: one cell
 
 
 def test_gldas_reads_both_layers_and_skips_sea():

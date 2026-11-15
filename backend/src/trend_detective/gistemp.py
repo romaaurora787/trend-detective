@@ -4,107 +4,60 @@ GISTEMP is NASA GISS's analysis of thousands of weather-station thermometers (NO
 MERRA-2 does not assimilate 2 m air temperature over land, so a GISTEMP trend that matches
 the NASA POWER trend is independent evidence from real thermometers.
 
-Only the box is read: NOAA PSL serves the gridded file over OPeNDAP, and we ask for the
-2° cells that overlap the box from Jan 1981 onward (a few kB, no login). Values are monthly
-anomalies (°C) against 1951–1980, so compare direction and slope, not the level.
+Data: NASA GISS gistemp250_GHCNv4.nc (downloaded 15 Nov 2026, file dated 10 Nov 2026), cut to
+Jan 1981 onward and stored as data/external/gistemp250_GHCNv4_1981.nc (4.6 MB, 0.01 °C
+precision), so the witness works offline and never waits on another server. Values are monthly
+anomalies (°C) against 1951–1980, so compare direction and slope, not the level. Cells with no
+station within 250 km are empty (oceans, deserts, parts of Africa).
 
 Reference: Lenssen, N. et al. (2019). Improvements in the GISTEMP uncertainty model.
-J. Geophys. Res. Atmos., 124, 6307–6326, doi:10.1029/2018JD029522. GISTEMP Team (2025):
-GISS Surface Temperature Analysis (GISTEMP), version 4. NASA GISS. Gridded copy: NOAA PSL.
+J. Geophys. Res. Atmos., 124, 6307–6326, doi:10.1029/2018JD029522. GISTEMP Team (2026):
+GISS Surface Temperature Analysis (GISTEMP), version 4. NASA GISS, data.giss.nasa.gov/gistemp/.
 
 AI-use note: drafted with Claude (Anthropic) during the hackathon.
 """
 from __future__ import annotations
 
-import json
-import re
-import threading
+from functools import lru_cache
 from pathlib import Path
 
-import httpx
 import numpy as np
 import pandas as pd
 
-URL = "https://psl.noaa.gov/thredds/dodsC/Datasets/gistemp/landonly/250km/air.2x2.250.mon.anom.land.nc"
-CACHE = Path(__file__).resolve().parents[2] / "data" / "cache"
+FILE = Path(__file__).resolve().parents[2] / "data" / "external" / "gistemp250_GHCNv4_1981.nc"
 NAME = "NASA GISTEMP v4 station thermometers (250 km grid)"
-CREDIT = ("GISTEMP Team (2025), GISS Surface Temperature Analysis v4, NASA GISS; Lenssen et al. (2019), "
-          "doi:10.1029/2018JD029522. Gridded file served by NOAA PSL.")
+CREDIT = ("GISTEMP Team (2026), GISS Surface Temperature Analysis v4, NASA GISS, data.giss.nasa.gov/gistemp/; "
+          "Lenssen et al. (2019), doi:10.1029/2018JD029522")
 INDEPENDENCE = ("Independent: real thermometers (NASA GISS analysis of NOAA GHCN stations). MERRA-2 does not "
                 "use 2 m land air temperature, so agreement is separate evidence")
-START = 1212  # index of Jan 1981 (the file starts Jan 1880)
-_lock = threading.Lock()
 
 
-def _ranges(box):
-    """Index ranges of the 2° cells overlapping the box. lat 89..-89 (descending), lon 1..359."""
-    la0, la1, lo0, lo1 = box
-    j0 = max(0, int(np.floor((89 - min(la1 + 1, 89)) / 2)))
-    j1 = min(89, int(np.ceil((89 - max(la0 - 1, -89)) / 2)))
-    # cell centres c = 1 + 2i (0..360). A cell overlaps [lo0, lo1] when |c - x| <= 1 for some x in the box.
-    a, b = lo0 % 360, lo1 % 360
-    def idx(x0, x1):
-        return max(0, int(np.ceil((x0 - 2) / 2))), min(179, int(np.floor(x1 / 2)))
-    lons = [idx(a, b)] if a <= b else [idx(a, 360), idx(0, b)]  # the box crosses 0° (e.g. Lincolnshire)
-    return j0, j1, lons
+@lru_cache(maxsize=1)
+def _grid():
+    import xarray as xr
+
+    return xr.open_dataset(FILE)["tempanomaly"].load()  # (time, lat -89..89, lon -179..179), ~36 MB in memory
 
 
-def _n_time(client) -> int:
-    dds = client.get(URL + ".dds").text
-    return int(re.search(r"time\[time = (\d+)\]", dds).group(1))
-
-
-def _read(client, t1, j0, j1, i0, i1):
-    ce = f"air[{START}:{t1}][{j0}:{j1}][{i0}:{i1}],lat[{j0}:{j1}]"
-    r = client.get(URL + ".ascii?" + ce.replace("[", "%5B").replace("]", "%5D"))
-    r.raise_for_status()
-    body = r.text.split("---------------------------------------------", 1)[1]
-    vals, lat = {}, None
-    block = None
-    for line in body.splitlines():
-        line = line.strip()
-        if line.startswith("air.air["):
-            block = "air"
-        elif line.startswith("lat[") or line.startswith("air.lat["):
-            block = "lat"
-        elif block == "air" and line.startswith("["):
-            k, v = line.split(",", 1)  # "[t][j], v_lon0, v_lon1, ..."
-            t, j = (int(x) for x in re.findall(r"\d+", k))
-            vals.setdefault(t, {}).setdefault(j, []).extend(float(x) for x in v.split(","))
-        elif block == "lat" and line and line[0] in "-0123456789":
-            lat = np.array([float(x) for x in line.split(",")])
-            block = None
-    return vals, lat
-
-
-def _cache_path(box) -> Path:
-    return CACHE / ("gistemp_" + "_".join(f"{v:+.2f}" for v in box) + ".json")
+def _overlap(centres: np.ndarray, lo: float, hi: float) -> np.ndarray:
+    """2° cells (centre ± 1°) that overlap [lo, hi]."""
+    return (centres + 1 > lo) & (centres - 1 < hi)
 
 
 def monthly(box) -> pd.Series:
-    """Box-mean GISTEMP anomaly (°C), one value per month from Jan 1981 (cached per box)."""
-    box = [float(v) for v in box]
-    path = _cache_path(box)
-    if path.exists():
-        d = json.loads(path.read_text())
-    else:
-        j0, j1, lons = _ranges(box)
-        with httpx.Client(timeout=90, follow_redirects=True) as c:
-            t1 = _n_time(c) - 1
-            parts = [_read(c, t1, j0, j1, i0, i1) for i0, i1 in lons]
-        d = {}
-        for t in range(t1 - START + 1):
-            num = den = 0.0
-            for vals, lat in parts:
-                for j, row in vals.get(t, {}).items():
-                    w = float(np.cos(np.radians(lat[j])))
-                    for v in row:
-                        if abs(v) < 100:  # missing value is 9999
-                            num, den = num + w * v, den + w
-            y, m = divmod(START + t, 12)
-            d[f"{1880 + y}-{m + 1:02d}"] = num / den if den else None
-        with _lock:
-            CACHE.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps(d))
-    s = pd.Series({pd.Timestamp(k + "-01"): v for k, v in d.items()}, dtype=float).sort_index()
-    return s.dropna().rename("GISTEMP")
+    """Box-mean GISTEMP anomaly (°C), area-weighted over the overlapping 2° cells, one value per month from 1981."""
+    la0, la1, lo0, lo1 = (float(v) for v in box)
+    da = _grid()
+    lat, lon = da["lat"].values, da["lon"].values
+    jm = _overlap(lat, la0, la1)
+    im = _overlap(lon, lo0, lo1) | _overlap(lon + 360, lo0, lo1) | _overlap(lon - 360, lo0, lo1)
+    if not jm.any() or not im.any():
+        return pd.Series(dtype=float, name="GISTEMP")
+    sub = da.values[:, jm][:, :, im]  # (time, nlat, nlon)
+    w = np.cos(np.radians(lat[jm]))[None, :, None] * np.ones_like(sub)
+    ok = np.isfinite(sub)
+    num = np.where(ok, sub * w, 0).sum(axis=(1, 2))
+    den = np.where(ok, w, 0).sum(axis=(1, 2))
+    vals = np.where(den > 0, num / np.where(den > 0, den, 1), np.nan)
+    idx = pd.to_datetime(da["time"].values).to_period("M").to_timestamp()
+    return pd.Series(vals, index=idx, name="GISTEMP").dropna()

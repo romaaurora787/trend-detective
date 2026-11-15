@@ -12,3 +12,4 @@ dist-*/
 
 # trimmed narration clips (rebuilt from the .mp3 files)
 docs/demo/audio/*.wav
+backend/data/cache/globe_raw/
