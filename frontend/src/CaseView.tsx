@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { api, examples, type Analysis, type Box } from "./api";
+import { api, examples, type Analysis, type Box, type Cite } from "./api";
 import { Reveal } from "./Chart";
-import { CheckOurWork, CrossExamBlock, WitnessList, useCrossExam } from "./CrossExam";
+import { CheckOurWork, CrossExamBlock, WitnessList, useCrossExam, useLive } from "./CrossExam";
 import { LABELS, dirTone, pText, placeName, plain, sameBox, short, signed } from "./lib";
 import { StoryChart, StoryKey, type Stage } from "./Story";
 
@@ -80,7 +80,7 @@ const CASES = [
   { tag: "Real change", tone: "rise", title: "Lincolnshire air temperature", text: "Warming, proven by both corrected tests and backed by independent records.", href: "#/case?var=T2M&box=52.6,53.7,-1,0.4" },
   { tag: "Fooled the typical test", tone: "warn", title: "England & Wales soil", text: "A typical map flags 89 cells as drying. After the corrections, none hold up.", href: "#/map?var=GWETROOT&box=50,55.5,-6,2" },
   { tag: "Could be the satellite", tone: "warn", title: "Central Wisconsin cloud cover", text: "A cloud trend that one jump at the 2001 satellite switch explains better.", href: "#/case?var=CLOUD_AMT&box=44,46,-91,-89&name=Central%20Wisconsin" },
-  { tag: "Witnesses disagree", tone: "fall", title: "Delhi rainfall", text: "NASA's record shows a trend; the other rain records don't back it.", href: "#/case?var=PRECTOTCORR&box=28,29.5,76.5,78" },
+  { tag: "Thermometers disagree", tone: "warn", title: "Delhi air temperature", text: "NASA's model finds no warming; NASA's own station thermometers find +0.22 °C a decade. Rain: 0 of 3 records agree. Water: GRACE sees the ground losing 52 cm a decade.", href: "#/case?var=T2M&box=28,29.5,76.5,78&name=Delhi" },
   { tag: "The whole world", tone: "ink", title: "The world on trial", text: "111 places, 19 variables, on a see-through globe. Watch the three tests.", href: "#/world" },
 ];
 
@@ -206,11 +206,45 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
             </dl>
           </details>
         </Reveal>
+        <Reveal className="frame sec">
+          <h2 className="sec-title"><span className="tag">[{String(steps.length + 4).padStart(2, "0")}]</span>Cite this</h2>
+          <CiteBox varId={v.id} name={place} />
+        </Reveal>
       </div>
 
       <p className="cite">{data.citation}. Trend is not cause: we detect change, we do not explain it.</p>
       <button className="cue wide" onClick={onReport}><span className="tag">[NEXT]</span>See everything changing in {place} <span aria-hidden>→</span></button>
     </main>
+  );
+}
+
+const FMT = [["apa", "APA"], ["harvard", "Harvard"], ["bibtex", "BibTeX"]] as const;
+const ital = (t: string) => t.split(/\*([^*]+)\*/).map((p, i) => (i % 2 ? <i key={i}>{p}</i> : p));
+
+/** APA / Harvard / BibTeX for this case, from /api/cite (B6). */
+function CiteBox({ varId, name }: { varId: string; name: string }) {
+  const url = location.href;
+  const { data, error } = useLive<Cite | null>(() => api.cite(varId, name, url), `${varId}|${name}|${url}`, null);
+  const [fmt, setFmt] = useState<(typeof FMT)[number][0]>("apa");
+  const [copied, setCopied] = useState(false);
+  if (!data) return <p className="note pad" role="status">{error ? <span className="error">{error}</span> : "Writing the references…"}</p>;
+  const text = data.items.map((it) => it[fmt].replace(/\*/g, "")).join(fmt === "bibtex" ? "\n\n" : "\n");
+  const copy = () => navigator.clipboard?.writeText(text).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1600); });
+  return (
+    <div className="citebox">
+      <div className="cite-tabs" role="group" aria-label="Citation style">
+        {FMT.map(([k, l]) => <button key={k} aria-pressed={fmt === k} onClick={() => setFmt(k)}>{l}</button>)}
+        <button className="cite-copy" onClick={copy}>{copied ? "Copied ✔" : "Copy all"}</button>
+      </div>
+      <ol className="cite-list">
+        {data.items.map((it) => (
+          <li key={it.key}>
+            {fmt === "bibtex" ? <pre>{it.bibtex}</pre> : <p>{ital(it[fmt])}</p>}
+            {it.acknowledgement && <p className="note">{it.acknowledgement}</p>}
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }
 

@@ -51,6 +51,8 @@ export interface Report {
   box: Box; summary: string; fooled_count: number;
   groups: { key: string; title: string; items: ReportItem[] }[];
   errors: { id: string; name: string; error: string }[];
+  clearest_headline?: string;
+  clearest?: { id: string; name: string; clarity: number; direction: string; slope_per_decade: number; units: string; emerged_year?: number | null }[];
 }
 export interface MapCell {
   id: number; lat: number; lon: number; slope_per_decade: number | null; p: number | null;
@@ -88,7 +90,11 @@ export interface PlaceHit { label: string; population: number; box: Box }
 export interface Validation {
   validation: { phis: number[]; false_alarm_rate: Record<string, number[]>; n_sims: number };
   validation_power: { trends_per_decade: number[]; detection_rate: Record<string, number[]>; n_sims: number };
+  yearly_vs_monthly?: { headline: string; false_alarms: Record<"mild_noise" | "sticky_noise", { yearly_shortcut: number; yearly_hamed_rao: number; ours: number }> };
 }
+export interface Cite { items: { key: string; apa: string; harvard: string; bibtex: string; acknowledgement?: string }[] }
+export type Spot = { name: string; slope_per_decade: number; units: string; case: string };
+export interface Opposites { n_land_cells: number; n_rising: number; n_falling: number; headline: string; rising: Spot[]; falling: Spot[] }
 
 const q = (b: Box) => `lat_min=${b[0]}&lat_max=${b[1]}&lon_min=${b[2]}&lon_max=${b[3]}`;
 
@@ -117,6 +123,8 @@ export const api = {
   places: (s: string) => get<{ results: PlaceHit[] }>(`/api/places?q=${encodeURIComponent(s)}&limit=8`),
   world: <T>() => get<T>("/api/world"),
   globe: <T>(v: string) => get<T>(`/api/globe?var=${v}&land_only=true`),
+  cite: (v: string, name: string, url: string) => get<Cite>(`/api/cite?var=${v}&name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}`),
+  opposites: (v: string) => get<Opposites>(`/api/opposites?var=${v}&n=4`),
   evidenceUrl: (v: string, b: Box) => `${API}/api/evidence.csv?var=${v}&${q(b)}`,
 };
 

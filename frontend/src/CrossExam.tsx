@@ -40,7 +40,7 @@ function MonthBars({ months, varId }: { months: { month: string; slope_per_decad
   );
 }
 
-type Row = { name: string; sec: { headline?: string; error?: string } | undefined; pass?: boolean; extra?: ReactNode };
+type Row = { name: string; sec: { headline?: string; error?: string; status?: string } | undefined; pass?: boolean; extra?: ReactNode };
 
 export function CrossExamBlock({ x, error, varId, units }: { x: CrossExam | null; error: string | null; varId: string; units: string }) {
   const [ref, seen] = useInView<HTMLDivElement>();
@@ -86,10 +86,11 @@ export function CrossExamBlock({ x, error, varId, units }: { x: CrossExam | null
       </div>
       <ol className="checks">
         {rows.filter((r) => r.sec && !r.sec.error && r.sec.headline).map((r, i) => {
-          const mark = r.pass === undefined || !scored ? "info" : r.pass ? "ok" : "warn";
+          // B2: "revealed" = a trend that only shows once the ocean cycles are removed. A lead, not proof.
+          const mark = r.sec!.status === "revealed" ? "hidden" : r.pass === undefined || !scored ? "info" : r.pass ? "ok" : "warn";
           return (
             <li key={r.name} className={`check c-${mark}`} style={{ "--n": i } as CSSProperties}>
-              <p className="tag">[{String(i + 1).padStart(2, "0")}] <span className="check-mark">{mark === "ok" ? "✔ Holds" : mark === "warn" ? "⚠ Caution" : "Context"}</span></p>
+              <p className="tag">[{String(i + 1).padStart(2, "0")}] <span className="check-mark">{mark === "ok" ? "✔ Holds" : mark === "warn" ? "⚠ Caution" : mark === "hidden" ? "◐ Hidden change: treat with care" : "Context"}</span></p>
               <h3>{r.name}</h3>
               <p>{r.sec!.headline}</p>
               {r.extra}

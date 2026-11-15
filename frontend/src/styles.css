@@ -576,3 +576,25 @@ button.rrow:hover .go { opacity: 1; transform: translateX(4px); }
   .draw { stroke-dashoffset: 0; }
   .bar, .month-col i { transform: none; }
 }
+
+/* Cite this (B6), opposite places (B8), hidden change (B2), trust note (B4) */
+.citebox { padding: 0 var(--cell) var(--space-5); display: grid; gap: var(--space-3); }
+.cite-tabs { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.cite-tabs button { font: 600 0.78rem/1 var(--font-data); padding: 0.55rem 0.8rem; background: none; color: var(--ink); border: 1px solid var(--rule-2); cursor: pointer; white-space: nowrap; }
+.cite-tabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.cite-tabs button:hover { border-color: var(--ink); }
+.cite-tabs button:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.cite-tabs .cite-copy { margin-left: auto; }
+.cite-list { display: grid; gap: var(--space-3); margin: 0; padding-left: 1.2rem; font: 400 0.86rem/1.5 var(--font-body, inherit); }
+.cite-list p { margin: 0; overflow-wrap: anywhere; }
+.cite-list pre { margin: 0; font: 400 0.74rem/1.45 var(--font-data); white-space: pre-wrap; overflow-wrap: anywhere; background: var(--paper-3); padding: var(--space-2); }
+.opp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); padding: 0 var(--cell) var(--space-5); }
+.opp-list { list-style: none; margin: var(--space-2) 0 0; padding: 0; }
+.opp-list a { display: flex; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: 1px solid var(--rule); color: var(--ink); text-decoration: none; }
+.opp-list a:hover span { color: var(--signal-tx); }
+.opp-list b { font: 600 0.82rem/1.3 var(--font-data); white-space: nowrap; }
+.opp-list b.t-rise { color: var(--signal-tx); } .opp-list b.t-fall { color: var(--fall); }
+.c-hidden { background: oklch(72% 0.14 75 / 0.08); }
+.c-hidden .check-mark { color: var(--ochre-tx); }
+.trust-note { padding: 0 var(--cell) var(--space-5); max-width: 70ch; }
+@media (max-width: 640px) { .opp { grid-template-columns: minmax(0, 1fr); } }

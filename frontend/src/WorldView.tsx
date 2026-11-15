@@ -6,7 +6,7 @@ import { feature, mesh } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import countries from "world-atlas/countries-110m.json";
 import exWorld from "../../docs/examples/world.json";
-import { api, examples, type Label } from "./api";
+import { api, examples, type Label, type Opposites as Opp } from "./api";
 import { Reveal, still, useInView, useSize, useTween } from "./Chart";
 import { LABELS, dirTone, short, signed } from "./lib";
 import { Trust } from "./Trust";
@@ -388,6 +388,37 @@ function Big({ to, of, label, pct }: { to: number; of?: number; label: string; p
   );
 }
 
+const OPP: Record<string, [string, string]> = { T2M: ["warmer", "cooler"], PRECTOTCORR: ["wetter", "drier"] };
+
+/** Proven-rising vs proven-falling land squares, from /api/opposites (B8). */
+function Opposites({ varId }: { varId: string }) {
+  const [d, setD] = useState<{ v: string; o: Opp } | null>(null);
+  useEffect(() => {
+    let live = true;
+    api.opposites(varId).then((o) => live && setD({ v: varId, o })).catch(() => {});
+    return () => { live = false; };
+  }, [varId]);
+  if (!d || d.v !== varId) return null;
+  const { o } = d, [up, down] = OPP[varId] ?? ["rising", "falling"];
+  const col = (dir: string, list: Opp["rising"]) => (
+    <div>
+      <p className="tag">[PROVEN {dir.toUpperCase()}]</p>
+      <ul className="opp-list">
+        {list.map((x) => (
+          <li key={x.case}><a href={`${x.case}&name=${encodeURIComponent(x.name)}`}><span>{x.name}</span><b className={`t-${dirTone(varId, x.slope_per_decade)}`}>{signed(x.slope_per_decade)} {short(x.units).replace(/ per decade$/, "")}/decade</b></a></li>
+        ))}
+      </ul>
+    </div>
+  );
+  return (
+    <Reveal className="frame sec">
+      <h2 className="sec-title"><span className="tag">[02]</span>Opposite places</h2>
+      <p className="sec-lede">On land, <b>{o.n_rising.toLocaleString("en-GB")}</b> places are proven {up} and <b>{o.n_falling.toLocaleString("en-GB")}</b> proven {down}, out of {o.n_land_cells.toLocaleString("en-GB")}. These are the steepest of each, at least 15° apart. Open one to see its full case.</p>
+      <div className="opp">{col(up, o.rising)}{col(down, o.falling)}</div>
+    </Reveal>
+  );
+}
+
 export default function WorldView() {
   const [world, setWorld] = useState<World>(exWorld as unknown as World);
   const [varId, setVarId] = useState("CLOUD_AMT");
@@ -554,8 +585,10 @@ export default function WorldView() {
         onVar={(id) => { setVarId(id); setSel(null); document.querySelector(".globe-sheet")?.scrollIntoView({ behavior: "smooth" }); }}
         onDrop={(c) => setPicked(picked.filter((x) => x !== c))} />}
 
+      {grid && <Opposites varId={v.id} />}
+
       <Reveal className="frame sec">
-        <h2 className="sec-title"><span className="tag">[02]</span>Where a typical analysis goes wrong</h2>
+        <h2 className="sec-title"><span className="tag">[03]</span>Where a typical analysis goes wrong</h2>
         <p className="sec-lede">Each row is one NASA variable at {world.n_points} places. Light bar: a typical analysis calls it real. Solid bar: proven after our checks. Sorted by the share of claims that don't hold.</p>
         <ul className="wrows">
           {rows.map((x, i) => {
@@ -578,7 +611,7 @@ export default function WorldView() {
       </Reveal>
 
       <Reveal className="frame sec">
-        <h2 className="sec-title"><span className="tag">[03]</span>Why trust the Detective</h2>
+        <h2 className="sec-title"><span className="tag">[04]</span>Why trust the Detective</h2>
         <Trust variables={world.variables} />
       </Reveal>
     </main>

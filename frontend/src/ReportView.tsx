@@ -53,6 +53,22 @@ export function ReportView({ box, onOpen }: { box: Box; onOpen: (varId: string) 
       </section>
       {ready && (
         <>
+          {data.clearest && data.clearest.length > 0 && (
+            <Reveal className="frame sec" aria-labelledby="clearest">
+              <h2 id="clearest" className="sec-title"><span className="tag">[00]</span>What's changing most clearly here</h2>
+              <p className="sec-lede">Ranked by how far each proven change has moved, against the normal swing from one year to the next.</p>
+              <div className="cases">
+                {data.clearest.map((c, i) => (
+                  <button key={c.id} className="case-card" onClick={() => onOpen(c.id)} style={{ "--n": i } as CSSProperties}>
+                    <span className={`chip c-${dirTone(c.id, c.slope_per_decade)}`}>{c.direction}</span>
+                    <b>{c.name}</b>
+                    <span className="gtext"><strong>{c.clarity.toFixed(1)}×</strong> the normal year-to-year swing · {signed(c.slope_per_decade)}{c.units === "unitless" ? "" : ` ${short(c.units)}`}/decade{c.emerged_year ? ` · clear since ${c.emerged_year}` : ""}</span>
+                    <span className="tag">Open the case →</span>
+                  </button>
+                ))}
+              </div>
+            </Reveal>
+          )}
           {data.groups.map((g, gi) => g.items.length > 0 && (
             <Reveal key={g.key} className="frame sec rgroup" aria-labelledby={`g-${g.key}`}>
               <h2 id={`g-${g.key}`} className="sec-title"><span className="tag">[{String(gi + 1).padStart(2, "0")}]</span>{g.title} <span className="count">{g.items.length}</span></h2>
