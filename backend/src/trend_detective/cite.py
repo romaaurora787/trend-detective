@@ -100,7 +100,8 @@ def _fmt(key: str, r: dict, accessed: str) -> dict:
 
 
 def citations(var: str, case_url: str = SITE, name: str = "") -> dict:
-    accessed = dt.date.today().strftime("%-d %B %Y")
+    d = dt.date.today()
+    accessed = f"{d.day} {d:%B %Y}"  # not %-d: that is Linux/macOS only and fails on Windows
     meta = BY_ID.get(var, {})
     items = [_fmt(k, REFS[k], accessed) for k in _source_keys(var)]
     if meta.get("citation"):
