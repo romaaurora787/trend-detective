@@ -188,9 +188,11 @@ def card(kind: str, voiced: bool) -> Image.Image:
     else:
         d.text((48, 110), "CHECK ANY PLACE", font=DISPLAY(120), fill=BLUE)
         d.text((48, 235), "YOURSELF.", font=DISPLAY(120), fill=RED)
-        d.text((52, 390), SITE, font=MONO(38), fill=BLUE)
-        d.text((52, 470), f"Team {TEAM}  ·  {NAMES}", font=BODY_B(34), fill=INK)
-        d.text((52, 520), f"NASA Space Apps 2026  ·  “{CHALLENGE}”", font=BODY(30), fill=MUTED)
+        d.text((52, 375), SITE, font=MONO(38), fill=BLUE)
+        d.text((52, 432), "Instrument check · false alarms measured · witnesses counted · 4 ocean cycles · "
+                          "world luck test · 2050 what-ifs", font=BODY_B(27), fill=RED)
+        d.text((52, 490), f"Team {TEAM}  ·  {NAMES}", font=BODY_B(34), fill=INK)
+        d.text((52, 538), f"NASA Space Apps 2026  ·  “{CHALLENGE}”", font=BODY(30), fill=MUTED)
         credit = ("Data: NASA POWER, MERRA-2, MODIS, GPM IMERG, GPCP, GISTEMP, GLDAS, GRACE, Blue Marble; "
                   "ESA CCI; Met Office; NOAA; CMIP6.")
         d.text((52, 625), credit, font=BODY(22), fill=MUTED)

@@ -1,11 +1,27 @@
-# Earth System Trend Detective
+# Trend Detective: is it really changing?
 
-> **New here (or a Claude helping Kanishk)? Start with [docs/FULL_REPORT.md](docs/FULL_REPORT.md)**: full status, every endpoint, demo numbers, what to check and what to build next.
+**NASA Space Apps Challenge 2026 · "Be An Earth System Trend Detective!" · Team Paani Ke Batashe (Akshita Srivastava, Kanishk K. Sachan) · Lincoln, UK**
 
+**Live site:** https://kaakserver.tail042e87.ts.net/trend-detective/ · **Deck:** [docs/demo/trend_detective_slides.pdf](docs/demo/trend_detective_slides.pdf) · **30 s video:** [docs/demo/trend_detective_demo.mp4](docs/demo/trend_detective_demo.mp4) · **Project text:** [docs/SUBMISSION.md](docs/SUBMISSION.md)
 
-NASA Space Apps Challenge 2026, team Akshita + Kanishk.
+Pick any place on Earth and a NASA variable (temperature, rain, soil moisture, haze, greenness and more). Trend Detective tells you honestly whether it is really changing or could be chance, then tries to break its own answer.
 
-Pick a place and a question. The app pulls NASA monthly data and answers in plain English: is it really changing, how fast, how sure are we, where, and how many more years until we would know.
+## What sets it apart
+
+It has what the strongest projects in this challenge have: any place, tests corrected for "sticky" noise, a false-discovery check on maps, a world globe, a second NASA record, a sudden-jump test, El Niño removed, two places compared, plain and detailed wording, and citations. On top of that, it puts six things together in one tool:
+
+1. **An instrument check for every known change in NASA's data sources** (2001 sunlight, cloud and heat radiation; 2014 aerosols; deep soil; 1987 rain), re-tested on single-source years. Worldwide, **42 of 88 proven cloud-cover trends could be the instrument, not the sky.**
+2. **False alarms measured on monthly data:** 6% on pure noise vs 28–55% for a typical test, with 99.7% of real 0.3-per-decade trends still caught.
+3. **Witnesses counted for independence:** station thermometers, rain gauges, GPCP, IMERG, ESA CCI, GLDAS, GRACE and ERA5, each labelled for how independent it is.
+4. **Four ocean cycles removed together** (El Niño, NAO, Indian Ocean Dipole, PDO), with a careful "hidden change" flag.
+5. **The world on trial:** 2,013 checks (111 places × 19 variables) show that 29% of typical trend claims don't hold. A luck test on 4,498 land squares: a typical test is fooled 22% of the time, ours 7%.
+6. **Around 2050, three what-ifs:** our trend drawn on, 7 CMIP6 models and 3 IPCC emission paths, with a refusal when the change is one sudden jump.
+
+Every number is computed from the data, never written by AI. Each case links to a CSV, the exact NASA request, NASA Giovanni and a notebook that rebuilds it.
+
+---
+
+*For developers (and the Claude agents helping us): start with [docs/FULL_REPORT.md](docs/FULL_REPORT.md) for status, every endpoint and demo numbers.*
 
 ## Run the backend
 

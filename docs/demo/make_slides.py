@@ -100,6 +100,16 @@ def picture(fig, name, rect, crop=None, frame=BLUE):
     return a
 
 
+def edge(ax, elsewhere, here):
+    """Full-width strip: what judges will usually see elsewhere vs what we add."""
+    from matplotlib.patches import Rectangle
+    ax.add_patch(Rectangle((0.45, 0.68), W - 0.9, 0.42, facecolor="#efe2c6", edgecolor=RULE, lw=1))
+    ax.text(0.62, 0.89, "ELSEWHERE", color=MUTED, fontsize=10, va="center", **MONO_B)
+    ax.text(1.62, 0.89, elsewhere, color=INK, fontsize=13, va="center", **BODY)
+    ax.text(6.85, 0.89, "HERE", color=RED, fontsize=10, va="center", **MONO_B)
+    ax.text(7.35, 0.89, here, color=INK, fontsize=13, va="center", **BODY_B)
+
+
 def caption(ax, x, y, text, color=MUTED, size=11):
     ax.text(x, y, text, color=color, fontsize=size, va="top", **MONO)
 
@@ -173,21 +183,47 @@ def build(team: str, out: Path) -> None:
         save(pdf, fig)
         plt.close(fig)
 
-        # 3. What it does
-        fig, ax = new_slide(3, "What it does", team)
-        title(ax, 6.55, "PICK ANY PLACE.", "GET AN HONEST ANSWER.", size=44)
-        bullets(ax, 0.45, 4.7, [
-            "Any town on Earth, 23 NASA variables:\nair temperature, rain, soil, haze, greenness…",
-            "A 7-step scroll story: raw record, seasons\nremoved, trend, “could it be chance?”",
-            "Corrected tests (Mann–Kendall with\nHamed–Rao, least squares with n_eff).",
-            "**A verdict in plain words: strong evidence,\nsome, not yet (“about N more years”), none.",
-            "Cite this, a CSV, the NASA request, Giovanni,\nand a notebook that rebuilds the number.",
-        ], size=15, gap=0.43)
-        picture(fig, "chance2.jpg", (6.0, 1.15, 6.88, 4.3))
-        caption(ax, 6.0, 5.95, "Lincolnshire air temperature: 540 months carry the evidence of", color=INK)
-        caption(ax, 6.0, 5.67, "only ~326 independent ones. Still proven: +0.33 °C per decade.", color=INK)
-        caption(ax, 6.0, 0.98, "Data: NASA POWER (MERRA-2, CERES) · MODIS · GPM IMERG · GPCP · GISTEMP · GLDAS · GRACE ·", size=9)
-        caption(ax, 6.0, 0.8, "Blue Marble · partners: ESA CCI, Met Office, NOAA, ERA5, CMIP6", size=9)
+        # 3. What sets it apart
+        fig, ax = new_slide(3, "What sets it apart", team)
+        title(ax, 6.55, "EVERYTHING THE BEST PROJECTS DO.", "THEN SIX THINGS MORE.", size=40)
+        ax.text(0.45, 5.2, "IN THE STRONGEST ENTRIES, AND HERE TOO", color=BLUE, fontsize=17, va="top", **DISPLAY)
+        y = 4.72
+        for t in ["Any place on Earth, 23 NASA variables", "Tests corrected for sticky noise (Hamed–Rao, n_eff)",
+                  "False-discovery check on maps", "A world globe: 4,498 land squares",
+                  "A second NASA record (GISTEMP, GLDAS)", "Sudden jump vs steady trend", "El Niño removed",
+                  "Compare two places, opposite trends", "“Not yet: about N more years of data”",
+                  "Plain / Detailed wording, guided first visit", "Cite this (APA, Harvard, BibTeX), CSV, notebook"]:
+            ax.text(0.45, y, "✓", color=BLUE, fontsize=14, va="top", family="DejaVu Sans", weight="bold")
+            ax.text(0.78, y, t, color=INK, fontsize=14, va="top", **BODY)
+            y -= 0.335
+        ax.plot([5.55, 5.55], [0.75, 5.25], color=RULE, lw=1)
+        ax.text(5.85, 5.2, "WHAT WE ADD, ALL IN ONE PLACE", color=RED, fontsize=17, va="top", **DISPLAY)
+        rows = [
+            ("INSTRUMENT CHECK FOR EVERY KNOWN DATA SWITCH",
+             "2001 sunlight, cloud, heat radiation · 2014 aerosols · deep soil · 1987 rain, re-tested on single-source years.",
+             "Worldwide: 42 of 88 proven cloud trends could be the instrument. Elsewhere: early years cut, or one variable."),
+            ("FALSE ALARMS MEASURED ON MONTHLY DATA",
+             "6% on pure noise (typical test 28–55%), while 99.7% of real 0.3/decade trends are still caught.",
+             "Elsewhere: rarely measured, or reached by averaging to years (we check that shortcut too)."),
+            ("WITNESSES, COUNTED FOR INDEPENDENCE",
+             "Thermometers, rain gauges, GPCP, IMERG, ESA CCI, GLDAS, GRACE, ERA5: each says how independent it is.",
+             "Lincolnshire: 4 of 4 agree. Delhi: the thermometers disagree with the model. Elsewhere: one second record."),
+            ("FOUR OCEAN CYCLES REMOVED TOGETHER",
+             "El Niño, NAO, Indian Ocean Dipole and PDO, plus a careful “hidden change” flag. Elsewhere: usually El Niño only.", None),
+            ("THE WORLD ON TRIAL, ON NASA'S OWN DATA",
+             "2,013 checks (111 places × 19 variables): 29% of typical claims don't hold.",
+             "Luck test on 4,498 squares: a typical test is fooled 22% of the time, ours 7%."),
+            ("AROUND 2050: THREE WHAT-IFS, WITH REFUSALS",
+             "Our trend drawn on + 7 CMIP6 models + 3 IPCC emission paths. No straight line when the change is one jump.", None),
+        ]
+        y = 4.78
+        for i, (head, l1, l2) in enumerate(rows, 1):
+            ax.text(5.85, y + 0.03, f"{i}", color=RED, fontsize=26, va="top", **DISPLAY)
+            ax.text(6.3, y, head, color=BLUE, fontsize=14.5, va="top", **DISPLAY)
+            ax.text(6.3, y - 0.27, l1, color=INK, fontsize=11.5, va="top", **BODY)
+            if l2:
+                ax.text(6.3, y - 0.46, l2, color=INK, fontsize=11.5, va="top", **BODY)
+            y -= 0.72 if l2 else 0.53
         save(pdf, fig)
         plt.close(fig)
 
@@ -199,8 +235,10 @@ def build(team: str, out: Path) -> None:
             "We caught our own data: at 42 of 88 places,\ncloud cover's “trend” is better explained by\nNASA POWER's 2001 GEWEX → CERES switch.",
             "El Niño, NAO, Indian Ocean Dipole and PDO\nremoved together. One year left out at a time.\nEvery start and end year. Sudden jump or trend?",
         ], size=16, gap=0.47)
-        picture(fig, "alibi_wisc.jpg", (6.35, 1.0, 6.55, 4.09))
-        caption(ax, 6.35, 5.42, "Central Wisconsin cloud cover: “could be the instrument”", color=BLUE, size=12)
+        picture(fig, "alibi_wisc.jpg", (6.35, 1.25, 6.55, 4.09))
+        edge(ax, "The years before 2001 are cut, or one variable is tested at one date.",
+             "Every documented switch (4 dates), re-tested, with a worldwide count.")
+        caption(ax, 6.35, 5.66, "Central Wisconsin cloud cover: “could be the instrument”", color=BLUE, size=12)
         save(pdf, fig)
         plt.close(fig)
 
@@ -209,12 +247,14 @@ def build(team: str, out: Path) -> None:
         title(ax, 6.55, "INDEPENDENT RECORDS", "MUST AGREE.", size=44)
         bullets(ax, 0.45, 4.7, [
             "Lincolnshire: 4 of 4 other records agree,\n3 of them fully independent (+0.33 °C/decade).",
-            "**Delhi: NASA's model shows no proven warming.\nNASA's own station thermometers (GISTEMP)\nshow +0.22 °C per decade.",
+            "**Delhi: NASA's model shows no proven warming.\nNASA's own station thermometers (GISTEMP)\nshow +0.21 °C per decade.",
             "Rain there: 0 of 3 records back the model.",
-            "GRACE satellites, which weigh water, see the\nregion losing ~52 cm per decade (groundwater).",
+            "GRACE satellites, which weigh water, see the\nregion losing ~52 cm of water per decade.",
         ], size=16, gap=0.47)
-        picture(fig, "delhi_wit.jpg", (6.35, 1.0, 6.55, 4.09), crop=(0, 15, 400, 265))
-        caption(ax, 6.35, 5.42, "Each witness says how independent it is, and the headline counts them.", size=11)
+        picture(fig, "delhi_wit.jpg", (6.35, 1.25, 6.55, 4.09), crop=(0, 15, 400, 265))
+        edge(ax, "One second record per variable, and agreement isn't weighed.",
+             "Up to 7 kinds of witness, each labelled for how independent it is.")
+        caption(ax, 6.35, 5.66, "Each witness says how independent it is, and the headline counts them.", size=11)
         save(pdf, fig)
         plt.close(fig)
 
@@ -227,7 +267,9 @@ def build(team: str, out: Path) -> None:
             "**The luck test: shuffle each square's years so no\ntrend can exist. A typical test still “finds” one in\n22% of squares. Ours: 7%.",
             "England & Wales soil: 89 cells look like change\non a typical map. 0 survive our checks.",
         ], size=16, gap=0.47)
-        picture(fig, "globe_luck.jpg", (6.35, 1.2, 6.55, 3.77), crop=(0, 40, 800, 500))
+        picture(fig, "globe_luck.jpg", (6.35, 1.3, 6.55, 3.77), crop=(0, 40, 800, 500))
+        edge(ax, "A trend map, rarely showing how often its method is fooled.",
+             "Typical vs ours on every square, and the luck test shown: 22% vs 7%.")
         save(pdf, fig)
         plt.close(fig)
 
@@ -237,11 +279,13 @@ def build(team: str, out: Path) -> None:
         bullets(ax, 0.45, 4.8, [
             "Today's proven trend drawn on (refused when the\nchange is one sudden jump).",
             "7 CMIP6 high-resolution climate models.",
-            "**Three IPCC emission paths. Lincolnshire around\n2050: +0.7 °C with big cuts, +1.8 °C with very\nhigh emissions. The choice makes ~1.1 °C.",
+            "**Three IPCC emission paths. Lincolnshire around\n2050: +0.67 °C with big cuts, +1.75 °C with very\nhigh emissions. The choice makes 1.09 °C.",
         ], size=16, gap=0.47)
-        ax.text(0.45, 1.65, "TRY IT", color=RED, fontsize=20, va="top", **DISPLAY)
-        ax.text(0.45, 1.3, SITE, color=BLUE, fontsize=13.5, va="top", **MONO_B)
-        ax.text(0.45, 0.95, CODE, color=MUTED, fontsize=13, va="top", **MONO)
+        ax.text(0.45, 2.3, "TRY IT", color=RED, fontsize=20, va="top", **DISPLAY)
+        ax.text(0.45, 1.95, SITE, color=BLUE, fontsize=13.5, va="top", **MONO_B)
+        ax.text(0.45, 1.62, CODE, color=MUTED, fontsize=13, va="top", **MONO)
+        edge(ax, "No outlook, or a single projection.",
+             "Three what-ifs side by side, and a refusal when a line would mislead.")
         picture(fig, "y2050.jpg", (6.35, 1.6, 6.55, 3.28), crop=(0, 20, 800, 420))
         save(pdf, fig)
         plt.close(fig)
