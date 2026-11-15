@@ -450,6 +450,7 @@ button.rrow:hover .go { opacity: 1; transform: translateX(4px); }
 .legend-row span { display: inline-flex; align-items: center; gap: 6px; }
 .k-dot { width: 9px; height: 9px; border-radius: 50%; }
 .k-dot.t-rise { background: var(--signal); } .k-dot.t-fall { background: var(--fall); } .k-dot.k-grey { background: var(--ink-3); opacity: 0.5; }
+.k-dot.k-ochre { background: var(--ochre); border-radius: 0; } .k-dot.k-ink { background: var(--ink); border-radius: 0; }
 .k-ring { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--signal); }
 .globe-side { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-5) var(--cell); min-width: 0; }
 .m-detective .map-n { color: var(--ink); }

@@ -17,7 +17,15 @@ export interface WorldVar {
   n_typical: number; n_fooled: number; alibi: Record<string, number>; cells: Cell[];
 }
 export interface World { n_points: number; points: { lat: number; lon: number }[]; variables: WorldVar[] }
-type Mode = "typical" | "detective" | "satellite";
+type Mode = "typical" | "detective" | "satellite" | "luck";
+
+// The dense layer: every 2° land square from NASA MERRA-2 (Akshita's /api/globe), rows [lat, lon, slope, flags].
+type GridRow = [number, number, number, string];
+interface Grid { variable: string; cells: GridRow[]; counts: { land: { cells: number; typical: number; proven: number; luck_typical: number; luck_ours: number } } }
+const GRID_VARS = ["T2M", "PRECTOTCORR"];
+const RAD = Math.PI / 180;
+const gProven = (f: string) => f.includes("S") || f.includes("s");
+const G_LABEL: Record<string, Label> = { S: "strong", s: "some", m: "mixed", n: "none" };
 
 const proven = (c: Cell) => !!c && (c.label === "strong" || c.label === "some");
 const FEATURED = ["T2M", "PRECTOTCORR", "CLOUD_AMT", "GWETROOT", "AOD_55", "SNODP"];
@@ -41,12 +49,13 @@ function mainland(name: string): GeoPermissibleObjects | null {
  * The far side shows faintly through the glass; each place is a spike whose height is the size of its trend.
  * ponytail: d3-geo + canvas, not three.js; 111 spikes don't need a 3D engine.
  */
-function Globe({ v, points, mode, sel, focus, picked, onPick }: { v: WorldVar; points: World["points"]; mode: Mode; sel: number | null; focus: string | null; picked: string[]; onPick: (i: number | null, country: string | null) => void }) {
+function Globe({ v, points, mode, sel, focus, picked, grid, gsel, onPick }: { v: WorldVar; points: World["points"]; mode: Mode; sel: number | null; focus: string | null; picked: string[]; grid?: Grid; gsel: number | null; onPick: (i: number | null, country: string | null, g: number | null) => void }) {
   const [box, w, h] = useSize<HTMLDivElement>();
   const cv = useRef<HTMLCanvasElement>(null);
-  const live = useRef({ v, mode, sel, focus, picked });
-  live.current = { v, mode, sel, focus, picked };
-  const s = useRef({ rot: [-10, -22] as [number, number], drag: null as null | { x: number; y: number; r: [number, number]; moved: boolean }, last: 0, cur: new Float32Array(points.length), tips: new Float32Array(points.length * 2), hover: -1, zoom: 1, goal: null as null | { rot: [number, number]; zoom: number } });
+  const live = useRef({ v, mode, sel, focus, picked, grid, gsel, onPick });
+  live.current = { v, mode, sel, focus, picked, grid, gsel, onPick };
+  const s = useRef({ rot: [-10, -22] as [number, number], drag: null as null | { x: number; y: number; r: [number, number]; moved: boolean }, last: 0, cur: new Float32Array(points.length), tips: new Float32Array(points.length * 2), hover: -1, zoom: 1, goal: null as null | { rot: [number, number]; zoom: number },
+    gref: null as Grid | null, gcur: new Float32Array(0), grate: new Float32Array(0), gtop: 1, gidx: new Map<string, number>() });
   const borders = useMemo(() => mesh(topo, topo.objects.countries), []);
   const land = LAND as unknown as GeoPermissibleObjects;
   const grat = useMemo(() => geoGraticule10(), []);
@@ -67,7 +76,7 @@ function Globe({ v, points, mode, sel, focus, picked, onPick }: { v: WorldVar; p
     const dpr = Math.min(devicePixelRatio || 1, 2);
     c.width = w * dpr; c.height = h * dpr;
     const ctx = c.getContext("2d")!;
-    const col = { ink: css("--ink"), ink3: css("--ink-3"), rule: css("--rule"), rule2: css("--rule-2"), paper: css("--paper-3"), paper2: css("--paper-2"), rise: css("--signal"), fall: css("--fall") };
+    const col = { ink: css("--ink"), ink3: css("--ink-3"), rule: css("--rule"), rule2: css("--rule-2"), paper: css("--paper-3"), paper2: css("--paper-2"), rise: css("--signal"), fall: css("--fall"), ochre: css("--ochre") };
     const R = Math.min(w, h) / 2 / 1.22, cx = w / 2, cy = h / 2 - R * 0.04;
     const front = geoOrthographic().scale(R).translate([cx, cy]).clipAngle(90).precision(0.6);
     const back = geoOrthographic().scale(R).translate([cx, cy]).clipAngle(90).reflectX(true).precision(0.6);
@@ -76,7 +85,7 @@ function Globe({ v, points, mode, sel, focus, picked, onPick }: { v: WorldVar; p
     const calm = still();
 
     const frame = (t: number) => {
-      const st = s.current, { v, mode, sel, focus, picked } = live.current;
+      const st = s.current, { v, mode, sel, focus, picked, grid, gsel } = live.current;
       const go = st.goal;
       if (go && !st.drag) {
         const k = calm ? 1 : 0.07, d = ((go.rot[0] - st.rot[0] + 540) % 360) - 180;
@@ -106,6 +115,45 @@ function Globe({ v, points, mode, sel, focus, picked, onPick }: { v: WorldVar; p
       ctx.lineWidth = 1.2; ctx.strokeStyle = col.ink; ctx.stroke();
       ctx.beginPath(); pf(grat); ctx.strokeStyle = col.rule2; ctx.lineWidth = 0.5; ctx.stroke();
       ctx.beginPath(); pf(land); ctx.fillStyle = col.paper2; ctx.globalAlpha = 0.75; ctx.fill(); ctx.globalAlpha = 1;
+      // The 2° grid: one small square per land cell, batched into a few paths per colour.
+      if (grid) {
+        if (st.gref !== grid) {
+          st.gref = grid;
+          st.gcur = new Float32Array(grid.cells.length);
+          st.grate = Float32Array.from(grid.cells, () => 0.03 + Math.random() * 0.09); // staggered, so squares flip in a ripple
+          const m = grid.cells.map((c) => Math.abs(c[2])).sort((a, b) => a - b);
+          st.gtop = m[Math.floor(m.length * 0.95)] || 1;
+          st.gidx = new Map(grid.cells.map((c, i) => [`${c[0]},${c[1]}`, i]));
+        }
+        const l0 = centre[0] * RAD, sp0 = Math.sin(centre[1] * RAD), cp0 = Math.cos(centre[1] * RAD);
+        const half = Math.max(1.1, R * st.zoom * 0.0155);
+        const paths = new Map<string, Path2D>();
+        const P = (k: string) => { let q = paths.get(k); if (!q) paths.set(k, (q = new Path2D())); return q; };
+        for (let i = 0; i < grid.cells.length; i++) {
+          const [la, lo, sl, f] = grid.cells[i];
+          const lit = mode === "typical" ? f.includes("t") : mode === "luck" ? f.includes("l") || f.includes("o") : gProven(f);
+          st.gcur[i] += (+lit - st.gcur[i]) * (calm ? 1 : st.grate[i]);
+          const cosc = sp0 * Math.sin(la * RAD) + cp0 * Math.cos(la * RAD) * Math.cos(lo * RAD - l0);
+          if (cosc <= 0.02) continue;
+          const xy = front([lo, la]);
+          if (!xy) continue;
+          const key = st.gcur[i] <= 0.5 ? "g" : mode === "luck" ? (f.includes("o") ? "o" : "l")
+            : (dirTone(v.id, sl) === "rise" ? "r" : "f") + Math.min(2, Math.floor((Math.abs(sl) / st.gtop) * 3));
+          const hh = half * (0.5 + 0.5 * cosc);
+          P(key).rect(xy[0] - hh, xy[1] - hh, 2 * hh, 2 * hh);
+        }
+        const A = [0.4, 0.68, 0.95];
+        for (const [k, q] of paths) {
+          ctx.fillStyle = k === "g" ? col.ink3 : k === "l" ? col.ochre : k === "o" ? col.ink : k[0] === "r" ? col.rise : col.fall;
+          ctx.globalAlpha = k === "g" ? 0.16 : k === "l" || k === "o" ? 0.9 : A[+k[1]];
+          ctx.fill(q);
+        }
+        ctx.globalAlpha = 1;
+        if (gsel != null && grid.cells[gsel]) {
+          const xy = front([grid.cells[gsel][1], grid.cells[gsel][0]]);
+          if (xy) { ctx.strokeStyle = col.ink; ctx.lineWidth = 2.5; ctx.strokeRect(xy[0] - half - 4, xy[1] - half - 4, 2 * half + 8, 2 * half + 8); }
+        }
+      }
       ctx.beginPath(); pf(borders); ctx.strokeStyle = col.ink; ctx.globalAlpha = 0.55; ctx.lineWidth = 0.7; ctx.stroke(); ctx.globalAlpha = 1;
       // Chosen countries: the focus in ink, the ones pinned for comparison in red.
       for (const name of new Set([...picked, focus])) {
@@ -117,8 +165,8 @@ function Globe({ v, points, mode, sel, focus, picked, onPick }: { v: WorldVar; p
         ctx.strokeStyle = on ? col.ink : col.rise; ctx.lineWidth = 1.6; ctx.stroke();
       }
 
-      // Spikes, far ones first.
-      const order = points.map((p, i) => ({ i, d: geoDistance([p.lon, p.lat], centre) })).sort((a, b) => b.d - a.d);
+      // Spikes, far ones first (only when there is no grid for this variable).
+      const order = grid ? [] : points.map((p, i) => ({ i, d: geoDistance([p.lon, p.lat], centre) })).sort((a, b) => b.d - a.d);
       for (const { i, d } of order) {
         const c = v.cells[i];
         const lit = !c ? 0 : mode === "typical" ? +c.typical : +proven(c);
@@ -155,6 +203,7 @@ function Globe({ v, points, mode, sel, focus, picked, onPick }: { v: WorldVar; p
     const pick = (x: number, y: number) => {
       const centre: [number, number] = [-s.current.rot[0], -s.current.rot[1]];
       let best = -1, bd = 14;
+      if (live.current.grid) return -1;
       points.forEach((p, i) => {
         if (geoDistance([p.lon, p.lat], centre) >= Math.PI / 2) return;
         const xy = front([p.lon, p.lat]);
@@ -188,7 +237,13 @@ function Globe({ v, points, mode, sel, focus, picked, onPick }: { v: WorldVar; p
         const [x, y] = at(e), i = pick(x, y);
         const ll = i >= 0 ? [points[i].lon, points[i].lat] as [number, number] : Math.hypot(x - cx, y - cy) <= R * s.current.zoom ? front.invert!([x, y]) : null;
         const hit = ll && LAND.features.find((f) => geoContainsSafe(f.geometry, ll));
-        onPick(i >= 0 ? i : null, hit ? hit.properties.name : null);
+        let gi: number | null = null;
+        if (ll && live.current.grid) {
+          const la = Math.max(-86, Math.min(88, Math.round((ll[1] + 88) / 2) * 2 - 88));
+          const lo = (((Math.round((ll[0] + 180) / 2.5) % 144) + 144) % 144) * 2.5 - 180;
+          gi = s.current.gidx.get(`${la},${lo}`) ?? null;
+        }
+        live.current.onPick(i >= 0 ? i : null, hit ? hit.properties.name : null, gi);
       }
     };
     c.addEventListener("pointerdown", down); c.addEventListener("pointermove", move); addEventListener("pointerup", up);
@@ -209,6 +264,35 @@ function placeOf(p: { lat: number; lon: number }) {
   return hit?.properties.name ?? "Open ocean / coast";
 }
 const geoContainsSafe = (g: GeoPermissibleObjects, p: [number, number]) => { try { return geoContains(g, p); } catch { return false; } };
+/** Grid squares inside a country (cached); if none, the nearest square to its middle. */
+const GIN = new Map<string, { idx: number[]; km: number }>();
+function gridHere(g: Grid, name: string) {
+  const key = g.variable + "|" + name;
+  let r = GIN.get(key);
+  if (!r) {
+    const f = BYNAME.get(name);
+    const idx = f ? g.cells.flatMap((c, i) => (geoContainsSafe(f.geometry, [c[1], c[0]]) ? [i] : [])) : [];
+    r = { idx, km: 0 };
+    const m = !idx.length && mainland(name);
+    if (m) {
+      const c = geoCentroid(m);
+      let best = 0, bd = Infinity;
+      g.cells.forEach((x, i) => { const d = geoDistance([x[1], x[0]], c); if (d < bd) { bd = d; best = i; } });
+      r = { idx: [best], km: Math.round((bd * 6371) / 10) * 10 };
+    }
+    GIN.set(key, r);
+  }
+  return r;
+}
+function gsum(g: Grid, idx: number[]) {
+  const cs = idx.map((i) => g.cells[i]);
+  const pr = cs.filter((c) => gProven(c[3]));
+  return {
+    n: cs.length, p: pr.length, slope: pr.length ? pr.reduce((a, c) => a + c[2], 0) / pr.length : null,
+    fooled: cs.filter((c) => c[3].includes("t") && !gProven(c[3])).length, sat: 0, luck: cs.filter((c) => c[3].includes("l")).length,
+  };
+}
+
 const ll = (p: { lat: number; lon: number }) => `${Math.abs(p.lat).toFixed(0)}°${p.lat >= 0 ? "N" : "S"}, ${Math.abs(p.lon).toFixed(0)}°${p.lon >= 0 ? "E" : "W"}`;
 
 /** The places we tested inside a country; if none sit inside it, the nearest one. */
@@ -235,7 +319,7 @@ function sum(v: WorldVar, idx: number[]) {
   return { n: cs.length, p: pr.length, slope, fooled: cs.filter((c) => c.typical && !proven(c)).length, sat: pr.filter((c) => c.alibi === "could_be_instrument").length };
 }
 
-function CountryTable({ world, cols, where, varId, onVar, onDrop }: { world: World; cols: string[]; where: string[]; varId: string; onVar: (id: string) => void; onDrop: (c: string) => void }) {
+function CountryTable({ world, grids, cols, where, varId, onVar, onDrop }: { world: World; grids: Record<string, Grid>; cols: string[]; where: string[]; varId: string; onVar: (id: string) => void; onDrop: (c: string) => void }) {
   const at = cols.map((c) => ({ name: c, ...placesIn(world, c, where) }));
   const vars = [...FEATURED.map((id) => world.variables.find((x) => x.id === id)).filter((x): x is WorldVar => !!x), ...world.variables.filter((x) => !FEATURED.includes(x.id))];
   return (
@@ -243,7 +327,7 @@ function CountryTable({ world, cols, where, varId, onVar, onDrop }: { world: Wor
       <h2 className="sec-title"><span className="tag">[{cols.length > 1 ? "COMPARE" : "COUNTRY"}]</span>{cols.join(" vs ")}</h2>
       <p className="sec-lede">
         Every variable we tested, at the places inside {cols.length > 1 ? "each country" : cols[0]}. A trend counts only if it is proven after our checks.
-        "By 2050" draws today's proven trend straight on: a what-if, not a climate-model forecast.
+        Air temperature and rainfall use every 2° grid square inside the country. "By 2050" draws today's proven trend straight on: a what-if, not a climate-model forecast.
       </p>
       <div className="ctable-scroll">
         <table className="ctable">
@@ -266,7 +350,8 @@ function CountryTable({ world, cols, where, varId, onVar, onDrop }: { world: Wor
                 <tr key={v.id} className={v.id === varId ? "on" : undefined}>
                   <th scope="row"><button className="linkish" onClick={() => onVar(v.id)}>{v.name}</button></th>
                   {at.map((c) => {
-                    const r = sum(v, c.idx);
+                    const g = grids[v.id];
+                    const r = g ? gsum(g, gridHere(g, c.name).idx) : sum(v, c.idx);
                     if (!r.n) return <td key={c.name} className="muted">no data</td>;
                     if (r.slope == null) return (
                       <td key={c.name}>
@@ -277,7 +362,7 @@ function CountryTable({ world, cols, where, varId, onVar, onDrop }: { world: Wor
                     return (
                       <td key={c.name}>
                         <span className={`cval t-${dirTone(v.id, r.slope)}`}><b>{signed(r.slope)}</b> {u}/decade</span>
-                        <span className="tag">proven at {r.p} of {r.n}{r.sat ? ` · ${r.sat} could be the satellite` : ""}</span>
+                        <span className="tag">proven at {r.p} of {r.n}{g ? " grid squares" : ""}{r.sat ? ` · ${r.sat} could be the satellite` : ""}</span>
                         <span className="c2050">If it keeps going, by 2050: {signed(r.slope * TO_2050)} {u} on today</span>
                       </td>
                     );
@@ -311,26 +396,38 @@ export default function WorldView() {
   const [focus, setFocus] = useState<string | null>(null);
   const [picked, setPicked] = useState<string[]>([]);
   const [playing, setPlaying] = useState(false);
+  const [grids, setGrids] = useState<Record<string, Grid>>({});
+  const [gsel, setGsel] = useState<number | null>(null);
   useEffect(() => { api.world<World>().then((d) => d.variables && setWorld(d)).catch(() => {}); }, []);
+  useEffect(() => { GRID_VARS.forEach((id) => api.globe<Grid>(id).then((d) => d.cells && setGrids((g) => ({ ...g, [id]: d }))).catch(() => {})); }, []);
+  const grid = grids[varId];
+  const third: Mode = grid ? "luck" : "satellite";
+  useEffect(() => { if ((mode === "luck" || mode === "satellite") && mode !== third) setMode(third); }, [mode, third]);
+  useEffect(() => { setGsel(null); }, [varId]);
   useEffect(() => {
     if (!playing) return;
-    const order: Mode[] = ["typical", "detective", "satellite"];
+    const order: Mode[] = ["typical", "detective", third];
     const t = setInterval(() => setMode((m) => { const n = order[(order.indexOf(m) + 1) % 3]; if (n === "typical") setPlaying(false); return n; }), 2600);
     return () => clearInterval(t);
-  }, [playing]);
+  }, [playing, third]);
 
   const v = world.variables.find((x) => x.id === varId) ?? world.variables[0];
   const where = useMemo(() => world.points.map(placeOf), [world.points]);
   const cols = [...new Set([focus, ...picked].filter((c): c is string => !!c))];
-  const here = focus ? placesIn(world, focus, where) : null;
-  const fs = here ? sum(v, here.idx) : null;
+  const here = focus ? (grid ? gridHere(grid, focus) : placesIn(world, focus, where)) : null;
+  const fs = here ? (grid ? gsum(grid, here.idx) : sum(v, here.idx)) : null;
+  const unit = grid ? "grid square" : "place";
+  const gl = grid?.counts.land;
+  const gc = grid && gsel != null ? grid.cells[gsel] : null;
   const tot = world.variables.reduce((a, x) => ({ n: a.n + x.n_points, t: a.t + x.n_typical, p: a.p + x.n_proven, f: a.f + x.n_fooled }), { n: 0, t: 0, p: 0, f: 0 });
   const cloud = world.variables.find((x) => x.id === "CLOUD_AMT");
   const fa = examples.validation.validation;
   const i5 = fa.phis.indexOf(0.5);
   const sat = v.alibi.could_be_instrument ?? 0;
   const hasSwitch = Object.keys(v.alibi).some((k) => k !== "no_known_change" && k !== "untested");
-  const counts = { typical: v.n_typical, detective: v.n_proven, satellite: sat };
+  const counts = gl ? { typical: gl.typical, detective: gl.proven, satellite: 0, luck: gl.luck_typical } : { typical: v.n_typical, detective: v.n_proven, satellite: sat, luck: 0 };
+  const total = gl ? gl.cells : v.n_points;
+  const pc = (n: number) => `${Math.round((n / total) * 100)}%`;
   const shown = useTween(counts[mode], 800);
   const cell = sel != null ? v.cells[sel] : null;
   const pt = sel != null ? world.points[sel] : null;
@@ -338,8 +435,9 @@ export default function WorldView() {
   const rows = [...world.variables].sort((a, b) => b.n_fooled / b.n_points - a.n_fooled / a.n_points);
 
   const steps: { m: Mode; no: string; title: string; n: number; of: number; text: string }[] = [
-    { m: "typical", no: "01", title: "A typical analysis", n: v.n_typical, of: v.n_points, text: "Each place tested on its own with a straight line that treats every month as independent. That's how most trend maps are made." },
-    { m: "detective", no: "02", title: "The Detective", n: v.n_proven, of: v.n_points, text: "Both corrected tests must agree, with neighbouring months' stickiness counted. The rest fade to grey." },
+    { m: "typical", no: "01", title: "A typical analysis", n: counts.typical, of: total, text: `Each ${unit} tested on its own with a straight line that treats every month as independent. That's how most trend maps are made.` },
+    { m: "detective", no: "02", title: "The Detective", n: counts.detective, of: total, text: "Both corrected tests must agree, with neighbouring months' stickiness counted. The rest fade to grey." },
+    gl ? { m: "luck", no: "03", title: "The luck test", n: gl.luck_typical, of: total, text: `We shuffle each square's years, so no real trend can exist, and test again. Ochre: the typical test still "finds" one (${pc(gl.luck_typical)}). Ink: ours does (${gl.luck_ours}, ${pc(gl.luck_ours)}).` } :
     { m: "satellite", no: "03", title: "The satellite check", n: sat, of: v.n_proven, text: hasSwitch ? "Did the instrument change, not the climate? Red rings: one jump at a documented satellite or model switch explains the trend better." : "No documented satellite or model switch inside this record, so nothing to explain away." },
   ];
 
@@ -371,29 +469,32 @@ export default function WorldView() {
               {world.variables.filter((x) => !FEATURED.includes(x.id)).map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}
             </select>
           </div>
-          <Globe v={v} points={world.points} mode={mode} sel={sel} focus={focus} picked={picked} onPick={(i, c) => { setSel(i); if (c) setFocus(c); }} />
+          <Globe v={v} points={world.points} mode={mode} sel={sel} focus={focus} picked={picked} grid={grid} gsel={gsel} onPick={(i, c, g) => { setSel(i); setGsel(g); if (c) setFocus(c); }} />
           <div className="globe-foot">
-            <span className="tag">[DRAG TO TURN · TAP A COUNTRY OR A SPIKE]</span>
+            <span className="tag">[DRAG TO TURN · TAP A COUNTRY OR A {grid ? "SQUARE" : "SPIKE"}]</span>
             <span className="legend-row">
-              <span><i className={`k-dot t-${dirTone(v.id, 1)}`} />rising</span>
-              <span><i className={`k-dot t-${dirTone(v.id, -1)}`} />falling</span>
+              {mode !== "luck" && <>
+                <span><i className={`k-dot t-${dirTone(v.id, 1)}`} />rising</span>
+                <span><i className={`k-dot t-${dirTone(v.id, -1)}`} />falling</span>
+              </>}
               <span><i className="k-dot k-grey" />not counted</span>
               {mode === "satellite" && <span><i className="k-ring" />could be the satellite</span>}
-              <span className="muted">spike height = size of the trend</span>
+              {mode === "luck" && <><span><i className="k-dot k-ochre" />typical test fooled</span><span><i className="k-dot k-ink" />our test fooled</span></>}
+              <span className="muted">{grid ? `each square = one 2° NASA MERRA-2 cell (${gl!.cells.toLocaleString("en-GB")} on land); darker = bigger trend` : "spike height = size of the trend"}</span>
             </span>
           </div>
         </div>
 
         <aside className="globe-side">
-          <p className="map-n"><b>{Math.round(shown)}</b><small>/{mode === "satellite" ? v.n_proven : v.n_points}</small></p>
-          <p className="tag">{v.name} · {mode === "typical" ? "places that look like change" : mode === "detective" ? "places with proven change" : "proven trends that could be the instrument"}</p>
+          <p className="map-n"><b>{Math.round(shown).toLocaleString("en-GB")}</b><small>/{(mode === "satellite" ? v.n_proven : total).toLocaleString("en-GB")}</small></p>
+          <p className="tag">{v.name} · {mode === "typical" ? `${unit}s that look like change` : mode === "detective" ? `${unit}s with proven change` : mode === "luck" ? "shuffled records where a typical test still finds a trend" : "proven trends that could be the instrument"}</p>
           {focus && fs && here && (
             <div className="inspect country" aria-live="polite">
-              <p className="tag">[COUNTRY] {focus} · {here.km ? `nearest place ${here.km.toLocaleString("en-GB")} km away` : `${here.idx.length} place${here.idx.length === 1 ? "" : "s"}`}</p>
+              <p className="tag">[COUNTRY] {focus} · {here.km ? `nearest ${unit} ${here.km.toLocaleString("en-GB")} km away` : `${here.idx.length} ${unit}${here.idx.length === 1 ? "" : "s"}`}</p>
               <p className="cline">
                 {fs.slope == null
                   ? <>{v.name}: <b>no proven change</b>{fs.fooled ? `, though a typical test says there is at ${fs.fooled} of ${fs.n}` : ""}.</>
-                  : <>{v.name}: <b className={`t-${dirTone(v.id, fs.slope)}`}>{signed(fs.slope)} {u}</b> per decade, proven at {fs.p} of {fs.n}. If it keeps going, by 2050: <b>{signed(fs.slope * TO_2050)} {u}</b> on today.</>}
+                  : <>{v.name}: <b className={`t-${dirTone(v.id, fs.slope)}`}>{signed(fs.slope)} {u}</b> per decade{grid ? " on average" : ""}, proven at {fs.p} of {fs.n}{grid ? " squares" : ""}. If it keeps going, by 2050: <b>{signed(fs.slope * TO_2050)} {u}</b> on today.</>}
               </p>
               <div className="cbtns">
                 <button className="btn" onClick={() => document.getElementById("country")?.scrollIntoView({ behavior: "smooth" })}>Every variable here ↓</button>
@@ -409,7 +510,7 @@ export default function WorldView() {
               <li key={st.m}>
                 <button className={mode === st.m ? "on" : undefined} aria-pressed={mode === st.m} onClick={() => { setMode(st.m); setPlaying(false); }}>
                   <span className="tag">[{st.no}] {st.title}</span>
-                  <span className="gnum"><b>{st.n}</b> of {st.of}</span>
+                  <span className="gnum"><b>{st.n.toLocaleString("en-GB")}</b> of {st.of.toLocaleString("en-GB")}</span>
                   <span className="gbar" aria-hidden><i style={{ width: `${(st.n / Math.max(st.of, 1)) * 100}%` }} /></span>
                   <span className="gtext">{st.text}</span>
                 </button>
@@ -418,7 +519,20 @@ export default function WorldView() {
           </ol>
           <button className="btn ghost" onClick={() => { setMode("typical"); setPlaying(true); }} disabled={playing}>{playing ? "Playing…" : "▶ Play the three tests"}</button>
 
-          <div className="inspect" aria-live="polite">
+          {gc && (
+            <div className="inspect" aria-live="polite">
+              <p className="tag">[GRID SQUARE] {placeOf({ lat: gc[0], lon: gc[1] })} · {ll({ lat: gc[0], lon: gc[1] })}</p>
+              <dl className="stats">
+                <div><dt>Verdict</dt><dd><span className={`verdict v-${G_LABEL[gc[3][0]] ?? "none"}`}><span className="verdict-swatch" aria-hidden />{LABELS[G_LABEL[gc[3][0]] ?? "none"]}</span></dd></div>
+                <div><dt>Trend</dt><dd><b>{signed(gc[2])}</b> {u} per decade</dd></div>
+                <div><dt>Typical says</dt><dd>{gc[3].includes("t") ? "real change" : "no trend"}</dd></div>
+                <div><dt>Luck test</dt><dd className={gc[3].includes("l") ? "hl" : undefined}>{gc[3].includes("l") ? "typical test fooled by shuffled years here" : "not fooled"}{gc[3].includes("o") ? "; ours fooled too" : ""}</dd></div>
+              </dl>
+              <a className="btn" href={`#/case?var=${v.id}&box=${gc[0] - 1},${gc[0] + 1},${gc[1] - 1.25},${gc[1] + 1.25}&name=${encodeURIComponent(placeOf({ lat: gc[0], lon: gc[1] }))}`}>Open the full case →</a>
+            </div>
+          )}
+
+          {!grid && <div className="inspect" aria-live="polite">
             <p className="tag">[PLACE] {pt ? `${placeOf(pt)} · ${ll(pt)}` : "tap a spike on the globe"}</p>
             {pt && cell && (
               <>
@@ -432,11 +546,11 @@ export default function WorldView() {
               </>
             )}
             {pt && !cell && <p className="note">No data for {v.name} here.</p>}
-          </div>
+          </div>}
         </aside>
       </section>
 
-      {cols.length > 0 && <CountryTable world={world} cols={cols} where={where} varId={v.id}
+      {cols.length > 0 && <CountryTable world={world} grids={grids} cols={cols} where={where} varId={v.id}
         onVar={(id) => { setVarId(id); setSel(null); document.querySelector(".globe-sheet")?.scrollIntoView({ behavior: "smooth" }); }}
         onDrop={(c) => setPicked(picked.filter((x) => x !== c))} />}
 
