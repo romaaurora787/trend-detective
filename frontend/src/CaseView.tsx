@@ -75,6 +75,36 @@ function useActiveStep(n: number) {
   return [ref, i] as const;
 }
 
+// Worked examples, one per kind of verdict (G2). Links checked live by Akshita.
+const CASES = [
+  { tag: "Real change", tone: "rise", title: "Lincolnshire air temperature", text: "Warming, proven by both corrected tests and backed by independent records.", href: "#/case?var=T2M&box=52.6,53.7,-1,0.4" },
+  { tag: "Fooled the typical test", tone: "warn", title: "England & Wales soil", text: "A typical map flags 89 cells as drying. After the corrections, none hold up.", href: "#/map?var=GWETROOT&box=50,55.5,-6,2" },
+  { tag: "Could be the satellite", tone: "warn", title: "Central Wisconsin cloud cover", text: "A cloud trend that one jump at the 2001 satellite switch explains better.", href: "#/case?var=CLOUD_AMT&box=44,46,-91,-89&name=Central%20Wisconsin" },
+  { tag: "Witnesses disagree", tone: "fall", title: "Delhi rainfall", text: "NASA's record shows a trend; the other rain records don't back it.", href: "#/case?var=PRECTOTCORR&box=28,29.5,76.5,78" },
+  { tag: "The whole world", tone: "ink", title: "The world on trial", text: "111 places, 19 variables, on a see-through globe. Watch the three tests.", href: "#/world" },
+];
+
+function Cases({ cur }: { cur: string }) {
+  return (
+    <Reveal className="frame cases" aria-label="Worked cases">
+      {CASES.filter((c) => !c.href.includes(cur)).map((c, i) => (
+        <a key={c.href} className="case-card" href={c.href} style={{ "--n": i } as CSSProperties}>
+          <span className={`chip c-${c.tone}`}>{c.tag}</span>
+          <b>{c.title}</b>
+          <span className="gtext">{c.text}</span>
+          <span className="tag">{c.href === "#/world" ? "Spin the globe →" : "Open the case →"}</span>
+        </a>
+      ))}
+      <button className="case-card" onClick={() => (document.querySelector<HTMLInputElement>(".search input"))?.focus()}>
+        <span className="chip">Your turn</span>
+        <b>Your hometown</b>
+        <span className="gtext">Type any city or town in the search box above. Every place gets the same checks.</span>
+        <span className="tag">Search a place →</span>
+      </button>
+    </Reveal>
+  );
+}
+
 export function CaseView({ varId, box, onReport }: { varId: string; box: Box; onReport: () => void }) {
   const { data, loading, error, stale } = useAnalysis(varId, box);
   const x = useCrossExam(varId, box);
@@ -118,6 +148,8 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
           <a className="cue" href="#story"><span className="tag">[{steps.length} steps]</span>Scroll the evidence <span aria-hidden className="nudge">↓</span></a>
         </div>
       </section>
+
+      <Cases cur={`var=${v.id}&box=${data.box.join(",")}`} />
 
       <section className="frame story" id="story" aria-label="The evidence, step by step">
         <div className="story-stage">

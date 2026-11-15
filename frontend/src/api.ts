@@ -115,6 +115,7 @@ export const api = {
   crossExam: (v: string, b: Box) => get<CrossExam>(`/api/cross-examine?var=${v}&${q(b)}`),
   witnesses: (v: string, b: Box) => get<Witnesses>(`/api/witnesses?var=${v}&${q(b)}`),
   places: (s: string) => get<{ results: PlaceHit[] }>(`/api/places?q=${encodeURIComponent(s)}&limit=8`),
+  world: <T>() => get<T>("/api/world"),
   evidenceUrl: (v: string, b: Box) => `${API}/api/evidence.csv?var=${v}&${q(b)}`,
 };
 

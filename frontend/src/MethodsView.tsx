@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, examples, type Validation } from "./api";
 import { Panel, Reveal } from "./Chart";
+import { Trust } from "./Trust";
 
 const pct = (xs: number[]) => xs.map((x) => x * 100);
 
@@ -16,6 +17,11 @@ export function MethodsView() {
         <h1 className="hero-line">Real change, <span className="hl">or natural noise?</span></h1>
         <p className="lede">Is this variable really changing here, or is it natural ups and downs? If it is changing, how fast, and how sure are we? If we can't tell yet, how long until we could?</p>
       </section>
+
+      <Reveal className="frame sec">
+        <h2 className="sec-title"><span className="tag">[00]</span>Why trust the Detective</h2>
+        <Trust />
+      </Reveal>
 
       <Reveal className="frame proof">
         <Panel letter="a" height={220} yDomain={[0, 60]} xTicks={fa.phis} xFmt={(x) => x.toFixed(2)} yLabel="%"

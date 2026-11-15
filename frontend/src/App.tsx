@@ -6,11 +6,13 @@ import { ReportView } from "./ReportView";
 import { MethodsView } from "./MethodsView";
 
 const MapView = lazy(() => import("./MapView"));
+const WorldView = lazy(() => import("./WorldView"));
 const Picker = lazy(() => import("./MapView").then((m) => ({ default: m.Picker })));
 
-type Route = "case" | "report" | "map" | "methods";
+type Route = "case" | "world" | "report" | "map" | "methods";
 const ROUTES: { id: Route; label: string }[] = [
   { id: "case", label: "Case" },
+  { id: "world", label: "World" },
   { id: "report", label: "Report card" },
   { id: "map", label: "Map" },
   { id: "methods", label: "How it works" },
@@ -97,7 +99,7 @@ export default function App() {
             </select>
           </label>
           <button className="btn ghost" aria-expanded={picking} onClick={() => setPicking(!picking)}>{picking ? "Close map" : "Pick on a map"}</button>
-          {s.route !== "report" && (
+          {s.route !== "report" && s.route !== "world" && (
             <label className="grow">
               <span>Variable</span>
               <select value={s.varId} onChange={(e) => go({ varId: e.target.value })}>
@@ -116,11 +118,12 @@ export default function App() {
         {s.route === "case" && <CaseView varId={s.varId} box={s.box} onReport={() => go({ route: "report" })} />}
         {s.route === "report" && <ReportView box={s.box} onOpen={(varId) => go({ route: "case", varId })} />}
         {s.route === "map" && <Suspense fallback={<main className="sheet"><p className="status pad">Loading the map…</p></main>}><MapView varId={s.varId} box={s.box} /></Suspense>}
+        {s.route === "world" && <Suspense fallback={<main className="sheet"><p className="status pad">Loading the globe…</p></main>}><WorldView /></Suspense>}
         {s.route === "methods" && <MethodsView />}
       </div>
       <footer className="foot">
         <p className="tag">[CREDITS] NASA Space Apps Challenge 2026 · Lincoln · Akshita &amp; Kanishk</p>
-        <p>Data: NASA POWER (MERRA-2, CERES / GEWEX SRB); NASA MODIS via Microsoft Planetary Computer; NASA GPM IMERG and GPCP (GES DISC); NASA GISTEMP v4; NASA EONET; Met Office HadCET (Open Government Licence); ESA CCI Soil Moisture; ERA5 and CMIP6 models served by Open-Meteo (CC BY 4.0), containing modified Copernicus Climate Change Service information; NOAA NCEI GHCN stations and NOAA PSL / CPC climate indices. Places: GeoNames (CC BY 4.0). Map tiles: Esri.</p>
+        <p>Data: NASA POWER (MERRA-2, CERES / GEWEX SRB); NASA MODIS via Microsoft Planetary Computer; NASA GPM IMERG and GPCP (GES DISC); NASA GISTEMP v4; NASA EONET; Met Office HadCET (Open Government Licence); ESA CCI Soil Moisture; ERA5 and CMIP6 models served by Open-Meteo (CC BY 4.0), containing modified Copernicus Climate Change Service information; NOAA NCEI GHCN stations and NOAA PSL / CPC climate indices. Places: GeoNames (CC BY 4.0). Map tiles: Esri. Country outlines: Natural Earth (public domain).</p>
         <p>Code drafted with help from Claude (Anthropic); every verdict number is computed by our statistics code, never by AI.</p>
       </footer>
     </>
