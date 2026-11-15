@@ -602,3 +602,12 @@ button.rrow:hover .go { opacity: 1; transform: translateX(4px); }
 /* World tab: sections appear and disappear (opposites only for gridded variables), so number them in CSS. */
 .worldv { counter-reset: wsec; }
 .worldv .sec-title .tag.n::before { counter-increment: wsec; content: "[" counter(wsec, decimal-leading-zero) "]"; }
+/* By 2050 (case page) */
+.y2050 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); padding: 0 var(--cell) var(--space-5); }
+.y-card { display: grid; gap: var(--space-2); align-content: start; padding: var(--space-3); background: var(--paper-3); border: 1px solid var(--rule); }
+.y-card b { font: 800 2.6rem/0.95 var(--font-display); font-stretch: 62%; color: var(--ink); }
+.y-card b.t-rise { color: var(--signal-tx); } .y-card b.t-fall { color: var(--fall); }
+.y-card p { margin: 0; }
+.y-card .interval { width: 100%; height: 14px; }
+.y-note { grid-column: 1 / -1; margin: 0; }
+@media (max-width: 640px) { .y2050 { grid-template-columns: minmax(0, 1fr); } }

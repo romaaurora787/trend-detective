@@ -92,6 +92,11 @@ export interface Validation {
   validation_power: { trends_per_decade: number[]; detection_rate: Record<string, number[]>; n_sims: number };
   yearly_vs_monthly?: { headline: string; false_alarms: Record<"mild_noise" | "sticky_noise", { yearly_shortcut: number; yearly_hamed_rao: number; ours: number }> };
 }
+export interface Models {
+  available: boolean; headline: string; verdict?: "inside" | "above" | "below";
+  models?: { model: string; slope_observed_period: number; slope_2026_2050: number }[];
+  observed_slope?: number; model_range?: [number, number]; units_note?: string; caveat?: string; credit?: string;
+}
 export interface Cite { items: { key: string; apa: string; harvard: string; bibtex: string; acknowledgement?: string }[] }
 export type Spot = { name: string; slope_per_decade: number; units: string; case: string };
 export interface Opposites { n_land_cells: number; n_rising: number; n_falling: number; headline: string; rising: Spot[]; falling: Spot[] }
@@ -125,6 +130,7 @@ export const api = {
   globe: <T>(v: string) => get<T>(`/api/globe?var=${v}&land_only=true`),
   cite: (v: string, name: string, url: string) => get<Cite>(`/api/cite?var=${v}&name=${encodeURIComponent(name)}&url=${encodeURIComponent(url)}`),
   opposites: (v: string) => get<Opposites>(`/api/opposites?var=${v}&n=4`),
+  models: (v: string, b: Box) => get<Models>(`/api/models?var=${v}&${q(b)}`),
   evidenceUrl: (v: string, b: Box) => `${API}/api/evidence.csv?var=${v}&${q(b)}`,
 };
 

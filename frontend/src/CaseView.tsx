@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { api, examples, type Analysis, type Box, type Cite } from "./api";
+import { api, examples, type Analysis, type Box, type Cite, type Models } from "./api";
 import { Reveal } from "./Chart";
 import { CheckOurWork, CrossExamBlock, WitnessList, useCrossExam, useLive } from "./CrossExam";
 import { LABELS, dirTone, pText, placeName, plain, sameBox, short, signed } from "./lib";
@@ -190,13 +190,19 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
         <CrossExamBlock x={x.data} error={x.error} varId={v.id} units={short(r.units)} />
       </Reveal>
 
+      <Reveal className="frame sec">
+        <h2 className="sec-title"><span className="tag">[{String(steps.length + 2).padStart(2, "0")}]</span>By 2050</h2>
+        <p className="sec-lede">Two ways to look ahead: our own trend drawn on as a straight line, and what seven climate models project for this spot.</p>
+        <By2050 varId={v.id} box={data.box} r={r} />
+      </Reveal>
+
       <div className="pair-row">
         <Reveal className="frame sec">
-          <h2 className="sec-title"><span className="tag">[{String(steps.length + 2).padStart(2, "0")}]</span>Witnesses</h2>
+          <h2 className="sec-title"><span className="tag">[{String(steps.length + 3).padStart(2, "0")}]</span>Witnesses</h2>
           <WitnessList varId={v.id} box={data.box} fallback={data.second_witness} />
         </Reveal>
         <Reveal className="frame sec">
-          <h2 className="sec-title"><span className="tag">[{String(steps.length + 3).padStart(2, "0")}]</span>Check our work</h2>
+          <h2 className="sec-title"><span className="tag">[{String(steps.length + 4).padStart(2, "0")}]</span>Check our work</h2>
           <CheckOurWork links={r.reproduce ?? []} csv={api.evidenceUrl(v.id, data.box)} />
           <details className="details pad">
             <summary>The numbers behind it</summary>
@@ -209,7 +215,7 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
           </details>
         </Reveal>
         <Reveal className="frame sec">
-          <h2 className="sec-title"><span className="tag">[{String(steps.length + 4).padStart(2, "0")}]</span>Cite this</h2>
+          <h2 className="sec-title"><span className="tag">[{String(steps.length + 5).padStart(2, "0")}]</span>Cite this</h2>
           <CiteBox varId={v.id} name={place} />
         </Reveal>
       </div>
@@ -217,6 +223,70 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
       <p className="cite">{data.citation}. Trend is not cause: we detect change, we do not explain it.</p>
       <button className="cue wide" onClick={onReport}><span className="tag">[NEXT]</span>See everything changing in {place} <span aria-hidden>→</span></button>
     </main>
+  );
+}
+
+const TO = 2050;
+const VERDICT_2050 = {
+  inside: "For 1981–2025 our measured trend sits inside the models' range, so they got it about right here.",
+  above: "So far it has changed faster than every model ran it here.",
+  below: "So far it has changed more slowly than every model ran it here.",
+};
+
+/** By 2050: today's proven trend extended, next to 7 CMIP6 HighResMIP models (/api/models). A what-if, never a forecast. */
+function By2050({ varId, box, r }: { varId: string; box: Box; r: Analysis["result"] }) {
+  const m = useLive<Models | null>(() => api.models(varId, box), `${varId}|${box}`, null);
+  const u = short(r.units), dec = (TO - +r.end.slice(0, 4)) / 10;
+  const proven = r.verdict.label === "strong" || r.verdict.label === "some";
+  const line = proven ? { mid: r.sen_slope_per_decade * dec, lo: r.sen_ci95_per_decade[0] * dec, hi: r.sen_ci95_per_decade[1] * dec } : null;
+  const ms = m.data?.available && m.data.models?.length ? m.data.models.map((x) => x.slope_2026_2050 * dec).sort((a, b) => a - b) : null;
+  const mod = ms && { lo: ms[0], hi: ms[ms.length - 1], mid: ms[Math.floor(ms.length / 2)] };
+  const agree = ms && mod ? ms.filter((x) => Math.sign(x) === Math.sign(mod.mid)).length : 0;
+  // One shared scale so the two ranges can be compared by eye.
+  const span = Math.max(...[line, mod].flatMap((o) => (o ? [Math.abs(o.lo), Math.abs(o.hi)] : [])), 1e-9) * 1.1;
+  const X = (x: number) => 50 + (x / span) * 50;
+  const bar = (o: { lo: number; mid: number; hi: number }) => (
+    <svg className="interval" viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden>
+      <line className="iv-zero" x1="50" x2="50" y1="0" y2="12" />
+      <rect className={`iv-range t-${dirTone(varId, o.mid)}`} x={X(o.lo)} width={Math.max(X(o.hi) - X(o.lo), 0.6)} y="4" height="4" />
+      <rect className={`iv-mid t-${dirTone(varId, o.mid)}`} x={X(o.mid) - 0.6} width="1.2" y="1" height="10" />
+    </svg>
+  );
+  return (
+    <div className="y2050">
+      <div className="y-card">
+        <p className="tag">[IF TODAY'S TREND KEEPS GOING]</p>
+        {line ? (
+          <>
+            <b className={`t-${dirTone(varId, line.mid)}`}>{signed(line.mid)} {u}</b>
+            {bar(line)}
+            <p>Change from {r.end.slice(0, 4)} to {TO}. Likely range {signed(line.lo)} to {signed(line.hi)} {u}. This is the 1981–{r.end.slice(0, 4)} line drawn on for another {Math.round(dec * 10)} years.</p>
+          </>
+        ) : (
+          <>
+            <b>—</b>
+            <p>No proven trend here, so we don't draw a line into the future.</p>
+          </>
+        )}
+      </div>
+      <div className="y-card">
+        <p className="tag">[WHAT 7 CLIMATE MODELS PROJECT]</p>
+        {mod ? (
+          <>
+            <b className={`t-${dirTone(varId, mod.mid)}`}>{signed(mod.mid)} {u}</b>
+            {bar(mod)}
+            <p>Middle of 7 CMIP6 high-resolution models, {signed(mod.lo)} to {signed(mod.hi)} {u} across them; {agree} of 7 agree on the direction.{m.data?.verdict ? ` ${VERDICT_2050[m.data.verdict]}` : ""}</p>
+            {m.data?.units_note && <p className="note">{m.data.units_note}</p>}
+          </>
+        ) : (
+          <>
+            <b>—</b>
+            <p>{m.error ? "The climate models are busy right now (a free service with an hourly limit). Try again in a few minutes." : m.data ? m.data.headline : "Asking the climate models…"}</p>
+          </>
+        )}
+      </div>
+      <p className="note y-note">{m.data?.caveat ?? "A what-if, not a forecast for any single year."} {m.data?.credit ? `Models: ${m.data.credit}.` : ""}</p>
+    </div>
   );
 }
 
