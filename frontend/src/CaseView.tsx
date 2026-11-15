@@ -4,6 +4,7 @@ import { Reveal } from "./Chart";
 import { CheckOurWork, CrossExamBlock, WitnessList, useCrossExam, useLive } from "./CrossExam";
 import { LABELS, dirTone, pText, placeName, plain, sameBox, short, signed } from "./lib";
 import { StoryChart, StoryKey, type Stage } from "./Story";
+import { Impact } from "./Impact";
 
 const DEFAULT_VAR = "T2M";
 const DEFAULT_BOX: Box = [52.6, 53.7, -1.0, 0.4];
@@ -151,6 +152,7 @@ export function CaseView({ varId, box, onReport }: { varId: string; box: Box; on
         </div>
       </section>
 
+      {v.id === DEFAULT_VAR && sameBox(data.box, DEFAULT_BOX) && <Impact />}
       <Cases cur={`var=${v.id}&box=${data.box.join(",")}`} />
 
       <section className="frame story" id="story" aria-label="The evidence, step by step">

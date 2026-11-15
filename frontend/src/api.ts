@@ -106,6 +106,14 @@ export interface Outlook {
   scenarios: Off | { available: true; units: string; headline: string; choice_matters: string; note: string; source: string; caution?: string;
     scenarios: (Span & { id: string; name: string; global_warming_2050: number })[] };
 }
+type CmpSide = { name: string; box: Box; slope_per_decade: number; ci95: [number, number]; label: string; verdict: string };
+export interface Compare {
+  variable: Variable; n_cells: [number, number]; a: CmpSide; b: CmpSide;
+  difference: { slope_per_decade: number; ci95: [number, number]; label: string };
+  labels: { opposite_fitted_directions: boolean; supported_opposite_trends: boolean; rates_differ: boolean };
+  correlation: number; boxes_overlap: boolean; headline: string; trap: string | null; note: string | null;
+  chart: { dates: string[]; difference_anomaly: (number | null)[] }; period: string; method: string;
+}
 export interface Cite { items: { key: string; apa: string; harvard: string; bibtex: string; acknowledgement?: string }[] }
 export type Spot = { name: string; slope_per_decade: number; units: string; case: string };
 export interface Opposites { n_land_cells: number; n_rising: number; n_falling: number; headline: string; rising: Spot[]; falling: Spot[] }
@@ -141,6 +149,8 @@ export const api = {
   opposites: (v: string) => get<Opposites>(`/api/opposites?var=${v}&n=4`),
   models: (v: string, b: Box) => get<Models>(`/api/models?var=${v}&${q(b)}`),
   outlook: (v: string, b: Box) => get<Outlook>(`/api/outlook?var=${v}&${q(b)}`),
+  compare: (v: string, a: Box, b: Box, na: string, nb: string) =>
+    get<Compare>(`/api/compare?var=${v}&a=${a.join(",")}&b=${b.join(",")}&name_a=${encodeURIComponent(na)}&name_b=${encodeURIComponent(nb)}`),
   evidenceUrl: (v: string, b: Box) => `${API}/api/evidence.csv?var=${v}&${q(b)}`,
 };
 

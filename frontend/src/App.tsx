@@ -4,24 +4,27 @@ import { CaseView } from "./CaseView";
 import { PLACES, nameBox, placeName, sameBox } from "./lib";
 import { ReportView } from "./ReportView";
 import { MethodsView } from "./MethodsView";
+import { CompareView } from "./CompareView";
 
 const MapView = lazy(() => import("./MapView"));
 const WorldView = lazy(() => import("./WorldView"));
 const Picker = lazy(() => import("./MapView").then((m) => ({ default: m.Picker })));
 
-type Route = "case" | "world" | "report" | "map" | "methods";
+type Route = "case" | "world" | "report" | "map" | "compare" | "methods";
 const ROUTES: { id: Route; label: string }[] = [
   { id: "case", label: "Case" },
   { id: "report", label: "Report card" },
   { id: "map", label: "Map" },
   { id: "world", label: "World" },
+  { id: "compare", label: "Compare" },
   { id: "methods", label: "How it works" },
 ];
 // The judge's path: one case → everything in that place → its map → the world → the method → a harder case.
 const NEXT: Partial<Record<Route, [Route, (place: string) => string, string?]>> = {
   report: ["map", (p) => `Map the trend across ${p}: which grid cells hold up`],
   map: ["world", () => "Zoom out: the whole world on trial"],
-  world: ["methods", () => "How the Detective works, and why you can trust it"],
+  world: ["compare", () => "Compare two places: is the gap itself real?"],
+  compare: ["methods", () => "How the Detective works, and why you can trust it"],
   methods: ["case", () => "Try a harder case: Delhi, where the witnesses disagree", "#/case?var=T2M&box=28,29.5,76.5,78&name=Delhi"],
 };
 
@@ -106,7 +109,7 @@ export default function App() {
             </select>
           </label>
           <button className="btn ghost" aria-expanded={picking} onClick={() => setPicking(!picking)}>{picking ? "Close map" : "Pick on a map"}</button>
-          {s.route !== "report" && s.route !== "world" && (
+          {s.route !== "report" && s.route !== "world" && s.route !== "compare" && (
             <label className="grow">
               <span>Variable</span>
               <select value={s.varId} onChange={(e) => go({ varId: e.target.value })}>
@@ -126,6 +129,7 @@ export default function App() {
         {s.route === "report" && <ReportView box={s.box} onOpen={(varId) => go({ route: "case", varId })} />}
         {s.route === "map" && <Suspense fallback={<main className="sheet"><p className="status pad">Loading the map…</p></main>}><MapView varId={s.varId} box={s.box} /></Suspense>}
         {s.route === "world" && <Suspense fallback={<main className="sheet"><p className="status pad">Loading the globe…</p></main>}><WorldView /></Suspense>}
+        {s.route === "compare" && <CompareView vars={vars} />}
         {s.route === "methods" && <MethodsView />}
         {NEXT[s.route] && (() => {
           const [to, text, href] = NEXT[s.route]!;

@@ -10,6 +10,7 @@ import { api, examples, type Label, type Opposites as Opp } from "./api";
 import { Reveal, still, useInView, useSize, useTween } from "./Chart";
 import { LABELS, dirTone, short, signed } from "./lib";
 import { Trust } from "./Trust";
+import { compareHref } from "./CompareView";
 
 type Cell = { label: Label; slope: number; alibi: string | null; typical: boolean } | null;
 export interface WorldVar {
@@ -415,6 +416,10 @@ function Opposites({ varId }: { varId: string }) {
       <h2 className="sec-title"><span className="tag n" />Opposite places</h2>
       <p className="sec-lede">On land, <b>{o.n_rising.toLocaleString("en-GB")}</b> places are proven {up} and <b>{o.n_falling.toLocaleString("en-GB")}</b> proven {down}, out of {o.n_land_cells.toLocaleString("en-GB")}. These are the steepest of each, at least 15° apart. Open one to see its full case.</p>
       <div className="opp">{col(up, o.rising)}{col(down, o.falling)}</div>
+      {o.rising[0] && o.falling[0] && (() => {
+        const side = (x: Opp["rising"][number]) => ({ name: x.name, box: new URLSearchParams(x.case.split("?")[1]).get("box")!.split(",").map(Number) as [number, number, number, number] });
+        return <a className="cue wide" href={compareHref(varId, side(o.rising[0]), side(o.falling[0]))}><span className="tag">[COMPARE]</span>Put the steepest {up} and {down} places side by side <span aria-hidden>→</span></a>;
+      })()}
     </Reveal>
   );
 }
