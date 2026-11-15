@@ -71,3 +71,25 @@ def test_globe_and_opposites():
     assert c["luck_ours"] < c["luck_typical"]  # on shuffled years our test is fooled far less often
     o = api.opposite_places("PRECTOTCORR", 3)
     assert o["rising"] and o["falling"] and o["rising"][0]["slope_per_decade"] > 0 > o["falling"][0]["slope_per_decade"]
+
+
+def test_outlook_trend_and_scenarios_are_honest():
+    from trend_detective import outlook
+    g = outlook._global_annual().loc[1981:2025]
+    rng = np.random.default_rng(7)
+    # a place that warms 1.5x the globe, plus noise
+    vals = []
+    for yr in range(1981, 2026):
+        for m in range(1, 13):
+            vals.append(8 * np.sin(2 * np.pi * m / 12) + 1.5 * g.loc[yr] + rng.normal(0, 0.3))
+    s = pd.Series(vals, index=MONTHS)
+    sc = outlook.scenarios(s, "°C")
+    assert sc["available"] and 1.2 < sc["beta_per_global_degree"] < 1.8
+    low, mid, high = (r["change_by_2050"] for r in sc["scenarios"])
+    assert 0 < low < mid < high  # more emissions, more change
+    assert 0.9 < outlook.global_today()["now"] < 1.6
+    a = {"verdict": {"label": "strong"}, "sen_slope_per_decade": 0.3, "sen_ci95_per_decade": [0.2, 0.4]}
+    assert outlook.trend_whatif(a, "sudden_shift", "°C")["available"] is False  # a jump is never drawn on
+    assert abs(outlook.trend_whatif(a, None, "°C")["change_by_2050"] - 0.9) < 1e-9
+    noise = pd.Series(rng.normal(0, 1, len(MONTHS)), index=MONTHS)
+    assert outlook.scenarios(noise, "mm/day")["available"] is False  # no proven link, no scenarios

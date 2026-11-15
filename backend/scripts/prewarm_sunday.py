@@ -4,7 +4,7 @@ Covers what scripts/prewarm.py (Saturday) doesn't:
   - the G2 case cards (incl. central Wisconsin cloud and Delhi) on every endpoint a case page calls
   - the P2 compare presets
   - the new witnesses (GISTEMP for air temperature, GLDAS + GRACE for soil) at every demo place
-  - report card (B5 clearest), cite (B6), validation (B4), world, globe (B3), opposites (B8)
+  - report card (B5 clearest), cite (B6), validation (B4), world, globe (B3), opposites (B8), outlook (B9)
 
 Run it twice:
   1. on a laptop, then commit backend/data/cache (the disk caches travel with git), and
@@ -81,11 +81,14 @@ for var, b, name in CASES:
             hit(f"/api/{ep}?var={var}&{q(b)}" if ep != "drought" else f"/api/drought?{q(b)}")
     hit(f"/api/report-card?{q(b)}")
     hit(f"/api/cite?var={var}&name={quote(name)}")
+    hit(f"/api/outlook?var={var}&{q(b)}")
 for var, a, b in COMPARE:
     hit(f"/api/compare?var={var}&a={box_s(PLACES[a])}&b={box_s(PLACES[b])}&name_a={quote(a)}&name_b={quote(b)}")
 for name, b in PLACES.items():  # new witnesses + B5 report card everywhere
     for var in ("T2M", "GWETTOP", "GWETROOT"):
         hit(f"/api/witnesses?var={var}&{q(b)}")
+    for var in ("T2M", "PRECTOTCORR"):  # outlook: climate models via Open-Meteo (daily request limit per IP!)
+        hit(f"/api/outlook?var={var}&{q(b)}")
     hit(f"/api/report-card?{q(b)}")
 print("FAILED:", len(fails))
 for f in fails:

@@ -21,7 +21,7 @@ from fastapi.responses import Response
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import beyond, cite, compare as cmp, context, crossexam, drought, models, reproduce, era5, events, gistemp, gldas, globalref, grace, opposites, guide, heat, places, stations, power, stats, witnesses
+from . import beyond, cite, compare as cmp, context, crossexam, drought, models, reproduce, era5, events, gistemp, gldas, globalref, grace, opposites, outlook, guide, heat, places, stations, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -811,6 +811,19 @@ def opposite_places(var: str = "PRECTOTCORR", n: int = Query(5, ge=1, le=10)):
     if out is None:
         raise HTTPException(404, f"No globe file for {var} yet.")
     return out
+
+
+@app.get("/api/outlook")
+@memo
+def outlook_2050(var: str, lat_min: float = Query(...), lat_max: float = Query(...),
+                 lon_min: float = Query(...), lon_max: float = Query(...)):
+    """Around 2050: the trend drawn on, climate models, and three emission scenarios. What-ifs, not forecasts."""
+    meta = _var(var)
+    box = [lat_min, lat_max, lon_min, lon_max]
+    series, _ = _series(var, box)
+    cp = crossexam.change_point(var, series, meta["units"]).get("status")
+    out = outlook.outlook(var, series, meta["units"], (lat_min + lat_max) / 2, (lon_min + lon_max) / 2, cp)
+    return _clean({"variable": meta, "box": box, "change_point": cp, **out})
 
 
 def _yearly_summary(v: dict) -> dict:
