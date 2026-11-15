@@ -2,7 +2,15 @@
 
 **NASA Space Apps Challenge 2026 · "Be An Earth System Trend Detective!" · Team Paani Ke Batashe (Akshita Srivastava, Kanishk K. Sachan) · Lincoln, UK**
 
-**Live site:** https://kaakserver.tail042e87.ts.net/trend-detective/ · **Deck:** [docs/demo/trend_detective_slides.pdf](docs/demo/trend_detective_slides.pdf) · **30 s video:** [docs/demo/trend_detective_demo.mp4](docs/demo/trend_detective_demo.mp4) · **Project text:** [docs/SUBMISSION.md](docs/SUBMISSION.md)
+## ▶ Try the live demo
+
+**https://kaakserver.tail042e87.ts.net/trend-detective/**
+
+[![Trend Detective: Lincolnshire air temperature, open the live demo](frontend/public/og.jpg)](https://kaakserver.tail042e87.ts.net/trend-detective/)
+
+No sign-in needed. It opens on a worked case (Lincolnshire warming); search any town, or pick another case card.
+
+**30-second video:** [docs/demo/trend_detective_demo.mp4](docs/demo/trend_detective_demo.mp4) · **7-slide deck:** [docs/demo/trend_detective_slides.pdf](docs/demo/trend_detective_slides.pdf) · **Rebuild the headline number yourself:** [notebooks/reproduce_lincolnshire.ipynb](notebooks/reproduce_lincolnshire.ipynb) · **Project text:** [docs/SUBMISSION.md](docs/SUBMISSION.md)
 
 Pick any place on Earth and a NASA variable (temperature, rain, soil moisture, haze, greenness and more). Trend Detective tells you honestly whether it is really changing or could be chance, then tries to break its own answer.
 
