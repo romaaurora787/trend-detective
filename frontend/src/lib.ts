@@ -84,3 +84,9 @@ export function dirTone(varId: string, slope: number): "rise" | "fall" {
   const up = slope >= 0;
   return up !== risingIsBlue(varId) ? "rise" : "fall";
 }
+
+/** Focus the place search; on phones the controls are folded, so open them first. */
+export function focusSearch() {
+  document.querySelector<HTMLButtonElement>('.ctrl-toggle[aria-expanded="false"]')?.click();
+  requestAnimationFrame(() => { const i = document.querySelector<HTMLInputElement>(".search input"); i?.scrollIntoView({ block: "center" }); i?.focus(); });
+}

@@ -2,6 +2,7 @@
 // AI-use note: drafted with Claude (Anthropic).
 import type { CSSProperties } from "react";
 import { Reveal } from "./Chart";
+import { focusSearch } from "./lib";
 
 const KEY = "td-guide";
 export const guideSeen = () => { try { return localStorage.getItem(KEY) === "seen"; } catch { return false; } };
@@ -15,7 +16,7 @@ export function Guide({ onClose }: { onClose: () => void }) {
       act: "Start the case", href: "#/case" },
     { tag: "Try your own place", title: "Any town, any of 15 variables",
       text: "Type a town in Search, pick a demo case, or draw a box on a map. The same checks run on whatever you choose.",
-      act: "Search a place", run: () => { const i = document.querySelector<HTMLInputElement>(".search input"); i?.scrollIntoView({ block: "center" }); i?.focus(); } },
+      act: "Search a place", run: focusSearch },
     { tag: "Zoom out", title: "The whole planet on trial",
       text: "Every land square tested. See where change is proven, where a typical test is fooled, and where it could go by 2050.",
       act: "Open the world", href: "#/world" },
@@ -24,8 +25,8 @@ export function Guide({ onClose }: { onClose: () => void }) {
     <div className="sheet guide-wrap">
       <Reveal className="frame guide" aria-label="How to use this site">
         <div className="guide-head">
-          <p className="tag">[START HERE] Your first investigation · about 3 minutes</p>
-          <button className="btn ghost" onClick={close}>Got it, close</button>
+          <p className="tag">[START HERE] Your first investigation<span className="guide-time"> · about 3 minutes</span></p>
+          <button className="btn ghost" onClick={close}>Got it<span className="guide-time">, close</span></button>
         </div>
         <ol className="guide-steps">
           {steps.map((s, i) => (

@@ -78,6 +78,7 @@ export default function App() {
   const [vars, setVars] = useState<Variable[]>(examples.variables);
   const [picking, setPicking] = useState(false);
   const [guide, setGuide] = useState(() => !guideSeen());
+  const [ctrl, setCtrl] = useState(false); // phones: controls folded behind one button
 
   useEffect(() => {
     const on = () => setS(readHash());
@@ -110,7 +111,12 @@ export default function App() {
           </nav>
           <button className="btn ghost guide-open" aria-expanded={guide} onClick={() => setGuide(!guide)}>Guide</button>
         </div>
-        <div className="shell-row controls">
+        <button className="shell-row ctrl-toggle" aria-expanded={ctrl} aria-controls="controls" onClick={() => setCtrl(!ctrl)}>
+          <span className="tag">{ctrl ? "Close" : "Change"}</span>
+          <b>{s.name || placeName(s.box)}{s.route !== "report" && s.route !== "world" && s.route !== "compare" ? ` · ${vars.find((v) => v.id === s.varId)?.name ?? s.varId}` : ""}</b>
+          <span aria-hidden>{ctrl ? "▴" : "▾"}</span>
+        </button>
+        <div id="controls" className="shell-row controls" data-open={ctrl || undefined}>
           <PlaceSearch onPick={(h) => go({ box: h.box, name: h.label })} />
           <label>
             <span>Demo cases</span>

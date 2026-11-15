@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { api, examples, type Analysis, type Box, type Cite, type Models, type Outlook } from "./api";
 import { Reveal } from "./Chart";
 import { CheckOurWork, CrossExamBlock, WitnessList, useCrossExam, useLive } from "./CrossExam";
-import { LABELS, dirTone, luckText, pText, placeName, plain, sameBox, short, signed } from "./lib";
+import { LABELS, dirTone, focusSearch, luckText, pText, placeName, plain, sameBox, short, signed } from "./lib";
 import { StoryChart, StoryKey, type Stage } from "./Story";
 import { Impact } from "./Impact";
 
@@ -105,7 +105,7 @@ function Cases({ cur }: { cur: string }) {
           <span className="tag">{c.href === "#/world" ? "Spin the globe →" : "Open the case →"}</span>
         </a>
       ))}
-      <button className="case-card" onClick={() => (document.querySelector<HTMLInputElement>(".search input"))?.focus()}>
+      <button className="case-card" onClick={focusSearch}>
         <span className="case-img case-ph" aria-hidden><span>?</span></span>
         <span className="chip">Your turn</span>
         <b>Your hometown</b>

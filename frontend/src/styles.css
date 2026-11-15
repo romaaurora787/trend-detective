@@ -671,3 +671,23 @@ button.rrow:hover .go { opacity: 1; transform: translateX(4px); }
 .case-ph { display: grid; place-items: center; background: var(--paper-2); }
 .case-ph span { display: grid; place-items: center; width: 34%; height: 50%; border: 2px dashed var(--ink-3); font: 800 2rem/1 var(--font-display); color: var(--ink-3); }
 @media (prefers-reduced-motion: reduce) { .case-card:hover .case-img img { transform: none; } }
+
+.impact-lead { grid-column: 1 / -1; margin: 0; padding: var(--space-3) var(--cell); font: 400 0.9rem/1.5 var(--font-data); color: var(--ink-2); box-shadow: 0 1px 0 var(--rule); }
+.impact-lead b { color: var(--ink); font-weight: 700; }
+.impact-lead .tag { color: var(--signal-tx); margin-right: var(--space-2); }
+
+/* Phones: the first screen is the case, not the controls. One button opens them. */
+.ctrl-toggle { display: none; }
+@media (max-width: 719px) {
+  .ctrl-toggle { display: flex; width: 100%; align-items: baseline; gap: var(--space-2); background: var(--paper-3); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+  .ctrl-toggle .tag { flex: none; color: var(--signal-tx); }
+  .ctrl-toggle b { flex: 1; min-width: 0; font: 600 0.8rem/1.3 var(--font-data); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ctrl-toggle:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+  .controls:not([data-open]) { display: none; }
+  .guide-steps li { padding-block: var(--space-3); }
+  .guide-steps li p:not(.tag) { display: none; }
+  .guide-steps li p, .guide-foot, .guide-time { display: none; }
+  .guide-head { flex-wrap: nowrap; padding-block: var(--space-2); }
+  .guide-head .btn { padding-block: 0.45rem; }
+  .guide-steps li { gap: var(--space-1); }
+}
