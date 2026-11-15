@@ -662,3 +662,12 @@ button.rrow:hover .go { opacity: 1; transform: translateX(4px); }
 .reveal .guide-steps li { opacity: 0; transform: translateY(14px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); transition-delay: calc(var(--n, 0) * 70ms); }
 .reveal.in .guide-steps li { opacity: 1; transform: none; }
 @media (max-width: 979px) { .guide-steps { grid-template-columns: minmax(0, 1fr); } }
+
+/* Case-card satellite photos: full-bleed to the card edge */
+.case-img { position: relative; display: block; margin: calc(var(--space-4) * -1) calc(var(--cell) * -1) var(--space-1); aspect-ratio: 5 / 2; overflow: hidden; background: var(--ink); border-bottom: 1px solid var(--rule); }
+.case-img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease-out); }
+.case-card:hover .case-img img { transform: scale(1.04); }
+.case-credit { position: absolute; left: 0; bottom: 0; padding: 0.3rem 0.5rem; font: 500 0.62rem/1 var(--font-data); text-transform: uppercase; letter-spacing: 0.05em; color: var(--paper); background: rgb(0 0 0 / 0.45); }
+.case-ph { display: grid; place-items: center; background: var(--paper-2); }
+.case-ph span { display: grid; place-items: center; width: 34%; height: 50%; border: 2px dashed var(--ink-3); font: 800 2rem/1 var(--font-display); color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { .case-card:hover .case-img img { transform: none; } }

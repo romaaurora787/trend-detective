@@ -163,7 +163,7 @@ export default function App() {
       </div>
       <footer className="foot">
         <p className="tag">[CREDITS] NASA Space Apps Challenge 2026 · Lincoln · Akshita &amp; Kanishk</p>
-        <p>Data: NASA POWER (MERRA-2, CERES / GEWEX SRB); NASA MODIS via Microsoft Planetary Computer; NASA GPM IMERG and GPCP (GES DISC); NASA GISTEMP v4; NASA MERRA-2 monthly means (GES DISC, for the globe); NASA GLDAS-2.1 Noah; NASA GRACE / GRACE-FO JPL mascons; NASA EONET; Met Office HadCET (Open Government Licence); ESA CCI Soil Moisture; ERA5 and CMIP6 models served by Open-Meteo (CC BY 4.0), containing modified Copernicus Climate Change Service information; NOAA NCEI GHCN stations and NOAA PSL / CPC climate indices. Places: GeoNames (CC BY 4.0). Map tiles: Esri. Country outlines: Natural Earth (public domain).</p>
+        <p>Data: NASA POWER (MERRA-2, CERES / GEWEX SRB); NASA MODIS via Microsoft Planetary Computer; NASA GPM IMERG and GPCP (GES DISC); NASA GISTEMP v4; NASA MERRA-2 monthly means (GES DISC, for the globe); NASA GLDAS-2.1 Noah; NASA GRACE / GRACE-FO JPL mascons; NASA EONET; Met Office HadCET (Open Government Licence); ESA CCI Soil Moisture; ERA5 and CMIP6 models served by Open-Meteo (CC BY 4.0), containing modified Copernicus Climate Change Service information; NOAA NCEI GHCN stations and NOAA PSL / CPC climate indices. Case-card images: NASA Blue Marble: Next Generation (MODIS) via NASA GIBS / Worldview. Places: GeoNames (CC BY 4.0). Map tiles: Esri. Country outlines: Natural Earth (public domain).</p>
         <p>Code drafted with help from Claude (Anthropic); every verdict number is computed by our statistics code, never by AI.</p>
       </footer>
     </>

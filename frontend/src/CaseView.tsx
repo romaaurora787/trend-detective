@@ -79,12 +79,12 @@ function useActiveStep(n: number) {
 
 // Worked examples, one per kind of verdict (G2). Links checked live by Akshita.
 const CASES = [
-  { tag: "Real change", tone: "rise", title: "Lincolnshire air temperature", text: "Warming, proven by both corrected tests and backed by independent records.", href: "#/case?var=T2M&box=52.6,53.7,-1,0.4" },
-  { tag: "The whole world", tone: "ink", title: "The world on trial", text: "Every 2° land square for temperature and rain, plus 111 places for 19 variables. Watch the typical test get fooled by luck.", href: "#/world" },
-  { tag: "Fooled the typical test", tone: "warn", title: "England & Wales soil", text: "A typical map flags 89 cells as drying. After the corrections, none hold up.", href: "#/map?var=GWETROOT&box=50,55.5,-6,2" },
-  { tag: "Could be the satellite", tone: "warn", title: "Central Wisconsin cloud cover", text: "A cloud trend that one jump at the 2001 satellite switch explains better.", href: "#/case?var=CLOUD_AMT&box=44,46,-91,-89&name=Central%20Wisconsin" },
-  { tag: "Thermometers disagree", tone: "warn", title: "Delhi air temperature", text: "NASA's model finds no warming; NASA's own station thermometers find +0.22 °C a decade. Rain: 0 of 3 records agree. Water: GRACE sees the ground losing 52 cm a decade.", href: "#/case?var=T2M&box=28,29.5,76.5,78&name=Delhi" },
-  { tag: "A jump, not a trend", tone: "warn", title: "Luzon rainfall", text: "The tests say rising, but the cross-examination finds one jump in 1999: a real Pacific shift that NASA GPCP sees too, not a steady trend.", href: "#/case?var=PRECTOTCORR&box=14,16,119,121&name=Luzon" },
+  { img: "lincolnshire", tag: "Real change", tone: "rise", title: "Lincolnshire air temperature", text: "Warming, proven by both corrected tests and backed by independent records.", href: "#/case?var=T2M&box=52.6,53.7,-1,0.4" },
+  { img: "world", tag: "The whole world", tone: "ink", title: "The world on trial", text: "Every 2° land square for temperature and rain, plus 111 places for 19 variables. Watch the typical test get fooled by luck.", href: "#/world" },
+  { img: "england-wales", tag: "Fooled the typical test", tone: "warn", title: "England & Wales soil", text: "A typical map flags 89 cells as drying. After the corrections, none hold up.", href: "#/map?var=GWETROOT&box=50,55.5,-6,2" },
+  { img: "wisconsin", tag: "Could be the satellite", tone: "warn", title: "Central Wisconsin cloud cover", text: "A cloud trend that one jump at the 2001 satellite switch explains better.", href: "#/case?var=CLOUD_AMT&box=44,46,-91,-89&name=Central%20Wisconsin" },
+  { img: "delhi", tag: "Thermometers disagree", tone: "warn", title: "Delhi air temperature", text: "NASA's model finds no warming; NASA's own station thermometers find +0.22 °C a decade. Rain: 0 of 3 records agree. Water: GRACE sees the ground losing 52 cm a decade.", href: "#/case?var=T2M&box=28,29.5,76.5,78&name=Delhi" },
+  { img: "luzon", tag: "A jump, not a trend", tone: "warn", title: "Luzon rainfall", text: "The tests say rising, but the cross-examination finds one jump in 1999: a real Pacific shift that NASA GPCP sees too, not a steady trend.", href: "#/case?var=PRECTOTCORR&box=14,16,119,121&name=Luzon" },
 ];
 
 function Cases({ cur }: { cur: string }) {
@@ -93,6 +93,12 @@ function Cases({ cur }: { cur: string }) {
       {/* ponytail: 5 cards + "Your turn" keeps the 3-column grid full; the world card sits 2nd so it never drops */}
       {CASES.filter((c) => !c.href.includes(cur)).slice(0, 5).map((c, i) => (
         <a key={c.href} className="case-card" href={c.href} style={{ "--n": i } as CSSProperties}>
+          {/* NASA Blue Marble (MODIS) via GIBS, fetched by frontend/scripts/fetch_case_photos.py */}
+          <span className="case-img">
+            <img src={`${import.meta.env.BASE_URL}cases/${c.img}.jpg`} width={800} height={400} loading="lazy" decoding="async"
+              alt={c.img === "world" ? "NASA satellite view of the whole Earth" : `NASA satellite view around ${c.title.replace(/ (air temperature|soil|cloud cover|rainfall)$/, "")}; the white box is the area we test`} />
+            <span className="case-credit">{c.img === "world" ? "NASA Blue Marble" : "NASA Blue Marble · box = area tested"}</span>
+          </span>
           <span className={`chip c-${c.tone}`}>{c.tag}</span>
           <b>{c.title}</b>
           <span className="gtext">{c.text}</span>
@@ -100,6 +106,7 @@ function Cases({ cur }: { cur: string }) {
         </a>
       ))}
       <button className="case-card" onClick={() => (document.querySelector<HTMLInputElement>(".search input"))?.focus()}>
+        <span className="case-img case-ph" aria-hidden><span>?</span></span>
         <span className="chip">Your turn</span>
         <b>Your hometown</b>
         <span className="gtext">Type any city or town in the search box above. Every place gets the same checks.</span>
