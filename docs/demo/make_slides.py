@@ -251,7 +251,7 @@ def build(team: str, out: Path) -> None:
             "Rain there: 0 of 3 records back the model.",
             "GRACE satellites, which weigh water, see the\nregion losing ~52 cm of water per decade.",
         ], size=16, gap=0.47)
-        picture(fig, "delhi_wit.jpg", (6.35, 1.25, 6.55, 4.09), crop=(0, 15, 400, 265))
+        picture(fig, "delhi_wit.jpg", (6.35, 1.25, 6.55, 4.09), crop=(0, 30, 800, 530))
         edge(ax, "One second record per variable, and agreement isn't weighed.",
              "Up to 7 kinds of witness, each labelled for how independent it is.")
         caption(ax, 6.35, 5.66, "Each witness says how independent it is, and the headline counts them.", size=11)
@@ -267,7 +267,7 @@ def build(team: str, out: Path) -> None:
             "**The luck test: shuffle each square's years so no\ntrend can exist. A typical test still “finds” one in\n22% of squares. Ours: 7%.",
             "England & Wales soil: 89 cells look like change\non a typical map. 0 survive our checks.",
         ], size=16, gap=0.47)
-        picture(fig, "globe_luck.jpg", (6.35, 1.3, 6.55, 3.77), crop=(0, 40, 800, 500))
+        picture(fig, "globe_luck.jpg", (6.35, 1.3, 6.55, 3.77), crop=(0, 80, 1600, 1000))
         edge(ax, "A trend map, rarely showing how often its method is fooled.",
              "Typical vs ours on every square, and the luck test shown: 22% vs 7%.")
         save(pdf, fig)
@@ -286,7 +286,7 @@ def build(team: str, out: Path) -> None:
         ax.text(0.45, 1.62, CODE, color=MUTED, fontsize=13, va="top", **MONO)
         edge(ax, "No outlook, or a single projection.",
              "Three what-ifs side by side, and a refusal when a line would mislead.")
-        picture(fig, "y2050.jpg", (6.35, 1.6, 6.55, 3.28), crop=(0, 20, 800, 420))
+        picture(fig, "y2050.jpg", (6.35, 1.6, 6.55, 3.28), crop=(0, 40, 1600, 840))
         save(pdf, fig)
         plt.close(fig)
 
