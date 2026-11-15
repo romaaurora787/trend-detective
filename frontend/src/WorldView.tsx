@@ -412,7 +412,7 @@ function Opposites({ varId }: { varId: string }) {
   );
   return (
     <Reveal className="frame sec">
-      <h2 className="sec-title"><span className="tag">[02]</span>Opposite places</h2>
+      <h2 className="sec-title"><span className="tag n" />Opposite places</h2>
       <p className="sec-lede">On land, <b>{o.n_rising.toLocaleString("en-GB")}</b> places are proven {up} and <b>{o.n_falling.toLocaleString("en-GB")}</b> proven {down}, out of {o.n_land_cells.toLocaleString("en-GB")}. These are the steepest of each, at least 15° apart. Open one to see its full case.</p>
       <div className="opp">{col(up, o.rising)}{col(down, o.falling)}</div>
     </Reveal>
@@ -421,7 +421,7 @@ function Opposites({ varId }: { varId: string }) {
 
 export default function WorldView() {
   const [world, setWorld] = useState<World>(exWorld as unknown as World);
-  const [varId, setVarId] = useState("CLOUD_AMT");
+  const [varId, setVarId] = useState("T2M"); // opens on the 2° grid + luck test
   const [mode, setMode] = useState<Mode>("typical");
   const [sel, setSel] = useState<number | null>(null);
   const [focus, setFocus] = useState<string | null>(null);
@@ -588,7 +588,7 @@ export default function WorldView() {
       {grid && <Opposites varId={v.id} />}
 
       <Reveal className="frame sec">
-        <h2 className="sec-title"><span className="tag">[03]</span>Where a typical analysis goes wrong</h2>
+        <h2 className="sec-title"><span className="tag n" />Where a typical analysis goes wrong</h2>
         <p className="sec-lede">Each row is one NASA variable at {world.n_points} places. Light bar: a typical analysis calls it real. Solid bar: proven after our checks. Sorted by the share of claims that don't hold.</p>
         <ul className="wrows">
           {rows.map((x, i) => {
@@ -611,7 +611,7 @@ export default function WorldView() {
       </Reveal>
 
       <Reveal className="frame sec">
-        <h2 className="sec-title"><span className="tag">[04]</span>Why trust the Detective</h2>
+        <h2 className="sec-title"><span className="tag n" />Why trust the Detective</h2>
         <Trust variables={world.variables} />
       </Reveal>
     </main>

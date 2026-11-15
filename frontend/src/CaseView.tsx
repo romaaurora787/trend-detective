@@ -81,7 +81,7 @@ const CASES = [
   { tag: "Fooled the typical test", tone: "warn", title: "England & Wales soil", text: "A typical map flags 89 cells as drying. After the corrections, none hold up.", href: "#/map?var=GWETROOT&box=50,55.5,-6,2" },
   { tag: "Could be the satellite", tone: "warn", title: "Central Wisconsin cloud cover", text: "A cloud trend that one jump at the 2001 satellite switch explains better.", href: "#/case?var=CLOUD_AMT&box=44,46,-91,-89&name=Central%20Wisconsin" },
   { tag: "Thermometers disagree", tone: "warn", title: "Delhi air temperature", text: "NASA's model finds no warming; NASA's own station thermometers find +0.22 °C a decade. Rain: 0 of 3 records agree. Water: GRACE sees the ground losing 52 cm a decade.", href: "#/case?var=T2M&box=28,29.5,76.5,78&name=Delhi" },
-  { tag: "The whole world", tone: "ink", title: "The world on trial", text: "111 places, 19 variables, on a see-through globe. Watch the three tests.", href: "#/world" },
+  { tag: "The whole world", tone: "ink", title: "The world on trial", text: "Every 2° land square for temperature and rain, plus 111 places for 19 variables. Watch the typical test get fooled by luck.", href: "#/world" },
 ];
 
 function Cases({ cur }: { cur: string }) {

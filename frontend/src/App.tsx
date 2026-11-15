@@ -12,11 +12,18 @@ const Picker = lazy(() => import("./MapView").then((m) => ({ default: m.Picker }
 type Route = "case" | "world" | "report" | "map" | "methods";
 const ROUTES: { id: Route; label: string }[] = [
   { id: "case", label: "Case" },
-  { id: "world", label: "World" },
   { id: "report", label: "Report card" },
   { id: "map", label: "Map" },
+  { id: "world", label: "World" },
   { id: "methods", label: "How it works" },
 ];
+// The judge's path: one case → everything in that place → its map → the world → the method → a harder case.
+const NEXT: Partial<Record<Route, [Route, (place: string) => string, string?]>> = {
+  report: ["map", (p) => `Map the trend across ${p}: which grid cells hold up`],
+  map: ["world", () => "Zoom out: the whole world on trial"],
+  world: ["methods", () => "How the Detective works, and why you can trust it"],
+  methods: ["case", () => "Try a harder case: Delhi, where the witnesses disagree", "#/case?var=T2M&box=28,29.5,76.5,78&name=Delhi"],
+};
 
 // URL holds the whole state so any view can be shared: #/case?var=T2M&box=52.6,53.7,-1,0.4
 function readHash() {
@@ -120,10 +127,20 @@ export default function App() {
         {s.route === "map" && <Suspense fallback={<main className="sheet"><p className="status pad">Loading the map…</p></main>}><MapView varId={s.varId} box={s.box} /></Suspense>}
         {s.route === "world" && <Suspense fallback={<main className="sheet"><p className="status pad">Loading the globe…</p></main>}><WorldView /></Suspense>}
         {s.route === "methods" && <MethodsView />}
+        {NEXT[s.route] && (() => {
+          const [to, text, href] = NEXT[s.route]!;
+          return (
+            <div className="sheet next">
+              <a className="cue wide" href={href ?? `#/${to}?var=${s.varId}&box=${s.box.join(",")}${s.name ? `&name=${encodeURIComponent(s.name)}` : ""}`} onClick={() => scrollTo({ top: 0 })}>
+                <span className="tag">[NEXT]</span>{text(placeName(s.box))} <span aria-hidden>→</span>
+              </a>
+            </div>
+          );
+        })()}
       </div>
       <footer className="foot">
         <p className="tag">[CREDITS] NASA Space Apps Challenge 2026 · Lincoln · Akshita &amp; Kanishk</p>
-        <p>Data: NASA POWER (MERRA-2, CERES / GEWEX SRB); NASA MODIS via Microsoft Planetary Computer; NASA GPM IMERG and GPCP (GES DISC); NASA GISTEMP v4; NASA EONET; Met Office HadCET (Open Government Licence); ESA CCI Soil Moisture; ERA5 and CMIP6 models served by Open-Meteo (CC BY 4.0), containing modified Copernicus Climate Change Service information; NOAA NCEI GHCN stations and NOAA PSL / CPC climate indices. Places: GeoNames (CC BY 4.0). Map tiles: Esri. Country outlines: Natural Earth (public domain).</p>
+        <p>Data: NASA POWER (MERRA-2, CERES / GEWEX SRB); NASA MODIS via Microsoft Planetary Computer; NASA GPM IMERG and GPCP (GES DISC); NASA GISTEMP v4; NASA MERRA-2 monthly means (GES DISC, for the globe); NASA GLDAS-2.1 Noah; NASA GRACE / GRACE-FO JPL mascons; NASA EONET; Met Office HadCET (Open Government Licence); ESA CCI Soil Moisture; ERA5 and CMIP6 models served by Open-Meteo (CC BY 4.0), containing modified Copernicus Climate Change Service information; NOAA NCEI GHCN stations and NOAA PSL / CPC climate indices. Places: GeoNames (CC BY 4.0). Map tiles: Esri. Country outlines: Natural Earth (public domain).</p>
         <p>Code drafted with help from Claude (Anthropic); every verdict number is computed by our statistics code, never by AI.</p>
       </footer>
     </>

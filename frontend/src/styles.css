@@ -598,3 +598,7 @@ button.rrow:hover .go { opacity: 1; transform: translateX(4px); }
 .c-hidden .check-mark { color: var(--ochre-tx); }
 .trust-note { padding: 0 var(--cell) var(--space-5); max-width: 70ch; }
 @media (max-width: 640px) { .opp { grid-template-columns: minmax(0, 1fr); } }
+.sheet.next { padding-top: 0; margin-top: calc(var(--gutter) * -1); }
+/* World tab: sections appear and disappear (opposites only for gridded variables), so number them in CSS. */
+.worldv { counter-reset: wsec; }
+.worldv .sec-title .tag.n::before { counter-increment: wsec; content: "[" counter(wsec, decimal-leading-zero) "]"; }
