@@ -199,7 +199,7 @@ def build(team: str, out: Path) -> None:
         ax.plot([5.55, 5.55], [0.75, 5.25], color=RULE, lw=1)
         ax.text(5.85, 5.2, "WHAT WE ADD, ALL IN ONE PLACE", color=RED, fontsize=17, va="top", **DISPLAY)
         rows = [
-            ("INSTRUMENT CHECK FOR EVERY KNOWN DATA SWITCH",
+            ("INSTRUMENT CHECK AT THE DOCUMENTED DATA SWITCHES",
              "2001 sunlight, cloud, heat radiation · 2014 aerosols · deep soil · 1987 rain, re-tested on single-source years.",
              "Worldwide: 42 of 88 proven cloud trends could be the instrument. Elsewhere: early years cut, or one variable."),
             ("FALSE ALARMS MEASURED ON MONTHLY DATA",
@@ -231,13 +231,13 @@ def build(team: str, out: Path) -> None:
         fig, ax = new_slide(4, "The detective part", team)
         title(ax, 6.55, "THEN WE TRY TO", "BREAK OUR OWN ANSWER.", size=44)
         bullets(ax, 0.45, 4.7, [
-            "**Was it a change of satellite? Every documented\nswitch in NASA's sources is tested, worldwide.",
+            "**Was it a change of satellite? The documented\nswitches in NASA's sources are tested, worldwide.",
             "We caught our own data: at 42 of 88 places,\ncloud cover's “trend” is better explained by\nNASA POWER's 2001 GEWEX → CERES switch.",
             "El Niño, NAO, Indian Ocean Dipole and PDO\nremoved together. One year left out at a time.\nEvery start and end year. Sudden jump or trend?",
         ], size=16, gap=0.47)
         picture(fig, "alibi_wisc.jpg", (6.35, 1.25, 6.55, 4.09))
         edge(ax, "The years before 2001 are cut, or one variable is tested at one date.",
-             "Every documented switch (4 dates), re-tested, with a worldwide count.")
+             "The documented switches (4 dates), re-tested, with a worldwide count.")
         caption(ax, 6.35, 5.66, "Central Wisconsin cloud cover: “could be the instrument”", color=BLUE, size=12)
         save(pdf, fig)
         plt.close(fig)
