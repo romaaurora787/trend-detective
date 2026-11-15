@@ -695,8 +695,8 @@ def overturn(res: dict) -> list[str]:
     rs = res.get("resolution", {})
     if rs.get("label") == "sub_cell":
         out.append(rs["headline"])
-    out.append("MERRA-2 is a reanalysis (a weather model steered by observations), not a thermometer: "
-               "an independent witness agreeing makes the case much stronger.")
+    out.append("MERRA-2 is a reanalysis (a weather model steered by observations), not a direct measurement, "
+               "so the verdict leans on the witnesses: check how many fully independent records agree.")
     return out
 
 
