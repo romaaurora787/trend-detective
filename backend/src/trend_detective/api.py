@@ -20,7 +20,7 @@ from fastapi.responses import Response
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import beyond, compare as cmp, context, crossexam, drought, models, reproduce, era5, events, globalref, guide, heat, places, stations, power, stats, witnesses
+from . import beyond, cite, compare as cmp, context, crossexam, drought, models, reproduce, era5, events, globalref, guide, heat, places, stations, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -473,6 +473,14 @@ def report_card(
             "typical_outcome": r["typical_vs_detective"]["outcome"],
             "typical_note": r["typical_vs_detective"]["note"],
         }
+        # Clarity (rivals rank "suspects" the same way): change so far ÷ normal year-to-year swing.
+        try:
+            em = beyond.emergence(series)
+            noise = em.get("noise_sd_annual")
+            item["clarity"] = abs(r["total_change"]) / noise if noise else None
+            item["emerged_year"] = em.get("year")
+        except Exception:
+            item["clarity"] = None
         # Instrument check (Kanishk's issue 2.1): a documented data-source change could fake a trend.
         lat_c = (box[0] + box[1]) / 2
         if meta["id"] in crossexam.SOURCE_CHANGES or (meta["id"] == "PRECTOTCORR" and abs(lat_c) >= 42.5):
@@ -507,7 +515,16 @@ def report_card(
             members.sort(key=lambda i: i["more_years_needed"] if i["more_years_needed"] is not None else 1e9)
         groups.append({"key": key, "title": title, "items": members})
     fooled = [i["name"] for i in items if i.get("typical_outcome") == "fooled"]
+    proven_now = [i for i in items if i.get("label") in ("strong", "some") and i.get("clarity")
+                  and i.get("instrument_check", {}).get("status") not in ("could_be_instrument", "doubt")]
+    clearest = sorted(proven_now, key=lambda i: -i["clarity"])[:3]
+    clearest_headline = ("What's changing most clearly here: " + "; ".join(
+        f"{i['name'].lower()} ({i['clarity']:.1f}× the normal year-to-year swing)" for i in clearest) + "."
+        if clearest else "Nothing here has changed clearly beyond its normal year-to-year swings.")
     return _clean({
+        "clearest": [{"id": i["id"], "name": i["name"], "clarity": i["clarity"], "direction": i["direction"],
+                      "slope_per_decade": i["slope_per_decade"], "units": i["units"]} for i in clearest],
+        "clearest_headline": clearest_headline,
         "box": box,
         "groups": groups,
         "errors": [i for i in items if "error" in i],
@@ -697,6 +714,15 @@ def evidence_csv(
     fname = f"trend-detective_{meta['id']}_{lat_min}_{lat_max}_{lon_min}_{lon_max}.csv"
     return Response("\n".join(head + lines) + "\n", media_type="text/csv",
                     headers={"Content-Disposition": f'attachment; filename="{fname}"'})
+
+
+@app.get("/api/cite")
+def cite_case(var: str, url: str = Query(cite.SITE, max_length=600), name: str = Query("", max_length=80)):
+    """'Cite this': APA, Harvard and BibTeX for the tool, the data product and the method."""
+    _var(var)
+    if not url.startswith(cite.SITE):
+        url = cite.SITE
+    return cite.citations(var, url, name)
 
 
 @app.get("/api/world")

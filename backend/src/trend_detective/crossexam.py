@@ -228,8 +228,8 @@ def el_nino(series: pd.Series, units: str) -> dict:
                "Part of the 'trend' may be the timing of El Niño and La Niña years.")
         status = "weakens"
     elif not pb and pa:
-        msg = (f"El Niño was hiding it: removing El Niño's ups and downs reveals a proven trend "
-               f"({sa:+.3g} {units}/decade).")
+        msg = (f"A hidden change: removing El Niño's ups and downs reveals a proven trend "
+               f"({sa:+.3g} {units}/decade). Treat it as a lead, not proof: about 1 place in 20 shows this by chance.")
         status = "revealed"
     else:
         msg = "No proven trend with or without El Niño."
@@ -342,7 +342,9 @@ def climate_modes(series: pd.Series, units: str) -> dict:
         status, msg = "weakens", (f"Weakens once {names} are removed: {sb:+.3g} → {sa:+.3g} {units}/decade, no longer proven. "
                                   "Part of the 'trend' may be these natural swings.")
     elif pa:
-        status, msg = "revealed", f"Natural swings were hiding it: with {names} removed, a proven trend appears ({sa:+.3g} {units}/decade)."
+        status, msg = "revealed", (f"A hidden change: with {names} removed, a proven trend appears ({sa:+.3g} {units}/decade). "
+                                   "Treat it with care: across our 2,013 world checks this happens about as often as chance "
+                                   "alone would give (66 of 993 unproven trends), so one place on its own is a lead, not proof.")
     else:
         status, msg = "none", f"No proven trend with or without {names}."
     def _peak(l):
