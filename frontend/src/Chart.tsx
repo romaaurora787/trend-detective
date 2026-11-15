@@ -23,13 +23,15 @@ export const still = () => matchMedia("(prefers-reduced-motion: reduce)").matche
 export function useInView<T extends Element>(): [React.RefObject<T>, boolean] {
   const ref = useRef<T>(null);
   const [v, setV] = useState(false);
+  // No dependency list on purpose: if the element only mounts after data loads (e.g. the
+  // cross-examination score), ref.current is null on the first run, so keep trying until seen.
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (v || !el) return;
     const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); io.disconnect(); } }, { rootMargin: "0px 0px -12% 0px" });
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  });
   return [ref, v];
 }
 
