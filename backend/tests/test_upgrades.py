@@ -52,3 +52,22 @@ def test_gldas_reads_both_layers_and_skips_sea():
             "/SoilMoi0_10cm_inst[0][0], 30, -9999\n/SoilMoi0_10cm_inst[0][1], 31, 32\n")
     lat, arrs = gldas._parse(text)
     assert arrs["RootMoist_inst"].shape == (2, 2) and list(lat) == [52.625, 52.875]
+
+
+def test_grace_witness_is_supporting_not_proof():
+    from trend_detective import grace, witnesses
+    assert not witnesses.fully_independent(grace.INDEPENDENCE)  # different quantity: never "confirmed"
+    s = grace.monthly((-5, 5, 33, 43))
+    assert len(s) > 200 and s.index.is_monotonic_increasing
+    assert not ((s.index >= "2017-08-01") & (s.index <= "2018-04-01")).any()  # the mission gap stays empty
+
+
+def test_globe_and_opposites():
+    from trend_detective import api
+    g = api.globe("T2M", land_only=True)
+    assert len(g["cells"]) > 4000 and all("L" in c[3] for c in g["cells"])
+    assert not any(abs(c[0]) == 90 for c in g["cells"])
+    c = g["counts"]["land"]
+    assert c["luck_ours"] < c["luck_typical"]  # on shuffled years our test is fooled far less often
+    o = api.opposite_places("PRECTOTCORR", 3)
+    assert o["rising"] and o["falling"] and o["rising"][0]["slope_per_decade"] > 0 > o["falling"][0]["slope_per_decade"]

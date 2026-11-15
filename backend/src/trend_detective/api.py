@@ -21,7 +21,7 @@ from fastapi.responses import Response
 
 from concurrent.futures import ThreadPoolExecutor
 
-from . import beyond, cite, compare as cmp, context, crossexam, drought, models, reproduce, era5, events, gistemp, gldas, globalref, guide, heat, places, stations, power, stats, witnesses
+from . import beyond, cite, compare as cmp, context, crossexam, drought, models, reproduce, era5, events, gistemp, gldas, globalref, grace, opposites, guide, heat, places, stations, power, stats, witnesses
 from .catalogue import BY_ID, CATALOGUE, PLACE_TYPES
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -301,6 +301,15 @@ def all_witnesses(
             out.append(w)
         except Exception as ex:
             out.append({"available": False, "name": "NASA GLDAS", "note": f"GLDAS unavailable ({str(ex)[:120]})."})
+    if var in grace.VARS:
+        try:
+            w = witnesses.compare_witness(grace.NAME, "gravity satellites", grace.INDEPENDENCE, series,
+                                          grace.monthly(box), meta["units"], grace.UNITS_NOTE)
+            w["credit"] = grace.CREDIT
+            w["measures"] = "all stored water (soil + groundwater + snow + lakes)"
+            out.append(w)
+        except Exception as ex:
+            out.append({"available": False, "name": "NASA GRACE", "note": f"GRACE unavailable ({type(ex).__name__})."})
     try:
         e = era5.monthly(var, (lat_min + lat_max) / 2, (lon_min + lon_max) / 2) if var in era5.MAP else None
         if e is not None:
@@ -793,6 +802,15 @@ def globe(var: str = "T2M", land_only: bool = False):
     if land_only:
         d = {**d, "cells": [c for c in d["cells"] if "L" in c[3]]}
     return d
+
+
+@app.get("/api/opposites")
+def opposite_places(var: str = "PRECTOTCORR", n: int = Query(5, ge=1, le=10)):
+    """Where on land this variable is proven to rise vs proven to fall (from the globe dataset)."""
+    out = opposites.opposites(var, n)
+    if out is None:
+        raise HTTPException(404, f"No globe file for {var} yet.")
+    return out
 
 
 def _yearly_summary(v: dict) -> dict:
