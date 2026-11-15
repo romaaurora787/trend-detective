@@ -261,7 +261,7 @@ def build(team: str, out: Path) -> None:
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
-    p.add_argument("--team", default="[TEAM NAME]")
+    p.add_argument("--team", default="Paani Ke Batashe")
     p.add_argument("--out", default=str(HERE / "trend_detective_slides.pdf"))
     p.add_argument("--png", help="also write one PNG per slide into this folder")
     a = p.parse_args()
