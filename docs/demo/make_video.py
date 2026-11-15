@@ -234,6 +234,11 @@ def render(durations: list[float], use_voice: bool) -> None:
         mix = "".join(f"[a{k}]" for k in range(len(clips)))
         cmd += ["-filter_complex", ";".join(parts) + f";{mix}amix=inputs={len(clips)}:normalize=0[aout]",
                 "-map", "0:v", "-map", "[aout]", "-c:a", "aac", "-b:a", "160k"]
+    meta = ("Trend Detective: Is It Really Changing? Team Paani Ke Batashe (Akshita Srivastava, Kanishk K. Sachan), "
+            "NASA Space Apps 2026. Pictures: screenshots of our own site. "
+            + ("Voice-over: AI-generated text-to-speech (ElevenLabs)." if use_voice else "No voice-over."))
+    cmd += ["-metadata", f"title=Trend Detective: Is It Really Changing?", "-metadata", f"comment={meta}",
+            "-metadata", f"description={meta}"]
     cmd += ["-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", "-movflags", "+faststart",
             "-t", f"{sum(durations):.2f}", str(OUT)]
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
